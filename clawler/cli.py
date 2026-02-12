@@ -21,8 +21,18 @@ def main():
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
+    parser.add_argument("--list-sources", action="store_true", help="List all available sources and exit")
 
     args = parser.parse_args()
+
+    if args.list_sources:
+        from clawler.sources.rss import DEFAULT_FEEDS
+        print("📡 RSS Feeds:")
+        for f in DEFAULT_FEEDS:
+            print(f"   {f['source']:20s} [{f['category']}] — {f['url']}")
+        print("\n🔥 Hacker News — https://hacker-news.firebaseio.com/v0/topstories.json")
+        print("🤖 Reddit — subreddits: worldnews, technology, science, news, programming")
+        return
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,

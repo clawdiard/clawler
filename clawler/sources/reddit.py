@@ -1,6 +1,6 @@
 """Reddit source — uses public JSON endpoints (no API key needed)."""
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 import requests
 from clawler.models import Article
@@ -43,7 +43,7 @@ class RedditSource(BaseSource):
                         url=link if not link.startswith("https://www.reddit.com") else permalink,
                         source=f"r/{sub}",
                         summary=summary[:300],
-                        timestamp=datetime.utcfromtimestamp(created) if created else None,
+                        timestamp=datetime.fromtimestamp(created, tz=timezone.utc) if created else None,
                         category="tech" if sub in ("technology", "programming") else "world",
                     ))
                 logger.info(f"[Reddit] r/{sub}: {len(data.get('data', {}).get('children', []))} posts")
