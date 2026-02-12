@@ -73,6 +73,10 @@ def main():
                         help="Discover RSS/Atom feeds on a webpage and exit")
     parser.add_argument("--no-config", action="store_true",
                         help="Ignore config files (~/.clawler.yaml, ./clawler.yaml)")
+    parser.add_argument("--profile", type=str, default=None, metavar="FILE",
+                        help="Interest profile (YAML/JSON) for relevance scoring and sorting")
+    parser.add_argument("--min-relevance", type=float, default=0.0, dest="min_relevance",
+                        help="Minimum relevance score (0.0-1.0) when using --profile (default: 0.0)")
 
     args = parser.parse_args()
 
@@ -233,6 +237,11 @@ def main():
     elif args.sort == "source":
         articles.sort(key=lambda a: a.source.lower())
     # time sort is already applied by the engine
+
+    # Profile-based relevance scoring
+    if args.profile:
+        from clawler.profile import score_articles
+        articles = score_articles(articles, args.profile, min_relevance=args.min_relevance)
 
     # Limit
     articles = articles[:args.limit]

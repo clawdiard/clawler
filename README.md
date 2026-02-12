@@ -98,6 +98,47 @@ clawler --import-opml subscriptions.opml
 clawler --export-opml feeds.opml
 ```
 
+## Interest Profiles
+
+Score and rank articles by personal relevance using a YAML profile:
+
+```yaml
+# interests.yaml
+name: Alexandria
+interests:
+  - keywords: [AI, machine learning, LLM, GPT]
+    weight: 2.0
+  - keywords: [skateboarding, skatepark, skate]
+    weight: 1.5
+  - keywords: [python, rust, open source]
+    weight: 1.0
+```
+
+```bash
+# Rank articles by relevance to your interests
+clawler --profile interests.yaml
+
+# Only show articles with >50% relevance
+clawler --profile interests.yaml --min-relevance 0.5
+```
+
+## Python API
+
+Use Clawler as a library:
+
+```python
+from clawler.api import crawl
+
+# Simple one-liner
+articles = crawl(category="tech", limit=10, since="2h")
+
+# Profile-based personalized feed
+articles = crawl(profile="interests.yaml", min_relevance=0.3)
+
+for a in articles:
+    print(f"[{a.relevance:.0%}] {a.title} — {a.url}")
+```
+
 ## Custom Feeds File
 
 Create a YAML or JSON file with your own RSS feeds:
@@ -180,6 +221,8 @@ CLI arguments always override config file values.
 
 ```
 clawler/
+├── api.py          # Public Python API (library use)
+├── profile.py      # Interest-profile relevance scoring
 ├── cli.py          # CLI entry point
 ├── engine.py       # Crawl orchestrator (parallel execution)
 ├── models.py       # Article dataclass with dedup keys
