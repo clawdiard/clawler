@@ -43,7 +43,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
         title_lower = article.title.lower().strip()
         title_len = len(title_lower)
         is_dupe = False
-        for prev_title, prev_len, prev_idx in seen_titles:
+        for i, (prev_title, prev_len, prev_idx) in enumerate(seen_titles):
             if abs(title_len - prev_len) > max(title_len, prev_len) * (1 - similarity_threshold):
                 continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
@@ -52,6 +52,11 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
                     seen_keys.discard(unique[prev_idx].dedup_key)
                     seen_keys.add(article.dedup_key)
                     unique[prev_idx] = article
+                    # Update title entry for future comparisons
+                    seen_titles[i] = (title_lower, title_len, prev_idx)
+                    # Update fingerprint map if new article has one
+                    if fp:
+                        seen_fingerprints[fp] = prev_idx
                 is_dupe = True
                 break
 

@@ -29,7 +29,7 @@ def main():
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument("-f", "--format", choices=["console", "json", "jsonfeed", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
-    parser.add_argument("-n", "--limit", type=int, default=50,
+    parser.add_argument("-n", "--limit", "--top", type=int, default=50,
                         help="Max articles to display (default: 50)")
     parser.add_argument("--category", type=str, default="all",
                         help="Filter by category (comma-separated, e.g. tech,science)")
@@ -85,6 +85,10 @@ def main():
                         help="Clear all cached results and exit")
     parser.add_argument("--health", action="store_true",
                         help="Show per-source health report and exit")
+    parser.add_argument("--json-pretty", action="store_true", dest="json_pretty",
+                        help="Pretty-print JSON output (implies -f json)")
+    parser.add_argument("--dry-run", action="store_true", dest="dry_run",
+                        help="Show which sources would be crawled without fetching")
 
     args = parser.parse_args()
 
@@ -113,6 +117,20 @@ def main():
             rate = info["success_rate"]
             emoji = "✅" if rate >= 0.9 else "⚠️" if rate >= 0.7 else "❌"
             print(f"  {emoji} {source:25s}  success={rate:.0%}  crawls={info['total_crawls']}  avg_articles={info['avg_articles']}  last={info['last_success'] or 'never'}")
+        return
+
+    # Dry run
+    if args.dry_run:
+        from clawler.sources.rss import DEFAULT_FEEDS
+        print("🧪 Dry run — sources that would be crawled:\n")
+        if not args.no_rss:
+            feeds = custom_feeds if hasattr(args, '_custom_feeds') else DEFAULT_FEEDS
+            print(f"  📡 RSS ({len(feeds)} feeds)")
+        if not args.no_hn:
+            print("  🔥 Hacker News (top stories)")
+        if not args.no_reddit:
+            print("  🤖 Reddit (5 subreddits)")
+        print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
     # Feed autodiscovery
@@ -314,6 +332,10 @@ def main():
         top = sorted(srcs.items(), key=lambda x: x[1], reverse=True)[:10]
         print(f"   Top sources: {', '.join(f'{s} ({n})' for s, n in top)}")
         return
+
+    # Apply json-pretty shorthand
+    if args.json_pretty:
+        args.format = "json"
 
     # Format
     formatters = {

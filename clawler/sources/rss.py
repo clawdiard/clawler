@@ -60,6 +60,9 @@ DEFAULT_FEEDS = [
     {"url": "https://theintercept.com/feed/?rss", "source": "The Intercept", "category": "investigative"},
     # --- Culture ---
     {"url": "https://www.theatlantic.com/feed/all/", "source": "The Atlantic", "category": "culture"},
+    # --- Aggregator ---
+    {"url": "https://news.google.com/rss", "source": "Google News", "category": "world"},
+    {"url": "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB", "source": "Google News (Tech)", "category": "tech"},
 ]
 
 

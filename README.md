@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from 40+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from 42+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **40+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON
+- 📡 **42+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -61,6 +61,12 @@ clawler --list-sources
 
 # Check feed health
 clawler --check-feeds
+
+# Pretty JSON (shorthand for -f json)
+clawler --json-pretty
+
+# Dry run — see what sources would be crawled
+clawler --dry-run
 ```
 
 ## Sources
@@ -108,6 +114,8 @@ clawler --check-feeds
 | CNN | RSS | world | 0.64 |
 | Reddit | JSON | various | 0.62 |
 | The Next Web | RSS | tech | 0.60 |
+| Google News | RSS | world | 0.60 |
+| Google News (Tech) | RSS | tech | 0.60 |
 
 ## Quality Weighting
 
@@ -147,7 +155,7 @@ clawler/
 ├── dedup.py            # 3-tier deduplication (quality-aware)
 ├── weights.py          # Source quality score lookups
 ├── health.py           # Per-source health tracking
-├── source_weights.yaml # Quality scores for all 40+ sources
+├── source_weights.yaml # Quality scores for all 42+ sources
 ├── cache.py            # File-based result caching
 ├── config.py           # Config file support
 ├── profile.py          # Interest-based relevance scoring
