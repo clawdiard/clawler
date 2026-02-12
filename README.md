@@ -9,8 +9,8 @@ Clawler aggregates news from multiple sources using web scraping and RSS feeds, 
 - 📡 **Multiple sources** — RSS feeds (15+ major outlets), Hacker News, Reddit
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — exact match + fuzzy title similarity
-- 📊 **Multiple output formats** — Rich console, JSON, Markdown, CSV, HTML
-- 🏷️ **Category filtering** — tech, world, science, business (multi-select supported)
+- 📊 **Multiple output formats** — Rich console, JSON, JSON Feed 1.1, Markdown, CSV, HTML
+- 🏷️ **Category filtering** — tech, world, science, business (multi-select + exclude supported)
 - ⚡ **Parallel crawling** — concurrent fetching across all sources
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
 - 📋 **OPML import/export** — interop with other RSS readers
@@ -64,6 +64,18 @@ clawler --search "AI"
 
 # Sort by title or source instead of time
 clawler --sort title
+
+# Exclude a source
+clawler --exclude-source "Reddit"
+
+# Exclude categories
+clawler --exclude-category business,science
+
+# Show crawl statistics only
+clawler --stats
+
+# JSON Feed 1.1 output (for feed readers)
+clawler -f jsonfeed -o feed.json
 
 # Quiet mode (no status messages on stderr)
 clawler -q -f json

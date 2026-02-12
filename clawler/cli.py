@@ -5,9 +5,9 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, MarkdownFormatter
+from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, MarkdownFormatter
 
-__version__ = "1.6.0"
+from clawler import __version__
 
 
 def _parse_since(value: str) -> datetime:
@@ -29,7 +29,7 @@ def main():
         description="🗞️ Clawler — Advanced news crawling service",
     )
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("-f", "--format", choices=["console", "json", "markdown", "csv", "html"], default="console",
+    parser.add_argument("-f", "--format", choices=["console", "json", "jsonfeed", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -43,6 +43,12 @@ def main():
                         help="Filter articles by source name (substring match, case-insensitive)")
     parser.add_argument("-s", "--search", type=str, default=None,
                         help="Filter articles by keyword in title or summary (case-insensitive)")
+    parser.add_argument("--exclude-source", type=str, default=None,
+                        help="Exclude articles from sources matching this substring (case-insensitive)")
+    parser.add_argument("--exclude-category", type=str, default=None,
+                        help="Exclude categories (comma-separated, e.g. business,science)")
+    parser.add_argument("--stats", action="store_true",
+                        help="Print crawl statistics summary and exit (no articles)")
     parser.add_argument("--sort", choices=["time", "title", "source"], default="time",
                         help="Sort order (default: time)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
@@ -148,6 +154,16 @@ def main():
         q = args.source.lower()
         articles = [a for a in articles if q in a.source.lower()]
 
+    # Exclude source
+    if args.exclude_source:
+        eq = args.exclude_source.lower()
+        articles = [a for a in articles if eq not in a.source.lower()]
+
+    # Exclude categories
+    if args.exclude_category:
+        excl_cats = set(c.strip().lower() for c in args.exclude_category.split(","))
+        articles = [a for a in articles if a.category not in excl_cats]
+
     # Filter by keyword search
     if args.search:
         kw = args.search.lower()
@@ -168,10 +184,29 @@ def main():
     # Limit
     articles = articles[:args.limit]
 
+    # Stats mode
+    if args.stats:
+        total = sum(v for v in stats.values() if v >= 0)
+        failed = sum(1 for v in stats.values() if v == -1)
+        print(f"📊 Clawler Crawl Statistics")
+        print(f"   Sources crawled: {len(stats)} ({failed} failed)")
+        print(f"   Total raw articles: {total}")
+        print(f"   After dedup + filters: {len(articles)}")
+        cats = {}
+        for a in articles:
+            cats[a.category] = cats.get(a.category, 0) + 1
+        print(f"   Categories: {', '.join(f'{c}={n}' for c, n in sorted(cats.items()))}")
+        srcs = {}
+        for a in articles:
+            srcs[a.source] = srcs.get(a.source, 0) + 1
+        top = sorted(srcs.items(), key=lambda x: x[1], reverse=True)[:10]
+        print(f"   Top sources: {', '.join(f'{s} ({n})' for s, n in top)}")
+        return
+
     # Format
     formatters = {
-        "console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter,
-        "csv": CSVFormatter, "html": HTMLFormatter,
+        "console": ConsoleFormatter, "json": JSONFormatter, "jsonfeed": JSONFeedFormatter,
+        "markdown": MarkdownFormatter, "csv": CSVFormatter, "html": HTMLFormatter,
     }
     output = formatters[args.format]().format(articles)
 
