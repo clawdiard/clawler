@@ -5,7 +5,9 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import ConsoleFormatter, CSVFormatter, JSONFormatter, MarkdownFormatter
+from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, MarkdownFormatter
+
+__version__ = "1.4.0"
 
 
 def _parse_since(value: str) -> datetime:
@@ -26,7 +28,8 @@ def main():
         prog="clawler",
         description="🗞️ Clawler — Advanced news crawling service",
     )
-    parser.add_argument("-f", "--format", choices=["console", "json", "markdown", "csv"], default="console",
+    parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument("-f", "--format", choices=["console", "json", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -38,7 +41,10 @@ def main():
                         help="Write output to file instead of stdout")
     parser.add_argument("--source", type=str, default=None,
                         help="Filter articles by source name (substring match, case-insensitive)")
+    parser.add_argument("--sort", choices=["time", "title", "source"], default="time",
+                        help="Sort order (default: time)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
+    parser.add_argument("-q", "--quiet", action="store_true", help="Suppress status messages on stderr")
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
@@ -75,8 +81,14 @@ def main():
         sys.exit(1)
 
     engine = CrawlEngine(sources=sources)
-    print("🕷️  Crawling news sources...", file=sys.stderr)
-    articles = engine.crawl()
+    if not args.quiet:
+        print("🕷️  Crawling news sources...", file=sys.stderr)
+    articles, stats = engine.crawl()
+
+    # Print source stats
+    if not args.quiet:
+        for name, count in stats.items():
+            print(f"   ✓ {name}: {count} articles", file=sys.stderr)
 
     # Filter by category
     if args.category != "all":
@@ -92,17 +104,28 @@ def main():
         cutoff = _parse_since(args.since)
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
 
+    # Sort
+    if args.sort == "title":
+        articles.sort(key=lambda a: a.title.lower())
+    elif args.sort == "source":
+        articles.sort(key=lambda a: a.source.lower())
+    # time sort is already applied by the engine
+
     # Limit
     articles = articles[:args.limit]
 
     # Format
-    formatters = {"console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter}
+    formatters = {
+        "console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter,
+        "csv": CSVFormatter, "html": HTMLFormatter,
+    }
     output = formatters[args.format]().format(articles)
 
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(output)
-        print(f"✅ Wrote {len(articles)} articles to {args.output}", file=sys.stderr)
+        if not args.quiet:
+            print(f"✅ Wrote {len(articles)} articles to {args.output}", file=sys.stderr)
     else:
         print(output)
 

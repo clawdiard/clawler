@@ -1,6 +1,6 @@
 """Core crawl engine."""
 import logging
-from typing import List, Optional
+from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from clawler.models import Article
 from clawler.sources.base import BaseSource
@@ -21,9 +21,10 @@ class CrawlEngine:
         ]
         self.max_workers = max_workers
 
-    def crawl(self) -> List[Article]:
-        """Run all sources in parallel, deduplicate, and return sorted articles."""
+    def crawl(self) -> Tuple[List[Article], Dict[str, int]]:
+        """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats."""
         all_articles: List[Article] = []
+        stats: Dict[str, int] = {}
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
             futures = {pool.submit(src.crawl): src for src in self.sources}
@@ -32,9 +33,11 @@ class CrawlEngine:
                 try:
                     articles = future.result()
                     logger.info(f"[Engine] {src.name} returned {len(articles)} articles")
+                    stats[src.name] = len(articles)
                     all_articles.extend(articles)
                 except Exception as e:
                     logger.error(f"[Engine] {src.name} failed: {e}")
+                    stats[src.name] = -1  # -1 indicates failure
 
         logger.info(f"[Engine] Total raw: {len(all_articles)}")
         unique = deduplicate(all_articles)
@@ -51,4 +54,4 @@ class CrawlEngine:
                 return ts.replace(tzinfo=timezone.utc)
             return ts.astimezone(timezone.utc)
         unique.sort(key=sort_key, reverse=True)
-        return unique
+        return unique, stats

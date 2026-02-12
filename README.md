@@ -9,7 +9,7 @@ Clawler aggregates news from multiple sources using web scraping and RSS feeds, 
 - 📡 **Multiple sources** — RSS feeds (15+ major outlets), Hacker News, Reddit
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — exact match + fuzzy title similarity
-- 📊 **Multiple output formats** — Rich console, JSON, Markdown
+- 📊 **Multiple output formats** — Rich console, JSON, Markdown, CSV, HTML
 - 🏷️ **Category filtering** — tech, world, science, business
 - ⚡ **Parallel crawling** — concurrent fetching across all sources
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
@@ -47,8 +47,17 @@ clawler -f markdown -o digest.md
 # CSV export for data analysis
 clawler -f csv -o news.csv
 
+# Self-contained HTML digest
+clawler -f html -o digest.html
+
 # Filter by source name
 clawler --source "BBC"
+
+# Sort by title or source instead of time
+clawler --sort title
+
+# Quiet mode (no status messages on stderr)
+clawler -q -f json
 
 # Skip slow sources
 clawler --no-reddit --no-hn
@@ -93,6 +102,7 @@ clawler/
 └── formatters/
     ├── console.py  # Rich terminal output
     ├── csv_out.py  # CSV output
+    ├── html_out.py # Self-contained HTML page
     ├── json_out.py # JSON output
     └── markdown.py # Markdown output
 ```
