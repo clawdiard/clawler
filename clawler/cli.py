@@ -83,6 +83,8 @@ def main():
                         help="Cache TTL in seconds (default: 300)")
     parser.add_argument("--clear-cache", action="store_true", dest="clear_cache",
                         help="Clear all cached results and exit")
+    parser.add_argument("--health", action="store_true",
+                        help="Show per-source health report and exit")
 
     args = parser.parse_args()
 
@@ -96,6 +98,21 @@ def main():
         from clawler.cache import clear_cache
         n = clear_cache()
         print(f"🧹 Cleared {n} cached file(s)")
+        return
+
+    # Health report
+    if args.health:
+        from clawler.health import HealthTracker
+        tracker = HealthTracker()
+        summary = tracker.summary
+        if not summary:
+            print("🩺 No health data recorded yet. Run a crawl first.")
+            return
+        print("🩺 Source Health Report\n")
+        for source, info in sorted(summary.items(), key=lambda x: x[1]["success_rate"]):
+            rate = info["success_rate"]
+            emoji = "✅" if rate >= 0.9 else "⚠️" if rate >= 0.7 else "❌"
+            print(f"  {emoji} {source:25s}  success={rate:.0%}  crawls={info['total_crawls']}  avg_articles={info['avg_articles']}  last={info['last_success'] or 'never'}")
         return
 
     # Feed autodiscovery

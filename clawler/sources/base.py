@@ -9,7 +9,7 @@ import time
 logger = logging.getLogger(__name__)
 
 HEADERS = {
-    "User-Agent": "Clawler/2.2 (News Aggregator; +https://github.com/clawdiard/clawler)"
+    "User-Agent": "Clawler/2.4 (News Aggregator; +https://github.com/clawdiard/clawler)"
 }
 
 

@@ -58,7 +58,7 @@ class HealthTracker:
     def get_health_modifier(self, source: str) -> float:
         """Return a modifier (0.5-1.0) based on source health."""
         for key, d in self.data.items():
-            if key in source.lower() or source.lower() in key:
+            if key.lower() in source.lower() or source.lower() in key.lower():
                 total = d.get("total_crawls", 0)
                 if total == 0:
                     return 1.0

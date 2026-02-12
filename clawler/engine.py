@@ -63,8 +63,10 @@ class CrawlEngine:
                 age_hours = max(0, (now - ts).total_seconds() / 3600)
             else:
                 age_hours = 48
+                ts = datetime.min.replace(tzinfo=timezone.utc)
             recency = max(0.0, 1.0 - (age_hours / 48.0))
-            return 0.6 * recency + 0.4 * a.quality_score
+            # Use timestamp as tiebreaker when blended scores are equal
+            return (0.6 * recency + 0.4 * a.quality_score, ts)
         unique.sort(key=blended_key, reverse=True)
 
         self.health.save()
