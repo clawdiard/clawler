@@ -12,15 +12,13 @@ from clawler import __version__
 
 def _parse_since(value: str) -> datetime:
     """Parse a relative time string like '1h', '30m', '2d' into a UTC datetime."""
-    match = re.match(r"^(\d+)\s*([mhdw])$", value.strip().lower())
-    if not match:
+    from clawler.utils import parse_since
+    try:
+        return parse_since(value)
+    except ValueError:
         raise argparse.ArgumentTypeError(
             f"Invalid --since value '{value}'. Use e.g. 30m, 2h, 1d, 1w"
         )
-    amount, unit = int(match.group(1)), match.group(2)
-    deltas = {"m": timedelta(minutes=amount), "h": timedelta(hours=amount),
-              "d": timedelta(days=amount), "w": timedelta(weeks=amount)}
-    return datetime.now(timezone.utc) - deltas[unit]
 
 
 def main():

@@ -1,5 +1,24 @@
 """Shared utility functions."""
+import re
 from datetime import datetime, timedelta, timezone
+
+
+def parse_since(value: str) -> datetime:
+    """Parse a relative time string like '1h', '30m', '2d' into a UTC datetime.
+
+    Raises ValueError on invalid input.
+    """
+    match = re.match(r"^(\d+)\s*([mhdw])$", value.strip().lower())
+    if not match:
+        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30m, 2h, 1d, 1w")
+    amount, unit = int(match.group(1)), match.group(2)
+    deltas = {
+        "m": timedelta(minutes=amount),
+        "h": timedelta(hours=amount),
+        "d": timedelta(days=amount),
+        "w": timedelta(weeks=amount),
+    }
+    return datetime.now(timezone.utc) - deltas[unit]
 
 
 def relative_time(dt: datetime) -> str:

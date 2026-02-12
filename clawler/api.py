@@ -20,8 +20,7 @@ Profile-based relevance scoring:
 """
 from __future__ import annotations
 
-import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Sequence, Union
 
 from clawler.engine import CrawlEngine
@@ -30,13 +29,8 @@ from clawler.sources import HackerNewsSource, RedditSource, RSSSource
 
 
 def _parse_since(value: str) -> datetime:
-    match = re.match(r"^(\d+)\s*([mhdw])$", value.strip().lower())
-    if not match:
-        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30m, 2h, 1d, 1w")
-    amount, unit = int(match.group(1)), match.group(2)
-    deltas = {"m": timedelta(minutes=amount), "h": timedelta(hours=amount),
-              "d": timedelta(days=amount), "w": timedelta(weeks=amount)}
-    return datetime.now(timezone.utc) - deltas[unit]
+    from clawler.utils import parse_since
+    return parse_since(value)
 
 
 def crawl(
