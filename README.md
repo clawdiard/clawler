@@ -6,7 +6,7 @@ Clawler aggregates news from 42+ sources using RSS feeds, APIs, and web scraping
 
 ## Features
 
-- 📡 **42+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON
+- 📡 **42+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON, GitHub Trending
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -19,6 +19,7 @@ Clawler aggregates news from 42+ sources using RSS feeds, APIs, and web scraping
 - 🎯 **Interest profiles** — relevance scoring based on personal interests
 - 📦 **Result caching** — skip network if results are fresh
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
+- 🚦 **Rate limiting** — per-domain request throttling to be a good citizen
 
 ## Quick Start
 
@@ -49,6 +50,15 @@ clawler --category security
 
 # Skip slow sources
 clawler --no-reddit --no-hn
+
+# Skip GitHub Trending
+clawler --no-github
+
+# Only articles from last 6 hours
+clawler --max-age 6h
+
+# Custom retry count
+clawler --retries 3
 
 # Search for a topic
 clawler -s "climate"
@@ -116,6 +126,7 @@ clawler --dry-run
 | The Next Web | RSS | tech | 0.60 |
 | Google News | RSS | world | 0.60 |
 | Google News (Tech) | RSS | tech | 0.60 |
+| GitHub Trending | Scrape | tech | 0.72 |
 
 ## Quality Weighting
 
@@ -167,7 +178,8 @@ clawler/
 │   ├── base.py         # Abstract base source
 │   ├── rss.py          # RSS/Atom feed crawler (39 feeds)
 │   ├── hackernews.py   # HN Firebase API
-│   └── reddit.py       # Reddit JSON endpoints
+│   ├── reddit.py       # Reddit JSON endpoints
+│   └── github_trending.py # GitHub Trending scraper
 └── formatters/
     ├── console.py      # Rich terminal output
     ├── json_out.py     # JSON output

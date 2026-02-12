@@ -54,8 +54,11 @@ def main():
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
+    parser.add_argument("--no-github", action="store_true", help="Skip GitHub Trending source")
     parser.add_argument("--timeout", type=int, default=15,
                         help="HTTP request timeout in seconds (default: 15)")
+    parser.add_argument("--retries", type=int, default=2,
+                        help="Max retries per request (default: 2)")
     parser.add_argument("--check-feeds", action="store_true",
                         help="Test connectivity to all RSS feeds and report status")
     parser.add_argument("--list-sources", action="store_true", help="List all available sources and exit")
@@ -89,6 +92,8 @@ def main():
                         help="Pretty-print JSON output (implies -f json)")
     parser.add_argument("--dry-run", action="store_true", dest="dry_run",
                         help="Show which sources would be crawled without fetching")
+    parser.add_argument("--max-age", type=str, default=None, dest="max_age",
+                        help="Exclude articles older than this (e.g. 6h, 1d, 2w). Same syntax as --since.")
 
     args = parser.parse_args()
 
@@ -214,19 +219,27 @@ def main():
     )
 
     # Build source list
-    from clawler.sources import RSSSource, HackerNewsSource, RedditSource
+    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource
     sources = []
     if not args.no_rss:
         src = RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource()
         src.timeout = args.timeout
+        src.max_retries = args.retries
         sources.append(src)
     if not args.no_hn:
         src = HackerNewsSource()
         src.timeout = args.timeout
+        src.max_retries = args.retries
         sources.append(src)
     if not args.no_reddit:
         src = RedditSource()
         src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_github:
+        src = GitHubTrendingSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
         sources.append(src)
 
     if not sources:
@@ -290,9 +303,14 @@ def main():
         kw = args.search.lower()
         articles = [a for a in articles if kw in a.title.lower() or kw in a.summary.lower()]
 
-    # Filter by time
+    # Filter by time (--since)
     if args.since:
         cutoff = _parse_since(args.since)
+        articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
+
+    # Filter by max age (--max-age) — excludes articles older than threshold
+    if args.max_age:
+        cutoff = _parse_since(args.max_age)
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
 
     # Filter by quality score
@@ -318,10 +336,12 @@ def main():
     if args.stats:
         total = sum(v for v in stats.values() if v >= 0)
         failed = sum(1 for v in stats.values() if v == -1)
+        avg_quality = sum(a.quality_score for a in articles) / len(articles) if articles else 0
         print(f"📊 Clawler Crawl Statistics")
         print(f"   Sources crawled: {len(stats)} ({failed} failed)")
         print(f"   Total raw articles: {total}")
         print(f"   After dedup + filters: {len(articles)}")
+        print(f"   Avg quality score: {avg_quality:.3f}")
         cats = {}
         for a in articles:
             cats[a.category] = cats.get(a.category, 0) + 1

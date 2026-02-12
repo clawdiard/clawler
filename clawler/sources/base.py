@@ -9,8 +9,12 @@ import time
 logger = logging.getLogger(__name__)
 
 HEADERS = {
-    "User-Agent": "Clawler/2.4 (News Aggregator; +https://github.com/clawdiard/clawler)"
+    "User-Agent": "Clawler/2.6 (News Aggregator; +https://github.com/clawdiard/clawler)"
 }
+
+# Per-domain rate limiting — minimum seconds between requests to the same domain
+_domain_last_request: dict = {}  # domain -> last request timestamp
+_RATE_LIMIT_SECONDS = 0.5
 
 
 class BaseSource(ABC):
@@ -21,8 +25,20 @@ class BaseSource(ABC):
     max_retries: int = 2
     retry_backoff: float = 1.0
 
+    @staticmethod
+    def _rate_limit(url: str):
+        """Enforce per-domain rate limiting."""
+        from urllib.parse import urlparse
+        domain = urlparse(url).netloc
+        if domain in _domain_last_request:
+            elapsed = time.time() - _domain_last_request[domain]
+            if elapsed < _RATE_LIMIT_SECONDS:
+                time.sleep(_RATE_LIMIT_SECONDS - elapsed)
+        _domain_last_request[domain] = time.time()
+
     def fetch_url(self, url: str, **kwargs) -> str:
-        """Fetch URL content with retries and error handling."""
+        """Fetch URL content with retries, rate limiting, and error handling."""
+        self._rate_limit(url)
         for attempt in range(self.max_retries + 1):
             try:
                 resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
@@ -39,7 +55,8 @@ class BaseSource(ABC):
         return ""
 
     def fetch_json(self, url: str, **kwargs):
-        """Fetch URL and parse JSON, with retries. Returns None on failure."""
+        """Fetch URL and parse JSON, with retries and rate limiting. Returns None on failure."""
+        self._rate_limit(url)
         for attempt in range(self.max_retries + 1):
             try:
                 resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
