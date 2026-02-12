@@ -9,7 +9,7 @@ import time
 logger = logging.getLogger(__name__)
 
 HEADERS = {
-    "User-Agent": "Clawler/2.6 (News Aggregator; +https://github.com/clawdiard/clawler)"
+    "User-Agent": "Clawler/2.7 (News Aggregator; +https://github.com/clawdiard/clawler)"
 }
 
 # Per-domain rate limiting — minimum seconds between requests to the same domain

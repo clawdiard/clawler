@@ -20,7 +20,7 @@ class ConsoleFormatter:
             else:
                 ts = "—"
             console.print(f"\n[bold white]{i}. {a.title}[/]")
-            console.print(f"   [dim]📰 {a.source} | 🕐 {ts} | 🏷️  {a.category}[/]")
+            console.print(f"   [dim]📰 {a.source} | 🕐 {ts} | 🏷️  {a.category}{'  | 🔥 ' + str(a.source_count) + ' sources' if a.source_count > 1 else ''}[/]")
             console.print(f"   [blue underline]{a.url}[/]")
             if a.summary:
                 console.print(f"   [dim italic]{a.summary[:150]}[/]")

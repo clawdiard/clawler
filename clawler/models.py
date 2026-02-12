@@ -15,6 +15,7 @@ class Article:
     category: str = "general"
     relevance: Optional[float] = None
     quality_score: float = 0.5
+    source_count: int = 1  # how many sources covered this story (set during dedup)
 
     @property
     def dedup_key(self) -> str:

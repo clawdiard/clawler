@@ -28,6 +28,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
         if fp and fp in seen_fingerprints:
             # Keep the one with higher quality_score
             idx = seen_fingerprints[fp]
+            unique[idx].source_count += 1
             if article.quality_score > unique[idx].quality_score:
                 seen_keys.discard(unique[idx].dedup_key)
                 seen_keys.add(article.dedup_key)
@@ -48,6 +49,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
                 continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
                 # Keep higher quality
+                unique[prev_idx].source_count += 1
                 if article.quality_score > unique[prev_idx].quality_score:
                     seen_keys.discard(unique[prev_idx].dedup_key)
                     seen_keys.add(article.dedup_key)

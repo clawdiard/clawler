@@ -92,6 +92,12 @@ def main():
                         help="Pretty-print JSON output (implies -f json)")
     parser.add_argument("--dry-run", action="store_true", dest="dry_run",
                         help="Show which sources would be crawled without fetching")
+    parser.add_argument("--reverse", action="store_true",
+                        help="Reverse the sort order")
+    parser.add_argument("--group-by", choices=["category", "source"], default=None, dest="group_by",
+                        help="Group output by category or source")
+    parser.add_argument("--min-sources", type=int, default=0, dest="min_sources",
+                        help="Only show stories covered by at least N sources (cross-source filter)")
     parser.add_argument("--max-age", type=str, default=None, dest="max_age",
                         help="Exclude articles older than this (e.g. 6h, 1d, 2w). Same syntax as --since.")
 
@@ -317,12 +323,20 @@ def main():
     if args.min_quality > 0:
         articles = [a for a in articles if a.quality_score >= args.min_quality]
 
+    # Filter by cross-source coverage
+    if args.min_sources > 0:
+        articles = [a for a in articles if a.source_count >= args.min_sources]
+
     # Sort
     if args.sort == "title":
         articles.sort(key=lambda a: a.title.lower())
     elif args.sort == "source":
         articles.sort(key=lambda a: a.source.lower())
     # time sort is already applied by the engine
+
+    # Reverse sort if requested
+    if args.reverse:
+        articles.reverse()
 
     # Profile-based relevance scoring
     if args.profile:
@@ -357,12 +371,29 @@ def main():
     if args.json_pretty:
         args.format = "json"
 
-    # Format
-    formatters = {
-        "console": ConsoleFormatter, "json": JSONFormatter, "jsonfeed": JSONFeedFormatter,
-        "markdown": MarkdownFormatter, "csv": CSVFormatter, "html": HTMLFormatter,
-    }
-    output = formatters[args.format]().format(articles)
+    # Group-by output (text mode only, overrides formatter)
+    if args.group_by and args.format == "console":
+        from collections import defaultdict
+        groups = defaultdict(list)
+        key_fn = (lambda a: a.category) if args.group_by == "category" else (lambda a: a.source)
+        for a in articles:
+            groups[key_fn(a)].append(a)
+        lines = [f"🗞️  Clawler News Digest — {len(articles)} stories (grouped by {args.group_by})\n"]
+        for group_name in sorted(groups.keys()):
+            lines.append(f"\n━━━ {group_name.upper()} ({len(groups[group_name])}) ━━━")
+            for i, a in enumerate(groups[group_name], 1):
+                ts = a.timestamp.strftime("%Y-%m-%d %H:%M") if a.timestamp else "—"
+                sc = f" [×{a.source_count}]" if a.source_count > 1 else ""
+                lines.append(f"  {i}. {a.title}{sc}")
+                lines.append(f"     {a.source} | {ts} | {a.url}")
+        output = "\n".join(lines)
+    else:
+        # Format
+        formatters = {
+            "console": ConsoleFormatter, "json": JSONFormatter, "jsonfeed": JSONFeedFormatter,
+            "markdown": MarkdownFormatter, "csv": CSVFormatter, "html": HTMLFormatter,
+        }
+        output = formatters[args.format]().format(articles)
 
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:

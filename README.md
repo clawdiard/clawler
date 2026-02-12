@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from 42+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **42+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON, GitHub Trending
+- 📡 **46+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -18,8 +18,12 @@ Clawler aggregates news from 42+ sources using RSS feeds, APIs, and web scraping
 - 🔍 **Feed discovery** — auto-detect feeds on any URL
 - 🎯 **Interest profiles** — relevance scoring based on personal interests
 - 📦 **Result caching** — skip network if results are fresh
+- 🔥 **Cross-source tracking** — see how many sources covered the same story
+- 📂 **Group-by output** — group results by category or source
+- 🔄 **Reverse sort** — flip any sort order
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
 - 🚦 **Rate limiting** — per-domain request throttling to be a good citizen
+
 
 ## Quick Start
 
@@ -77,6 +81,18 @@ clawler --json-pretty
 
 # Dry run — see what sources would be crawled
 clawler --dry-run
+
+# Group by category
+clawler --group-by category
+
+# Group by source
+clawler --group-by source
+
+# Reverse sort order (oldest first)
+clawler --reverse
+
+# Only stories covered by 2+ sources (trending)
+clawler --min-sources 2
 ```
 
 ## Sources
@@ -106,6 +122,10 @@ clawler --dry-run
 | Hacker News | API | tech | 0.75 |
 | HN Show | RSS | tech | 0.75 |
 | HN Ask | RSS | tech | 0.75 |
+| ArXiv CS.AI | RSS | science | 0.82 |
+| ArXiv CS.LG | RSS | science | 0.82 |
+| HN Best | RSS | tech | 0.76 |
+| IEEE AI | RSS | tech | 0.78 |
 | TorrentFreak | RSS | tech | 0.74 |
 | Wired | RSS | tech | 0.73 |
 | The Intercept | RSS | investigative | 0.72 |

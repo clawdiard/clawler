@@ -60,6 +60,12 @@ DEFAULT_FEEDS = [
     {"url": "https://theintercept.com/feed/?rss", "source": "The Intercept", "category": "investigative"},
     # --- Culture ---
     {"url": "https://www.theatlantic.com/feed/all/", "source": "The Atlantic", "category": "culture"},
+    # --- Science (academic) ---
+    {"url": "http://rss.arxiv.org/rss/cs.AI", "source": "ArXiv CS.AI", "category": "science"},
+    {"url": "http://rss.arxiv.org/rss/cs.LG", "source": "ArXiv CS.LG", "category": "science"},
+    # --- Tech (additional) ---
+    {"url": "https://hnrss.org/best", "source": "HN Best", "category": "tech"},
+    {"url": "https://spectrum.ieee.org/feeds/topic/artificial-intelligence.rss", "source": "IEEE AI", "category": "tech"},
     # --- Aggregator ---
     {"url": "https://news.google.com/rss", "source": "Google News", "category": "world"},
     {"url": "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB", "source": "Google News (Tech)", "category": "tech"},
