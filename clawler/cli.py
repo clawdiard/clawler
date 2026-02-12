@@ -67,8 +67,33 @@ def main():
                         help="Export current feed list as OPML and exit")
     parser.add_argument("--import-opml", type=str, default=None, metavar="FILE",
                         help="Import feeds from OPML file (replaces default RSS feeds)")
+    parser.add_argument("--dedupe-threshold", type=float, default=0.75, dest="dedupe_threshold",
+                        help="Fuzzy title similarity threshold for dedup (0.0-1.0, default: 0.75)")
+    parser.add_argument("--discover", type=str, default=None, metavar="URL",
+                        help="Discover RSS/Atom feeds on a webpage and exit")
+    parser.add_argument("--no-config", action="store_true",
+                        help="Ignore config files (~/.clawler.yaml, ./clawler.yaml)")
 
     args = parser.parse_args()
+
+    # Apply config file defaults (CLI args always win)
+    if not args.no_config:
+        from clawler.config import apply_config_defaults
+        args = apply_config_defaults(parser, args)
+
+    # Feed autodiscovery
+    if args.discover:
+        from clawler.discover import discover_feeds
+        feeds = discover_feeds(args.discover, timeout=args.timeout)
+        if feeds:
+            print(f"🔍 Found {len(feeds)} feed(s) on {args.discover}:\n")
+            for f in feeds:
+                print(f"   📡 {f['title']}")
+                print(f"      {f['url']}")
+                print(f"      Type: {f['type']}\n")
+        else:
+            print(f"No feeds found on {args.discover}")
+        return
 
     # Determine RSS feeds to use
     custom_feeds = None
@@ -159,7 +184,7 @@ def main():
     engine = CrawlEngine(sources=sources)
     if not args.quiet:
         print("🕷️  Crawling news sources...", file=sys.stderr)
-    articles, stats = engine.crawl()
+    articles, stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
 
     # Check if all sources failed
     if all(v == -1 for v in stats.values()):

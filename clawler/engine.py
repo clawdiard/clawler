@@ -21,7 +21,7 @@ class CrawlEngine:
         ]
         self.max_workers = max_workers
 
-    def crawl(self) -> Tuple[List[Article], Dict[str, int]]:
+    def crawl(self, dedupe_threshold: float = 0.75) -> Tuple[List[Article], Dict[str, int]]:
         """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats."""
         all_articles: List[Article] = []
         stats: Dict[str, int] = {}
@@ -40,7 +40,7 @@ class CrawlEngine:
                     stats[src.name] = -1  # -1 indicates failure
 
         logger.info(f"[Engine] Total raw: {len(all_articles)}")
-        unique = deduplicate(all_articles)
+        unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold)
         logger.info(f"[Engine] After dedup: {len(unique)}")
 
         # Sort by timestamp (newest first), None timestamps last

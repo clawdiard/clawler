@@ -16,6 +16,8 @@ Clawler aggregates news from multiple sources using web scraping and RSS feeds, 
 - 📋 **OPML import/export** — interop with other RSS readers
 - 📂 **Custom feeds file** — YAML or JSON feed configuration
 - 🕐 **Relative timestamps** — "2h ago" in console output
+- 🔍 **Feed autodiscovery** — find RSS/Atom feeds on any webpage
+- ⚙️ **Config files** — persist defaults in `~/.clawler.yaml`
 
 ## Quick Start
 
@@ -125,7 +127,33 @@ clawler --export-opml my-feeds.opml
 
 # Import feeds from another reader
 clawler --import-opml subscriptions.opml
+
+# Discover feeds on a webpage
+clawler --discover https://example.com
+
+# Adjust dedup sensitivity (0.0-1.0, default 0.75)
+clawler --dedupe-threshold 0.85
+
+# Ignore config files for this run
+clawler --no-config
 ```
+
+## Config File
+
+Create `~/.clawler.yaml` (or `clawler.yaml` in your project) to set defaults:
+
+```yaml
+# ~/.clawler.yaml
+format: markdown
+limit: 25
+category: tech,science
+since: 6h
+quiet: true
+no_reddit: true
+dedupe_threshold: 0.8
+```
+
+CLI arguments always override config file values.
 
 ## Sources
 
@@ -158,6 +186,8 @@ clawler/
 ├── dedup.py        # Deduplication (exact + fuzzy)
 ├── utils.py        # Shared utilities (relative time, etc.)
 ├── opml.py         # OPML import/export
+├── config.py       # Config file loading (~/.clawler.yaml)
+├── discover.py     # Feed autodiscovery from webpages
 ├── feeds_config.py # Custom feeds file loader (YAML/JSON)
 ├── sources/
 │   ├── base.py     # Abstract base source
