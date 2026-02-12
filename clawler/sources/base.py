@@ -21,11 +21,12 @@ class BaseSource(ABC):
     max_retries: int = 2
     retry_backoff: float = 1.0
 
-    def fetch_url(self, url: str) -> str:
+    def fetch_url(self, url: str, **kwargs) -> str:
         """Fetch URL content with retries and error handling."""
         for attempt in range(self.max_retries + 1):
             try:
-                resp = requests.get(url, headers=HEADERS, timeout=self.timeout)
+                resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
+                                     timeout=self.timeout)
                 resp.raise_for_status()
                 return resp.text
             except requests.RequestException as e:
@@ -36,6 +37,23 @@ class BaseSource(ABC):
                 else:
                     logger.warning(f"[{self.name}] Failed to fetch {url} after {self.max_retries+1} attempts: {e}")
         return ""
+
+    def fetch_json(self, url: str, **kwargs):
+        """Fetch URL and parse JSON, with retries. Returns None on failure."""
+        for attempt in range(self.max_retries + 1):
+            try:
+                resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
+                                     timeout=self.timeout)
+                resp.raise_for_status()
+                return resp.json()
+            except requests.RequestException as e:
+                if attempt < self.max_retries:
+                    wait = self.retry_backoff * (2 ** attempt)
+                    logger.info(f"[{self.name}] Retry {attempt+1}/{self.max_retries} for {url} in {wait:.1f}s")
+                    time.sleep(wait)
+                else:
+                    logger.warning(f"[{self.name}] Failed to fetch {url} after {self.max_retries+1} attempts: {e}")
+        return None
 
     @abstractmethod
     def crawl(self) -> List[Article]:

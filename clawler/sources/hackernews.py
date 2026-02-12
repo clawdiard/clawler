@@ -23,8 +23,7 @@ class HackerNewsSource(BaseSource):
     def _fetch_item(self, story_id: int) -> Optional[Article]:
         """Fetch a single HN item and return an Article or None."""
         try:
-            r = requests.get(HN_ITEM.format(story_id), timeout=self.timeout)
-            item = r.json()
+            item = self.fetch_json(HN_ITEM.format(story_id))
             if not item or item.get("type") != "story":
                 return None
             title = item.get("title", "")
@@ -45,9 +44,10 @@ class HackerNewsSource(BaseSource):
 
     def crawl(self) -> List[Article]:
         try:
-            resp = requests.get(HN_TOP, timeout=self.timeout)
-            resp.raise_for_status()
-            ids = resp.json()[:self.limit]
+            ids = self.fetch_json(HN_TOP)
+            if not ids:
+                return []
+            ids = ids[:self.limit]
         except Exception as e:
             logger.warning(f"[HN] Failed to get top stories: {e}")
             return []

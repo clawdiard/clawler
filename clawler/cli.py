@@ -56,6 +56,10 @@ def main():
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
+    parser.add_argument("--timeout", type=int, default=15,
+                        help="HTTP request timeout in seconds (default: 15)")
+    parser.add_argument("--check-feeds", action="store_true",
+                        help="Test connectivity to all RSS feeds and report status")
     parser.add_argument("--list-sources", action="store_true", help="List all available sources and exit")
     parser.add_argument("--feeds", type=str, default=None,
                         help="Path to custom feeds file (YAML or JSON)")
@@ -109,6 +113,24 @@ def main():
         print("🤖 Reddit — subreddits: worldnews, technology, science, news, programming")
         return
 
+    if args.check_feeds:
+        import requests as _req
+        from clawler.sources.rss import DEFAULT_FEEDS
+        from clawler.sources.base import HEADERS as _H
+        feeds = custom_feeds or DEFAULT_FEEDS
+        print(f"🩺 Checking {len(feeds)} feeds (timeout: {args.timeout}s)...\n")
+        ok = 0
+        for f in feeds:
+            try:
+                r = _req.get(f["url"], headers=_H, timeout=args.timeout)
+                r.raise_for_status()
+                print(f"   ✅ {f.get('source', f['url']):20s} [{r.status_code}] {len(r.content)} bytes")
+                ok += 1
+            except Exception as e:
+                print(f"   ❌ {f.get('source', f['url']):20s} {e}")
+        print(f"\n📊 {ok}/{len(feeds)} feeds reachable")
+        return
+
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -118,11 +140,17 @@ def main():
     from clawler.sources import RSSSource, HackerNewsSource, RedditSource
     sources = []
     if not args.no_rss:
-        sources.append(RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource())
+        src = RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource()
+        src.timeout = args.timeout
+        sources.append(src)
     if not args.no_hn:
-        sources.append(HackerNewsSource())
+        src = HackerNewsSource()
+        src.timeout = args.timeout
+        sources.append(src)
     if not args.no_reddit:
-        sources.append(RedditSource())
+        src = RedditSource()
+        src.timeout = args.timeout
+        sources.append(src)
 
     if not sources:
         print("Error: All sources disabled!", file=sys.stderr)

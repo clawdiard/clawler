@@ -23,9 +23,9 @@ class RedditSource(BaseSource):
         for sub in self.subreddits:
             url = f"https://www.reddit.com/r/{sub}/hot.json?limit={self.limit}"
             try:
-                resp = requests.get(url, headers={**HEADERS, "Accept": "application/json"}, timeout=self.timeout)
-                resp.raise_for_status()
-                data = resp.json()
+                data = self.fetch_json(url, extra_headers={"Accept": "application/json"})
+                if not data:
+                    continue
                 for post in data.get("data", {}).get("children", []):
                     d = post.get("data", {})
                     if d.get("stickied"):
