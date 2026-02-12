@@ -43,12 +43,12 @@ class CrawlEngine:
         # Sort by timestamp (newest first), None timestamps last
         from datetime import datetime, timezone
         epoch = datetime.min.replace(tzinfo=timezone.utc)
-        def sort_key(a):
+        def sort_key(a: Article):
             ts = a.timestamp
             if ts is None:
                 return epoch
             if ts.tzinfo is None:
                 return ts.replace(tzinfo=timezone.utc)
-            return ts
+            return ts.astimezone(timezone.utc)
         unique.sort(key=sort_key, reverse=True)
         return unique

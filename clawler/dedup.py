@@ -5,17 +5,30 @@ from difflib import SequenceMatcher
 
 
 def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> List[Article]:
-    """Remove duplicate articles using exact key + fuzzy title matching."""
-    seen_keys = set()
-    seen_titles = []
-    unique = []
+    """Remove duplicate articles using exact key + fingerprint + fuzzy title matching.
+
+    Three-tier dedup strategy:
+    1. Exact key match (title+url hash) — O(1) lookup
+    2. Title fingerprint match (sorted significant words) — O(1) lookup, catches
+       obvious cross-source duplicates cheaply
+    3. Fuzzy SequenceMatcher — O(n) per article, only reached if tiers 1-2 miss
+    """
+    seen_keys: set = set()
+    seen_fingerprints: set = set()
+    seen_titles: List[str] = []
+    unique: List[Article] = []
 
     for article in articles:
-        # Exact dedup
+        # Tier 1: exact dedup
         if article.dedup_key in seen_keys:
             continue
 
-        # Fuzzy title dedup (catch same story from different sources)
+        # Tier 2: fingerprint dedup (cheap cross-source catch)
+        fp = article.title_fingerprint
+        if fp and fp in seen_fingerprints:
+            continue
+
+        # Tier 3: fuzzy title dedup
         title_lower = article.title.lower().strip()
         is_dupe = False
         for prev_title in seen_titles:
@@ -27,6 +40,8 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
             continue
 
         seen_keys.add(article.dedup_key)
+        if fp:
+            seen_fingerprints.add(fp)
         seen_titles.append(title_lower)
         unique.append(article)
 

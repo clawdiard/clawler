@@ -38,6 +38,12 @@ clawler -f markdown
 # Tech news only, top 20
 clawler --category tech -n 20
 
+# Only articles from the last 2 hours
+clawler --since 2h
+
+# Save markdown digest to file
+clawler -f markdown -o digest.md
+
 # Skip slow sources
 clawler --no-reddit --no-hn
 

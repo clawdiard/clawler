@@ -23,6 +23,9 @@ class Article:
 
     @property
     def title_fingerprint(self) -> str:
-        """Fuzzy fingerprint based on title words for cross-source dedup."""
+        """Fuzzy fingerprint based on title words for cross-source dedup.
+        Returns empty string if insufficient significant words (avoids false matches)."""
         words = sorted(set(w.lower() for w in self.title.split() if len(w) > 3))
+        if len(words) < 2:
+            return ""  # Not enough signal for fingerprint dedup
         return hashlib.md5(" ".join(words).encode()).hexdigest()

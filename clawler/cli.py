@@ -1,9 +1,24 @@
 """CLI entry point for Clawler."""
 import argparse
 import logging
+import re
 import sys
+from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
 from clawler.formatters import ConsoleFormatter, JSONFormatter, MarkdownFormatter
+
+
+def _parse_since(value: str) -> datetime:
+    """Parse a relative time string like '1h', '30m', '2d' into a UTC datetime."""
+    match = re.match(r"^(\d+)\s*([mhdw])$", value.strip().lower())
+    if not match:
+        raise argparse.ArgumentTypeError(
+            f"Invalid --since value '{value}'. Use e.g. 30m, 2h, 1d, 1w"
+        )
+    amount, unit = int(match.group(1)), match.group(2)
+    deltas = {"m": timedelta(minutes=amount), "h": timedelta(hours=amount),
+              "d": timedelta(days=amount), "w": timedelta(weeks=amount)}
+    return datetime.now(timezone.utc) - deltas[unit]
 
 
 def main():
@@ -17,6 +32,10 @@ def main():
                         help="Max articles to display (default: 50)")
     parser.add_argument("--category", choices=["tech", "world", "science", "business", "all"], default="all",
                         help="Filter by category")
+    parser.add_argument("--since", type=str, default=None,
+                        help="Only show articles newer than this (e.g. 30m, 2h, 1d, 1w)")
+    parser.add_argument("-o", "--output", type=str, default=None,
+                        help="Write output to file instead of stdout")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
@@ -61,13 +80,24 @@ def main():
     if args.category != "all":
         articles = [a for a in articles if a.category == args.category]
 
+    # Filter by time
+    if args.since:
+        cutoff = _parse_since(args.since)
+        articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
+
     # Limit
     articles = articles[:args.limit]
 
     # Format
     formatters = {"console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter}
     output = formatters[args.format]().format(articles)
-    print(output)
+
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as f:
+            f.write(output)
+        print(f"✅ Wrote {len(articles)} articles to {args.output}", file=sys.stderr)
+    else:
+        print(output)
 
 
 if __name__ == "__main__":
