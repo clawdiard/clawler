@@ -75,6 +75,12 @@ def main():
                         help="Interest profile (YAML/JSON) for relevance scoring and sorting")
     parser.add_argument("--min-relevance", type=float, default=0.0, dest="min_relevance",
                         help="Minimum relevance score (0.0-1.0) when using --profile (default: 0.0)")
+    parser.add_argument("--cache", action="store_true",
+                        help="Enable file-based result cache (skip network if fresh)")
+    parser.add_argument("--cache-ttl", type=int, default=300, dest="cache_ttl",
+                        help="Cache TTL in seconds (default: 300)")
+    parser.add_argument("--clear-cache", action="store_true", dest="clear_cache",
+                        help="Clear all cached results and exit")
 
     args = parser.parse_args()
 
@@ -82,6 +88,13 @@ def main():
     if not args.no_config:
         from clawler.config import apply_config_defaults
         args = apply_config_defaults(parser, args)
+
+    # Clear cache
+    if args.clear_cache:
+        from clawler.cache import clear_cache
+        n = clear_cache()
+        print(f"🧹 Cleared {n} cached file(s)")
+        return
 
     # Feed autodiscovery
     if args.discover:
@@ -186,7 +199,23 @@ def main():
     engine = CrawlEngine(sources=sources)
     if not args.quiet:
         print("🕷️  Crawling news sources...", file=sys.stderr)
-    articles, stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
+
+    # Check cache first
+    articles = None
+    stats = None
+    if args.cache:
+        from clawler.cache import cache_key, load_cache, save_cache
+        ckey = cache_key([s.name for s in sources], args.dedupe_threshold)
+        cached = load_cache(ckey, ttl=args.cache_ttl)
+        if cached:
+            articles, stats = cached
+            if not args.quiet:
+                print("📦 Using cached results", file=sys.stderr)
+
+    if articles is None:
+        articles, stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
+        if args.cache:
+            save_cache(ckey, articles, stats)
 
     # Check if all sources failed
     if all(v == -1 for v in stats.values()):

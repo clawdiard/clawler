@@ -13,6 +13,7 @@ class Article:
     summary: str = ""
     timestamp: Optional[datetime] = None
     category: str = "general"
+    relevance: Optional[float] = None
 
     @property
     def dedup_key(self) -> str:

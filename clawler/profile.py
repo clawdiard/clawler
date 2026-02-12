@@ -84,9 +84,9 @@ def score_articles(
     # Normalize to 0.0-1.0
     max_score = max((s for _, s in scored), default=1.0) or 1.0
     for article, raw in scored:
-        article.relevance = raw / max_score  # type: ignore[attr-defined]
+        article.relevance = raw / max_score
 
     # Filter and sort
     result = [a for a, raw in scored if (raw / max_score) >= min_relevance]
-    result.sort(key=lambda a: a.relevance, reverse=True)  # type: ignore[attr-defined]
+    result.sort(key=lambda a: a.relevance or 0.0, reverse=True)
     return result

@@ -18,6 +18,7 @@ Clawler aggregates news from multiple sources using web scraping and RSS feeds, 
 - 🕐 **Relative timestamps** — "2h ago" in console output
 - 🔍 **Feed autodiscovery** — find RSS/Atom feeds on any webpage
 - ⚙️ **Config files** — persist defaults in `~/.clawler.yaml`
+- 💾 **Result caching** — file-based cache to skip network on repeated runs
 
 ## Quick Start
 
@@ -175,6 +176,15 @@ clawler --discover https://example.com
 # Adjust dedup sensitivity (0.0-1.0, default 0.75)
 clawler --dedupe-threshold 0.85
 
+# Enable result caching (default 5min TTL)
+clawler --cache
+
+# Cache with custom TTL (10 minutes)
+clawler --cache --cache-ttl 600
+
+# Clear cached results
+clawler --clear-cache
+
 # Ignore config files for this run
 clawler --no-config
 ```
@@ -222,6 +232,7 @@ CLI arguments always override config file values.
 ```
 clawler/
 ├── api.py          # Public Python API (library use)
+├── cache.py        # File-based result caching
 ├── profile.py      # Interest-profile relevance scoring
 ├── cli.py          # CLI entry point
 ├── engine.py       # Crawl orchestrator (parallel execution)

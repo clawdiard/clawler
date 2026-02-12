@@ -15,7 +15,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
     """
     seen_keys: set = set()
     seen_fingerprints: set = set()
-    seen_titles: List[str] = []
+    seen_titles: List[tuple] = []
     unique: List[Article] = []
 
     for article in articles:
@@ -30,8 +30,13 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
 
         # Tier 3: fuzzy title dedup
         title_lower = article.title.lower().strip()
+        title_len = len(title_lower)
         is_dupe = False
-        for prev_title in seen_titles:
+        for prev_title, prev_len in seen_titles:
+            # Quick length check: if lengths differ by more than allowed,
+            # SequenceMatcher can't possibly exceed threshold
+            if abs(title_len - prev_len) > max(title_len, prev_len) * (1 - similarity_threshold):
+                continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
                 is_dupe = True
                 break
@@ -42,7 +47,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
         seen_keys.add(article.dedup_key)
         if fp:
             seen_fingerprints.add(fp)
-        seen_titles.append(title_lower)
+        seen_titles.append((title_lower, title_len))
         unique.append(article)
 
     return unique
