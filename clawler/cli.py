@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
 from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, MarkdownFormatter
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 def _parse_since(value: str) -> datetime:
@@ -41,6 +41,8 @@ def main():
                         help="Write output to file instead of stdout")
     parser.add_argument("--source", type=str, default=None,
                         help="Filter articles by source name (substring match, case-insensitive)")
+    parser.add_argument("-s", "--search", type=str, default=None,
+                        help="Filter articles by keyword in title or summary (case-insensitive)")
     parser.add_argument("--sort", choices=["time", "title", "source"], default="time",
                         help="Sort order (default: time)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
@@ -98,6 +100,11 @@ def main():
     if args.source:
         q = args.source.lower()
         articles = [a for a in articles if q in a.source.lower()]
+
+    # Filter by keyword search
+    if args.search:
+        kw = args.search.lower()
+        articles = [a for a in articles if kw in a.title.lower() or kw in a.summary.lower()]
 
     # Filter by time
     if args.since:

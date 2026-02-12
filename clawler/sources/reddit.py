@@ -44,7 +44,9 @@ class RedditSource(BaseSource):
                         source=f"r/{sub}",
                         summary=summary[:300],
                         timestamp=datetime.fromtimestamp(created, tz=timezone.utc) if created else None,
-                        category="tech" if sub in ("technology", "programming") else "world",
+                        category={"technology": "tech", "programming": "tech",
+                              "science": "science", "worldnews": "world",
+                              "news": "world"}.get(sub, "general"),
                     ))
                 logger.info(f"[Reddit] r/{sub}: {len(data.get('data', {}).get('children', []))} posts")
             except Exception as e:

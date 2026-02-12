@@ -14,6 +14,7 @@ class HTMLFormatter:
             source = html.escape(a.source)
             summary = html.escape(a.summary[:200]) if a.summary else ""
             category = html.escape(a.category)
+            summary_html = f'<p class="summary">{summary}</p>' if summary else ""
             rows.append(
                 f'<article class="story">'
                 f'<h3>{i}. <a href="{url}" target="_blank" rel="noopener">{title}</a></h3>'
@@ -22,7 +23,7 @@ class HTMLFormatter:
                 f'<span class="time">🕐 {ts}</span>'
                 f'<span class="cat">🏷️ {category}</span>'
                 f'</div>'
-                f'{f"<p class=summary>{summary}</p>" if summary else ""}'
+                f'{summary_html}'
                 f'</article>'
             )
 

@@ -16,7 +16,7 @@ DEFAULT_FEEDS = [
     {"url": "https://www.theverge.com/rss/index.xml", "source": "The Verge", "category": "tech"},
     {"url": "https://techcrunch.com/feed/", "source": "TechCrunch", "category": "tech"},
     {"url": "https://www.wired.com/feed/rss", "source": "Wired", "category": "tech"},
-    {"url": "https://feeds.feedburner.com/TechCrunch/", "source": "TechCrunch (FB)", "category": "tech"},
+    {"url": "https://feeds.feedburner.com/TheHackersNews", "source": "The Hacker News", "category": "tech"},
     # --- World News ---
     {"url": "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml", "source": "NY Times", "category": "world"},
     {"url": "https://feeds.bbci.co.uk/news/rss.xml", "source": "BBC News", "category": "world"},

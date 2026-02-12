@@ -53,6 +53,9 @@ clawler -f html -o digest.html
 # Filter by source name
 clawler --source "BBC"
 
+# Search articles by keyword
+clawler --search "AI"
+
 # Sort by title or source instead of time
 clawler --sort title
 
