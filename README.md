@@ -44,6 +44,12 @@ clawler --since 2h
 # Save markdown digest to file
 clawler -f markdown -o digest.md
 
+# CSV export for data analysis
+clawler -f csv -o news.csv
+
+# Filter by source name
+clawler --source "BBC"
+
 # Skip slow sources
 clawler --no-reddit --no-hn
 
@@ -86,6 +92,7 @@ clawler/
 │   └── reddit.py   # Reddit JSON endpoints
 └── formatters/
     ├── console.py  # Rich terminal output
+    ├── csv_out.py  # CSV output
     ├── json_out.py # JSON output
     └── markdown.py # Markdown output
 ```

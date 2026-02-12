@@ -5,7 +5,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import ConsoleFormatter, JSONFormatter, MarkdownFormatter
+from clawler.formatters import ConsoleFormatter, CSVFormatter, JSONFormatter, MarkdownFormatter
 
 
 def _parse_since(value: str) -> datetime:
@@ -26,7 +26,7 @@ def main():
         prog="clawler",
         description="🗞️ Clawler — Advanced news crawling service",
     )
-    parser.add_argument("-f", "--format", choices=["console", "json", "markdown"], default="console",
+    parser.add_argument("-f", "--format", choices=["console", "json", "markdown", "csv"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -36,6 +36,8 @@ def main():
                         help="Only show articles newer than this (e.g. 30m, 2h, 1d, 1w)")
     parser.add_argument("-o", "--output", type=str, default=None,
                         help="Write output to file instead of stdout")
+    parser.add_argument("--source", type=str, default=None,
+                        help="Filter articles by source name (substring match, case-insensitive)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
     parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
@@ -80,6 +82,11 @@ def main():
     if args.category != "all":
         articles = [a for a in articles if a.category == args.category]
 
+    # Filter by source
+    if args.source:
+        q = args.source.lower()
+        articles = [a for a in articles if q in a.source.lower()]
+
     # Filter by time
     if args.since:
         cutoff = _parse_since(args.since)
@@ -89,7 +96,7 @@ def main():
     articles = articles[:args.limit]
 
     # Format
-    formatters = {"console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter}
+    formatters = {"console": ConsoleFormatter, "json": JSONFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter}
     output = formatters[args.format]().format(articles)
 
     if args.output:

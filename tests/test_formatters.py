@@ -1,8 +1,10 @@
 """Tests for output formatters."""
+import csv
+import io
 import json
 from datetime import datetime, timezone
 from clawler.models import Article
-from clawler.formatters import ConsoleFormatter, JSONFormatter, MarkdownFormatter
+from clawler.formatters import ConsoleFormatter, CSVFormatter, JSONFormatter, MarkdownFormatter
 
 
 def _articles():
@@ -82,3 +84,25 @@ class TestNoneTimestamp:
         a = [Article(title="X", url="https://x.com", source="x")]
         output = MarkdownFormatter().format(a)
         assert "unknown" in output
+
+
+class TestCSVFormatter:
+    def test_valid_csv(self):
+        output = CSVFormatter().format(_articles())
+        reader = csv.reader(io.StringIO(output))
+        rows = list(reader)
+        assert rows[0] == ["title", "url", "source", "summary", "timestamp", "category"]
+        assert len(rows) == 3  # header + 2 articles
+
+    def test_empty(self):
+        output = CSVFormatter().format([])
+        reader = csv.reader(io.StringIO(output))
+        rows = list(reader)
+        assert len(rows) == 1  # header only
+
+    def test_none_timestamp_empty_string(self):
+        a = [Article(title="X", url="https://x.com", source="x")]
+        output = CSVFormatter().format(a)
+        reader = csv.reader(io.StringIO(output))
+        rows = list(reader)
+        assert rows[1][4] == ""  # timestamp column is empty
