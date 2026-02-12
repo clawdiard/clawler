@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="clawler",
-    version="1.5.0",
+    version="1.6.0",
     description="Advanced news crawling service — no API keys required",
     author="Clawdia @ OpenClaw",
     packages=find_packages(),
@@ -12,6 +12,7 @@ setup(
         "feedparser>=6.0.0",
         "python-dateutil>=2.8.0",
         "rich>=13.0.0",
+        "pyyaml>=6.0.0",
     ],
     entry_points={
         "console_scripts": [

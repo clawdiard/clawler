@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
 from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, MarkdownFormatter
 
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 
 
 def _parse_since(value: str) -> datetime:
@@ -33,8 +33,8 @@ def main():
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", type=int, default=50,
                         help="Max articles to display (default: 50)")
-    parser.add_argument("--category", choices=["tech", "world", "science", "business", "all"], default="all",
-                        help="Filter by category")
+    parser.add_argument("--category", type=str, default="all",
+                        help="Filter by category (comma-separated, e.g. tech,science)")
     parser.add_argument("--since", type=str, default=None,
                         help="Only show articles newer than this (e.g. 30m, 2h, 1d, 1w)")
     parser.add_argument("-o", "--output", type=str, default=None,
@@ -51,14 +51,54 @@ def main():
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
     parser.add_argument("--list-sources", action="store_true", help="List all available sources and exit")
+    parser.add_argument("--feeds", type=str, default=None,
+                        help="Path to custom feeds file (YAML or JSON)")
+    parser.add_argument("--export-opml", type=str, default=None, metavar="FILE",
+                        help="Export current feed list as OPML and exit")
+    parser.add_argument("--import-opml", type=str, default=None, metavar="FILE",
+                        help="Import feeds from OPML file (replaces default RSS feeds)")
 
     args = parser.parse_args()
 
+    # Determine RSS feeds to use
+    custom_feeds = None
+    if args.import_opml:
+        from clawler.opml import import_opml
+        try:
+            with open(args.import_opml, "r", encoding="utf-8") as f:
+                custom_feeds = import_opml(f.read())
+            if not args.quiet:
+                print(f"📥 Imported {len(custom_feeds)} feeds from {args.import_opml}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error importing OPML: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    if args.feeds:
+        from clawler.feeds_config import load_feeds_file
+        try:
+            custom_feeds = load_feeds_file(args.feeds)
+            if not args.quiet:
+                print(f"📂 Loaded {len(custom_feeds)} feeds from {args.feeds}", file=sys.stderr)
+        except Exception as e:
+            print(f"Error loading feeds file: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    if args.export_opml:
+        from clawler.opml import export_opml
+        from clawler.sources.rss import DEFAULT_FEEDS
+        feeds = custom_feeds or DEFAULT_FEEDS
+        opml_xml = export_opml(feeds)
+        with open(args.export_opml, "w", encoding="utf-8") as f:
+            f.write(opml_xml)
+        print(f"✅ Exported {len(feeds)} feeds to {args.export_opml}")
+        return
+
     if args.list_sources:
         from clawler.sources.rss import DEFAULT_FEEDS
+        feeds = custom_feeds or DEFAULT_FEEDS
         print("📡 RSS Feeds:")
-        for f in DEFAULT_FEEDS:
-            print(f"   {f['source']:20s} [{f['category']}] — {f['url']}")
+        for f in feeds:
+            print(f"   {f.get('source', f['url']):20s} [{f.get('category', 'general')}] — {f['url']}")
         print("\n🔥 Hacker News — https://hacker-news.firebaseio.com/v0/topstories.json")
         print("🤖 Reddit — subreddits: worldnews, technology, science, news, programming")
         return
@@ -72,7 +112,7 @@ def main():
     from clawler.sources import RSSSource, HackerNewsSource, RedditSource
     sources = []
     if not args.no_rss:
-        sources.append(RSSSource())
+        sources.append(RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource())
     if not args.no_hn:
         sources.append(HackerNewsSource())
     if not args.no_reddit:
@@ -87,14 +127,21 @@ def main():
         print("🕷️  Crawling news sources...", file=sys.stderr)
     articles, stats = engine.crawl()
 
+    # Check if all sources failed
+    if all(v == -1 for v in stats.values()):
+        print("❌ All sources failed!", file=sys.stderr)
+        sys.exit(1)
+
     # Print source stats
     if not args.quiet:
         for name, count in stats.items():
-            print(f"   ✓ {name}: {count} articles", file=sys.stderr)
+            status = f"{count} articles" if count >= 0 else "FAILED"
+            print(f"   {'✓' if count >= 0 else '✗'} {name}: {status}", file=sys.stderr)
 
-    # Filter by category
+    # Parse multi-category filter
     if args.category != "all":
-        articles = [a for a in articles if a.category == args.category]
+        cats = set(c.strip().lower() for c in args.category.split(","))
+        articles = [a for a in articles if a.category in cats]
 
     # Filter by source
     if args.source:
