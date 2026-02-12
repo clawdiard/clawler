@@ -14,8 +14,8 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
     3. Fuzzy SequenceMatcher — O(n) per article, only reached if tiers 1-2 miss
     """
     seen_keys: set = set()
-    seen_fingerprints: set = set()
-    seen_titles: List[tuple] = []
+    seen_fingerprints: dict = {}  # fingerprint -> index in unique
+    seen_titles: List[tuple] = []  # (title_lower, title_len, index in unique)
     unique: List[Article] = []
 
     for article in articles:
@@ -26,28 +26,43 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
         # Tier 2: fingerprint dedup (cheap cross-source catch)
         fp = article.title_fingerprint
         if fp and fp in seen_fingerprints:
+            # Keep the one with higher quality_score
+            idx = seen_fingerprints[fp]
+            if article.quality_score > unique[idx].quality_score:
+                seen_keys.discard(unique[idx].dedup_key)
+                seen_keys.add(article.dedup_key)
+                unique[idx] = article
+                # Update title entry
+                for i, (t, tl, tidx) in enumerate(seen_titles):
+                    if tidx == idx:
+                        seen_titles[i] = (article.title.lower().strip(), len(article.title.lower().strip()), idx)
+                        break
             continue
 
         # Tier 3: fuzzy title dedup
         title_lower = article.title.lower().strip()
         title_len = len(title_lower)
         is_dupe = False
-        for prev_title, prev_len in seen_titles:
-            # Quick length check: if lengths differ by more than allowed,
-            # SequenceMatcher can't possibly exceed threshold
+        for prev_title, prev_len, prev_idx in seen_titles:
             if abs(title_len - prev_len) > max(title_len, prev_len) * (1 - similarity_threshold):
                 continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
+                # Keep higher quality
+                if article.quality_score > unique[prev_idx].quality_score:
+                    seen_keys.discard(unique[prev_idx].dedup_key)
+                    seen_keys.add(article.dedup_key)
+                    unique[prev_idx] = article
                 is_dupe = True
                 break
 
         if is_dupe:
             continue
 
+        idx = len(unique)
         seen_keys.add(article.dedup_key)
         if fp:
-            seen_fingerprints.add(fp)
-        seen_titles.append((title_lower, title_len))
+            seen_fingerprints[fp] = idx
+        seen_titles.append((title_lower, title_len, idx))
         unique.append(article)
 
     return unique

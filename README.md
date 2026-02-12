@@ -2,23 +2,23 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from multiple sources using web scraping and RSS feeds, deduplicates stories, and presents them in clean, formatted output.
+Clawler aggregates news from 40+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **Multiple sources** — RSS feeds (15+ major outlets), Hacker News, Reddit
+- 📡 **40+ sources** — RSS feeds (39 outlets), Hacker News API, Reddit JSON
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
-- 🧹 **Smart deduplication** — exact match + fuzzy title similarity
-- 📊 **Multiple output formats** — Rich console, JSON, JSON Feed 1.1, Markdown, CSV, HTML
-- 🏷️ **Category filtering** — tech, world, science, business (multi-select + exclude supported)
+- 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
+- ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
+- 📊 **Multiple output formats** — Console, JSON, JSON Feed, Markdown, CSV, HTML
+- 🏷️ **Category filtering** — tech, world, science, business, security, investigative, culture
 - ⚡ **Parallel crawling** — concurrent fetching across all sources
+- 🩺 **Health tracking** — per-source success rates with automatic score reduction
+- 📥 **OPML import/export** — bring your own feed lists
+- 🔍 **Feed discovery** — auto-detect feeds on any URL
+- 🎯 **Interest profiles** — relevance scoring based on personal interests
+- 📦 **Result caching** — skip network if results are fresh
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
-- 📋 **OPML import/export** — interop with other RSS readers
-- 📂 **Custom feeds file** — YAML or JSON feed configuration
-- 🕐 **Relative timestamps** — "2h ago" in console output
-- 🔍 **Feed autodiscovery** — find RSS/Atom feeds on any webpage
-- ⚙️ **Config files** — persist defaults in `~/.clawler.yaml`
-- 💾 **Result caching** — file-based cache to skip network on repeated runs
 
 ## Quick Start
 
@@ -38,222 +38,135 @@ clawler
 # JSON output for piping
 clawler -f json
 
-# Markdown output
-clawler -f markdown
-
 # Tech news only, top 20
 clawler --category tech -n 20
 
-# Multiple categories
-clawler --category tech,science
+# Only high-quality sources (score >= 0.75)
+clawler --min-quality 0.75
 
-# Only articles from the last 2 hours
-clawler --since 2h
-
-# Save markdown digest to file
-clawler -f markdown -o digest.md
-
-# CSV export for data analysis
-clawler -f csv -o news.csv
-
-# Self-contained HTML digest
-clawler -f html -o digest.html
-
-# Filter by source name
-clawler --source "BBC"
-
-# Search articles by keyword
-clawler --search "AI"
-
-# Sort by title or source instead of time
-clawler --sort title
-
-# Exclude a source
-clawler --exclude-source "Reddit"
-
-# Exclude categories
-clawler --exclude-category business,science
-
-# Show crawl statistics only
-clawler --stats
-
-# JSON Feed 1.1 output (for feed readers)
-clawler -f jsonfeed -o feed.json
-
-# Quiet mode (no status messages on stderr)
-clawler -q -f json
+# Security news
+clawler --category security
 
 # Skip slow sources
 clawler --no-reddit --no-hn
 
+# Search for a topic
+clawler -s "climate"
+
 # Verbose logging
 clawler -v
 
-# Use custom feeds from a YAML file
-clawler --feeds my-feeds.yaml
+# List all sources
+clawler --list-sources
 
-# Import feeds from OPML
-clawler --import-opml subscriptions.opml
-
-# Export current feeds as OPML
-clawler --export-opml feeds.opml
+# Check feed health
+clawler --check-feeds
 ```
-
-## Interest Profiles
-
-Score and rank articles by personal relevance using a YAML profile:
-
-```yaml
-# interests.yaml
-name: Alexandria
-interests:
-  - keywords: [AI, machine learning, LLM, GPT]
-    weight: 2.0
-  - keywords: [skateboarding, skatepark, skate]
-    weight: 1.5
-  - keywords: [python, rust, open source]
-    weight: 1.0
-```
-
-```bash
-# Rank articles by relevance to your interests
-clawler --profile interests.yaml
-
-# Only show articles with >50% relevance
-clawler --profile interests.yaml --min-relevance 0.5
-```
-
-## Python API
-
-Use Clawler as a library:
-
-```python
-from clawler.api import crawl
-
-# Simple one-liner
-articles = crawl(category="tech", limit=10, since="2h")
-
-# Profile-based personalized feed
-articles = crawl(profile="interests.yaml", min_relevance=0.3)
-
-for a in articles:
-    print(f"[{a.relevance:.0%}] {a.title} — {a.url}")
-```
-
-## Custom Feeds File
-
-Create a YAML or JSON file with your own RSS feeds:
-
-```yaml
-# my-feeds.yaml
-feeds:
-  - url: https://example.com/feed.xml
-    source: Example Blog
-    category: tech
-  - url: https://another.com/rss
-    source: Another Site
-    category: world
-```
-
-```bash
-clawler --feeds my-feeds.yaml
-```
-
-## OPML Import/Export
-
-Clawler supports OPML for feed portability:
-
-```bash
-# Export your feed list for use in other readers
-clawler --export-opml my-feeds.opml
-
-# Import feeds from another reader
-clawler --import-opml subscriptions.opml
-
-# Discover feeds on a webpage
-clawler --discover https://example.com
-
-# Adjust dedup sensitivity (0.0-1.0, default 0.75)
-clawler --dedupe-threshold 0.85
-
-# Enable result caching (default 5min TTL)
-clawler --cache
-
-# Cache with custom TTL (10 minutes)
-clawler --cache --cache-ttl 600
-
-# Clear cached results
-clawler --clear-cache
-
-# Ignore config files for this run
-clawler --no-config
-```
-
-## Config File
-
-Create `~/.clawler.yaml` (or `clawler.yaml` in your project) to set defaults:
-
-```yaml
-# ~/.clawler.yaml
-format: markdown
-limit: 25
-category: tech,science
-since: 6h
-quiet: true
-no_reddit: true
-dedupe_threshold: 0.8
-```
-
-CLI arguments always override config file values.
 
 ## Sources
 
-| Source | Type | Category |
-|--------|------|----------|
-| Ars Technica | RSS | tech |
-| The Verge | RSS | tech |
-| TechCrunch | RSS | tech |
-| Wired | RSS | tech |
-| The Hacker News | RSS | tech |
-| NY Times | RSS | world |
-| BBC News | RSS | world |
-| The Guardian | RSS | world |
-| Reuters | RSS | world |
-| CNN | RSS | world |
-| ScienceDaily | RSS | science |
-| Phys.org | RSS | science |
-| Bloomberg | RSS | business |
-| CNBC | RSS | business |
-| Hacker News | API | tech |
-| Reddit | JSON | various |
+| Source | Type | Category | Quality |
+|--------|------|----------|---------|
+| Reuters | RSS | world | 0.90 |
+| BBC News | RSS | world | 0.85 |
+| NY Times | RSS | world | 0.84 |
+| Nature | RSS | science | 0.84 |
+| Bloomberg | RSS | business | 0.83 |
+| ProPublica | RSS | investigative | 0.82 |
+| Krebs on Security | RSS | security | 0.81 |
+| MIT Technology Review | RSS | tech | 0.81 |
+| Ars Technica | RSS | tech | 0.81 |
+| Schneier on Security | RSS | security | 0.80 |
+| Rest of World | RSS | tech | 0.80 |
+| NPR | RSS | world | 0.80 |
+| The Guardian | RSS | world | 0.80 |
+| 404 Media | RSS | tech | 0.79 |
+| LWN.net | RSS | tech | 0.78 |
+| IEEE Spectrum | RSS | tech | 0.78 |
+| Al Jazeera | RSS | world | 0.78 |
+| DW | RSS | world | 0.78 |
+| The Atlantic | RSS | culture | 0.77 |
+| The Conversation | RSS | science | 0.77 |
+| Hacker News | API | tech | 0.75 |
+| HN Show | RSS | tech | 0.75 |
+| HN Ask | RSS | tech | 0.75 |
+| TorrentFreak | RSS | tech | 0.74 |
+| Wired | RSS | tech | 0.73 |
+| The Intercept | RSS | investigative | 0.72 |
+| TechCrunch | RSS | tech | 0.71 |
+| New Scientist | RSS | science | 0.71 |
+| Nautilus | RSS | science | 0.71 |
+| Lobsters | RSS | tech | 0.70 |
+| Phoronix | RSS | tech | 0.70 |
+| The Hacker News | RSS | tech | 0.70 |
+| TechDirt | RSS | tech | 0.69 |
+| ScienceDaily | RSS | science | 0.69 |
+| Phys.org | RSS | science | 0.69 |
+| EFF Updates | RSS | security | 0.69 |
+| The Verge | RSS | tech | 0.68 |
+| CNBC | RSS | business | 0.65 |
+| CNN | RSS | world | 0.64 |
+| Reddit | JSON | various | 0.62 |
+| The Next Web | RSS | tech | 0.60 |
+
+## Quality Weighting
+
+Articles are ranked by a blended score: **60% recency + 40% source quality**.
+
+- **Recency** = `max(0, 1.0 - age_hours / 48)` — articles older than 48h get 0
+- **Quality** = source score from `source_weights.yaml`, derived from 6 dimensions:
+  - Credibility (25%) — editorial standards, fact-checking
+  - Uniqueness (20%) — original reporting vs aggregation
+  - Signal-to-noise (20%) — substantive content vs filler
+  - Freshness (15%) — how quickly stories appear
+  - Reliability (10%) — feed uptime and consistency
+  - Coverage (10%) — breadth of topics
+
+During deduplication, when the same story appears from multiple sources, the version from the higher-quality source is kept.
+
+## Health Tracking
+
+Clawler tracks per-source health in `~/.clawler/health.json`:
+
+- **total_crawls** — number of crawl attempts
+- **failures** — number of failed crawls
+- **avg_articles** — average articles per successful crawl
+- **last_success** — timestamp of last successful crawl
+
+Health modifiers automatically reduce effective quality scores:
+- Success rate < 80% → 20% reduction
+- Success rate < 50% → 50% reduction
 
 ## Architecture
 
 ```
 clawler/
-├── api.py          # Public Python API (library use)
-├── cache.py        # File-based result caching
-├── profile.py      # Interest-profile relevance scoring
-├── cli.py          # CLI entry point
-├── engine.py       # Crawl orchestrator (parallel execution)
-├── models.py       # Article dataclass with dedup keys
-├── dedup.py        # Deduplication (exact + fuzzy)
-├── utils.py        # Shared utilities (relative time, etc.)
-├── opml.py         # OPML import/export
-├── config.py       # Config file loading (~/.clawler.yaml)
-├── discover.py     # Feed autodiscovery from webpages
-├── feeds_config.py # Custom feeds file loader (YAML/JSON)
+├── cli.py              # CLI entry point (30+ flags)
+├── engine.py           # Crawl orchestrator (parallel + quality scoring)
+├── models.py           # Article dataclass (dedup keys, quality_score, relevance)
+├── dedup.py            # 3-tier deduplication (quality-aware)
+├── weights.py          # Source quality score lookups
+├── health.py           # Per-source health tracking
+├── source_weights.yaml # Quality scores for all 40+ sources
+├── cache.py            # File-based result caching
+├── config.py           # Config file support
+├── profile.py          # Interest-based relevance scoring
+├── discover.py         # Feed autodiscovery
+├── opml.py             # OPML import/export
+├── feeds_config.py     # Custom feed file loading
+├── utils.py            # Shared utilities
 ├── sources/
-│   ├── base.py     # Abstract base source
-│   ├── rss.py      # RSS/Atom feed crawler (feedparser)
-│   ├── hackernews.py  # HN Firebase API
-│   └── reddit.py   # Reddit JSON endpoints
+│   ├── base.py         # Abstract base source
+│   ├── rss.py          # RSS/Atom feed crawler (39 feeds)
+│   ├── hackernews.py   # HN Firebase API
+│   └── reddit.py       # Reddit JSON endpoints
 └── formatters/
-    ├── console.py  # Rich terminal output (relative timestamps)
-    ├── csv_out.py  # CSV output
-    ├── html_out.py # Self-contained HTML page
-    ├── json_out.py # JSON output
-    └── markdown.py # Markdown output
+    ├── console.py      # Rich terminal output
+    ├── json_out.py     # JSON output
+    ├── jsonfeed.py     # JSON Feed format
+    ├── markdown.py     # Markdown output
+    ├── csv_out.py      # CSV output
+    └── html_out.py     # HTML output
 ```
 
 ## License

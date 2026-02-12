@@ -14,6 +14,7 @@ class Article:
     timestamp: Optional[datetime] = None
     category: str = "general"
     relevance: Optional[float] = None
+    quality_score: float = 0.5
 
     @property
     def dedup_key(self) -> str:

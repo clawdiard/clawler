@@ -29,6 +29,37 @@ DEFAULT_FEEDS = [
     # --- Business ---
     {"url": "https://feeds.bloomberg.com/markets/news.rss", "source": "Bloomberg", "category": "business"},
     {"url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114", "source": "CNBC", "category": "business"},
+    # --- Tech (expanded) ---
+    {"url": "https://www.technologyreview.com/feed/", "source": "MIT Technology Review", "category": "tech"},
+    {"url": "https://spectrum.ieee.org/feeds/feed.rss", "source": "IEEE Spectrum", "category": "tech"},
+    {"url": "https://lwn.net/headlines/rss", "source": "LWN.net", "category": "tech"},
+    {"url": "https://lobste.rs/rss", "source": "Lobsters", "category": "tech"},
+    {"url": "https://www.phoronix.com/rss.php", "source": "Phoronix", "category": "tech"},
+    {"url": "https://www.404media.co/rss/", "source": "404 Media", "category": "tech"},
+    {"url": "https://www.techdirt.com/feed/", "source": "TechDirt", "category": "tech"},
+    {"url": "https://thenextweb.com/feed", "source": "The Next Web", "category": "tech"},
+    {"url": "https://torrentfreak.com/feed/", "source": "TorrentFreak", "category": "tech"},
+    {"url": "https://restofworld.org/feed/", "source": "Rest of World", "category": "tech"},
+    {"url": "https://hnrss.org/show", "source": "HN Show", "category": "tech"},
+    {"url": "https://hnrss.org/ask", "source": "HN Ask", "category": "tech"},
+    # --- Security ---
+    {"url": "https://www.schneier.com/feed/", "source": "Schneier on Security", "category": "security"},
+    {"url": "https://krebsonsecurity.com/feed/", "source": "Krebs on Security", "category": "security"},
+    {"url": "https://www.eff.org/rss/updates.xml", "source": "EFF Updates", "category": "security"},
+    # --- World News (expanded) ---
+    {"url": "https://www.aljazeera.com/xml/rss/all.xml", "source": "Al Jazeera", "category": "world"},
+    {"url": "https://rss.dw.com/rdf/rss-en-all", "source": "DW", "category": "world"},
+    {"url": "https://feeds.npr.org/1001/rss.xml", "source": "NPR", "category": "world"},
+    # --- Science (expanded) ---
+    {"url": "https://www.nature.com/nature.rss", "source": "Nature", "category": "science"},
+    {"url": "https://theconversation.com/articles.atom", "source": "The Conversation", "category": "science"},
+    {"url": "https://www.newscientist.com/feed/home", "source": "New Scientist", "category": "science"},
+    {"url": "https://nautil.us/feed/", "source": "Nautilus", "category": "science"},
+    # --- Investigative ---
+    {"url": "https://www.propublica.org/feeds/propublica/main", "source": "ProPublica", "category": "investigative"},
+    {"url": "https://theintercept.com/feed/?rss", "source": "The Intercept", "category": "investigative"},
+    # --- Culture ---
+    {"url": "https://www.theatlantic.com/feed/all/", "source": "The Atlantic", "category": "culture"},
 ]
 
 

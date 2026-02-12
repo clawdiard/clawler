@@ -6,6 +6,8 @@ from clawler.models import Article
 from clawler.sources.base import BaseSource
 from clawler.sources import RSSSource, HackerNewsSource, RedditSource
 from clawler.dedup import deduplicate
+from clawler.weights import get_quality_score
+from clawler.health import HealthTracker
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,7 @@ class CrawlEngine:
             RedditSource(),
         ]
         self.max_workers = max_workers
+        self.health = HealthTracker()
 
     def crawl(self, dedupe_threshold: float = 0.75) -> Tuple[List[Article], Dict[str, int]]:
         """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats."""
@@ -34,24 +37,35 @@ class CrawlEngine:
                     articles = future.result()
                     logger.info(f"[Engine] {src.name} returned {len(articles)} articles")
                     stats[src.name] = len(articles)
+                    self.health.record_success(src.name, len(articles))
                     all_articles.extend(articles)
                 except Exception as e:
                     logger.error(f"[Engine] {src.name} failed: {e}")
-                    stats[src.name] = -1  # -1 indicates failure
+                    stats[src.name] = -1
+                    self.health.record_failure(src.name)
 
         logger.info(f"[Engine] Total raw: {len(all_articles)}")
         unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold)
         logger.info(f"[Engine] After dedup: {len(unique)}")
 
-        # Sort by timestamp (newest first), None timestamps last
+        # Inject quality scores with health modifier
+        for article in unique:
+            base_score = get_quality_score(article.source)
+            modifier = self.health.get_health_modifier(article.source)
+            article.quality_score = base_score * modifier
+
+        # Sort by blended score: 0.6 * recency + 0.4 * quality_score
         from datetime import datetime, timezone
-        epoch = datetime.min.replace(tzinfo=timezone.utc)
-        def sort_key(a: Article):
-            ts = a.timestamp
-            if ts is None:
-                return epoch
-            if ts.tzinfo is None:
-                return ts.replace(tzinfo=timezone.utc)
-            return ts.astimezone(timezone.utc)
-        unique.sort(key=sort_key, reverse=True)
+        now = datetime.now(tz=timezone.utc)
+        def blended_key(a: Article):
+            if a.timestamp:
+                ts = a.timestamp if a.timestamp.tzinfo else a.timestamp.replace(tzinfo=timezone.utc)
+                age_hours = max(0, (now - ts).total_seconds() / 3600)
+            else:
+                age_hours = 48
+            recency = max(0.0, 1.0 - (age_hours / 48.0))
+            return 0.6 * recency + 0.4 * a.quality_score
+        unique.sort(key=blended_key, reverse=True)
+
+        self.health.save()
         return unique, stats

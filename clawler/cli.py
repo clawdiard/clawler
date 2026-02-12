@@ -75,6 +75,8 @@ def main():
                         help="Interest profile (YAML/JSON) for relevance scoring and sorting")
     parser.add_argument("--min-relevance", type=float, default=0.0, dest="min_relevance",
                         help="Minimum relevance score (0.0-1.0) when using --profile (default: 0.0)")
+    parser.add_argument("--min-quality", type=float, default=0.0, dest="min_quality",
+                        help="Minimum source quality score (0.0-1.0, default: 0.0)")
     parser.add_argument("--cache", action="store_true",
                         help="Enable file-based result cache (skip network if fresh)")
     parser.add_argument("--cache-ttl", type=int, default=300, dest="cache_ttl",
@@ -257,6 +259,10 @@ def main():
     if args.since:
         cutoff = _parse_since(args.since)
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
+
+    # Filter by quality score
+    if args.min_quality > 0:
+        articles = [a for a in articles if a.quality_score >= args.min_quality]
 
     # Sort
     if args.sort == "title":

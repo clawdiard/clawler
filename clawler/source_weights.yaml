@@ -1,0 +1,60 @@
+# Source Quality Weights for Clawler
+# Each source has an overall quality score (0.0 - 1.0)
+# Scores are derived from 6 dimensions:
+#   credibility:     25%  - editorial standards, fact-checking, corrections policy
+#   uniqueness:      20%  - original reporting vs aggregation
+#   signal_to_noise: 20%  - ratio of substantive content to filler/clickbait
+#   freshness:       15%  - how quickly stories appear
+#   reliability:     10%  - feed uptime and consistency
+#   coverage:        10%  - breadth of topics covered
+
+dimension_weights:
+  credibility: 0.25
+  uniqueness: 0.20
+  signal_to_noise: 0.20
+  freshness: 0.15
+  reliability: 0.10
+  coverage: 0.10
+
+sources:
+  Reuters: 0.90
+  BBC News: 0.85
+  NY Times: 0.84
+  Nature: 0.84
+  Bloomberg: 0.83
+  ProPublica: 0.82
+  Krebs on Security: 0.81
+  MIT Technology Review: 0.81
+  Ars Technica: 0.81
+  Schneier on Security: 0.80
+  Rest of World: 0.80
+  NPR: 0.80
+  The Guardian: 0.80
+  404 Media: 0.79
+  LWN.net: 0.78
+  IEEE Spectrum: 0.78
+  Al Jazeera: 0.78
+  DW: 0.78
+  The Atlantic: 0.77
+  The Conversation: 0.77
+  Hacker News: 0.75
+  HN Show: 0.75
+  HN Ask: 0.75
+  TorrentFreak: 0.74
+  Wired: 0.73
+  The Intercept: 0.72
+  TechCrunch: 0.71
+  New Scientist: 0.71
+  Nautilus: 0.71
+  Lobsters: 0.70
+  Phoronix: 0.70
+  TechDirt: 0.69
+  ScienceDaily: 0.69
+  Phys.org: 0.69
+  EFF Updates: 0.69
+  The Verge: 0.68
+  CNBC: 0.65
+  CNN: 0.64
+  Reddit: 0.62
+  The Next Web: 0.60
+  The Hacker News: 0.70
