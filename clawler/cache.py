@@ -41,6 +41,8 @@ def _article_to_dict(a: Article) -> dict:
         "timestamp": a.timestamp.isoformat() if a.timestamp else None,
         "category": a.category,
         "relevance": a.relevance,
+        "quality_score": a.quality_score,
+        "source_count": a.source_count,
     }
 
 
@@ -57,6 +59,8 @@ def _dict_to_article(d: dict) -> Article:
         timestamp=ts,
         category=d.get("category", "general"),
         relevance=d.get("relevance"),
+        quality_score=d.get("quality_score", 0.5),
+        source_count=d.get("source_count", 1),
     )
 
 

@@ -25,7 +25,7 @@ from typing import Dict, List, Optional, Sequence, Union
 
 from clawler.engine import CrawlEngine
 from clawler.models import Article
-from clawler.sources import HackerNewsSource, RedditSource, RSSSource
+from clawler.sources import GitHubTrendingSource, HackerNewsSource, RedditSource, RSSSource
 
 
 def _parse_since(value: str) -> datetime:
@@ -45,6 +45,7 @@ def crawl(
     no_rss: bool = False,
     no_hn: bool = False,
     no_reddit: bool = False,
+    no_github: bool = False,
     dedupe_threshold: float = 0.75,
     timeout: int = 15,
     profile: Optional[Union[str, dict]] = None,
@@ -60,7 +61,7 @@ def crawl(
         limit: Max articles to return.
         exclude_source: Exclude sources matching this substring.
         exclude_category: Comma-separated categories to exclude.
-        no_rss/no_hn/no_reddit: Disable individual sources.
+        no_rss/no_hn/no_reddit/no_github: Disable individual sources.
         dedupe_threshold: Fuzzy dedup threshold (0.0-1.0).
         timeout: HTTP timeout in seconds.
         profile: Path to a YAML profile file, or a dict with 'interests' key.
@@ -82,6 +83,10 @@ def crawl(
         sources.append(src)
     if not no_reddit:
         src = RedditSource()
+        src.timeout = timeout
+        sources.append(src)
+    if not no_github:
+        src = GitHubTrendingSource()
         src.timeout = timeout
         sources.append(src)
 

@@ -100,6 +100,8 @@ def main():
                         help="Only show stories covered by at least N sources (cross-source filter)")
     parser.add_argument("--max-age", type=str, default=None, dest="max_age",
                         help="Exclude articles older than this (e.g. 6h, 1d, 2w). Same syntax as --since.")
+    parser.add_argument("--watch", type=str, default=None, metavar="INTERVAL",
+                        help="Continuously crawl at an interval (e.g. 5m, 1h). Press Ctrl+C to stop.")
 
     args = parser.parse_args()
 
@@ -402,6 +404,36 @@ def main():
             print(f"✅ Wrote {len(articles)} articles to {args.output}", file=sys.stderr)
     else:
         print(output)
+
+    # Watch mode: repeat crawl at interval
+    if args.watch:
+        _watch_loop(args, parser)
+
+
+def _watch_loop(args, parser):
+    """Continuously re-run crawl at the specified interval."""
+    import re as _re
+    match = _re.match(r"^(\d+)\s*([mhs])$", args.watch.strip().lower())
+    if not match:
+        print(f"Error: Invalid --watch interval '{args.watch}'. Use e.g. 5m, 1h, 30s", file=sys.stderr)
+        sys.exit(1)
+    amount, unit = int(match.group(1)), match.group(2)
+    seconds = {"s": 1, "m": 60, "h": 3600}[unit] * amount
+    if not args.quiet:
+        print(f"\n⏰ Watch mode: refreshing every {args.watch}. Press Ctrl+C to stop.", file=sys.stderr)
+    try:
+        import time
+        while True:
+            time.sleep(seconds)
+            if not args.quiet:
+                print(f"\n🔄 Refreshing...", file=sys.stderr)
+            # Re-run main without --watch to avoid recursion
+            args.watch = None
+            main()
+            return  # main() will call _watch_loop again if watch was set
+    except KeyboardInterrupt:
+        if not args.quiet:
+            print("\n👋 Watch stopped.", file=sys.stderr)
 
 
 if __name__ == "__main__":

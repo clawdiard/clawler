@@ -5,15 +5,17 @@ from clawler.models import Article
 import requests
 import logging
 import time
+import threading
 
 logger = logging.getLogger(__name__)
 
 HEADERS = {
-    "User-Agent": "Clawler/2.7 (News Aggregator; +https://github.com/clawdiard/clawler)"
+    "User-Agent": "Clawler/2.8 (News Aggregator; +https://github.com/clawdiard/clawler)"
 }
 
 # Per-domain rate limiting — minimum seconds between requests to the same domain
 _domain_last_request: dict = {}  # domain -> last request timestamp
+_rate_limit_lock = threading.Lock()
 _RATE_LIMIT_SECONDS = 0.5
 
 
@@ -27,14 +29,15 @@ class BaseSource(ABC):
 
     @staticmethod
     def _rate_limit(url: str):
-        """Enforce per-domain rate limiting."""
+        """Enforce per-domain rate limiting (thread-safe)."""
         from urllib.parse import urlparse
         domain = urlparse(url).netloc
-        if domain in _domain_last_request:
-            elapsed = time.time() - _domain_last_request[domain]
-            if elapsed < _RATE_LIMIT_SECONDS:
-                time.sleep(_RATE_LIMIT_SECONDS - elapsed)
-        _domain_last_request[domain] = time.time()
+        with _rate_limit_lock:
+            if domain in _domain_last_request:
+                elapsed = time.time() - _domain_last_request[domain]
+                if elapsed < _RATE_LIMIT_SECONDS:
+                    time.sleep(_RATE_LIMIT_SECONDS - elapsed)
+            _domain_last_request[domain] = time.time()
 
     def fetch_url(self, url: str, **kwargs) -> str:
         """Fetch URL content with retries, rate limiting, and error handling."""
