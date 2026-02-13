@@ -5,7 +5,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, MarkdownFormatter
+from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, JSONLFormatter, MarkdownFormatter
 
 from clawler import __version__
 
@@ -27,7 +27,7 @@ def main(argv=None):
         description="🗞️ Clawler — Advanced news crawling service",
     )
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("-f", "--format", choices=["console", "json", "jsonfeed", "atom", "markdown", "csv", "html"], default="console",
+    parser.add_argument("-f", "--format", choices=["console", "json", "jsonl", "jsonfeed", "atom", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", "--top", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -157,6 +157,9 @@ def main(argv=None):
                         help="Exclude articles matching keyword in title or summary (case-insensitive)")
     parser.add_argument("--highlight", type=str, default=None,
                         help="Highlight keyword in console output (bold, case-insensitive)")
+    parser.add_argument("--export-feeds", type=str, default=None, metavar="FILE",
+                        dest="export_feeds",
+                        help="Export current feed list as YAML and exit")
 
     args = parser.parse_args(argv)
 
@@ -320,6 +323,15 @@ def main(argv=None):
         with open(args.export_opml, "w", encoding="utf-8") as f:
             f.write(opml_xml)
         print(f"✅ Exported {len(feeds)} feeds to {args.export_opml}")
+        return
+
+    if args.export_feeds:
+        import yaml
+        from clawler.sources.rss import DEFAULT_FEEDS
+        feeds = custom_feeds or DEFAULT_FEEDS
+        with open(args.export_feeds, "w", encoding="utf-8") as f:
+            yaml.dump(feeds, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        print(f"✅ Exported {len(feeds)} feeds to {args.export_feeds}")
         return
 
     if args.list_sources:
@@ -582,7 +594,8 @@ def main(argv=None):
     else:
         # Format
         formatters = {
-            "console": ConsoleFormatter, "json": JSONFormatter, "jsonfeed": JSONFeedFormatter,
+            "console": ConsoleFormatter, "json": JSONFormatter, "jsonl": JSONLFormatter,
+            "jsonfeed": JSONFeedFormatter,
             "atom": AtomFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter,
             "html": HTMLFormatter,
         }

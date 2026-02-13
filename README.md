@@ -10,11 +10,12 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
-- 📊 **Multiple output formats** — Console, JSON, JSON Feed, Atom, Markdown, CSV, HTML
+- 📊 **Multiple output formats** — Console, JSON, **JSONL**, JSON Feed, Atom, Markdown, CSV, HTML
 - 🏷️ **Category filtering** — tech, world, science, business, security, investigative, culture
 - ⚡ **Parallel crawling** — concurrent fetching across all sources
 - 🩺 **Health tracking** — per-source success rates with automatic score reduction
 - 📥 **OPML import/export** — bring your own feed lists
+- 📤 **Feed export** — export feed list as YAML (`--export-feeds`)
 - 🔍 **Feed discovery** — auto-detect feeds on any URL
 - 🎯 **Interest profiles** — relevance scoring based on personal interests
 - 📦 **Result caching** — skip network if results are fresh
@@ -49,6 +50,15 @@ clawler
 
 # JSON output for piping
 clawler -f json
+
+# JSON Lines output (one JSON object per line — great for streaming/jq)
+clawler -f jsonl
+
+# Pipe JSONL to jq for custom filtering
+clawler -f jsonl | jq 'select(.category == "tech")'
+
+# Export current feed list as YAML
+clawler --export-feeds my-feeds.yaml
 
 # Atom feed output (subscribe in any feed reader)
 clawler -f atom -o feed.xml
@@ -269,6 +279,7 @@ clawler/
 └── formatters/
     ├── console.py      # Rich terminal output
     ├── json_out.py     # JSON output
+    ├── jsonl_out.py    # JSON Lines output (JSONL)
     ├── jsonfeed.py     # JSON Feed format
     ├── atom.py         # Atom 1.0 feed format
     ├── markdown.py     # Markdown output

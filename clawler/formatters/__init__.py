@@ -5,6 +5,7 @@ from .csv_out import CSVFormatter
 from .html_out import HTMLFormatter
 from .json_out import JSONFormatter
 from .jsonfeed import JSONFeedFormatter
+from .jsonl_out import JSONLFormatter
 from .markdown import MarkdownFormatter
 
-__all__ = ["AtomFormatter", "ConsoleFormatter", "CSVFormatter", "HTMLFormatter", "JSONFormatter", "JSONFeedFormatter", "MarkdownFormatter"]
+__all__ = ["AtomFormatter", "ConsoleFormatter", "CSVFormatter", "HTMLFormatter", "JSONFormatter", "JSONFeedFormatter", "JSONLFormatter", "MarkdownFormatter"]
