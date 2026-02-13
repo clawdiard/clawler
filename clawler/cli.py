@@ -121,6 +121,11 @@ def main():
     parser.add_argument("--export-bookmarks", type=str, default=None, metavar="FILE",
                         dest="export_bookmarks",
                         help="Export bookmarks to a file (format inferred from extension: .json, .md, .csv)")
+    parser.add_argument("--remove-bookmark", type=str, default=None, metavar="URL",
+                        dest="remove_bookmark",
+                        help="Remove a bookmark by URL and exit")
+    parser.add_argument("--count", action="store_true",
+                        help="Print only the article count (useful for scripting)")
 
     args = parser.parse_args()
 
@@ -154,6 +159,14 @@ def main():
         from clawler.bookmarks import clear_bookmarks
         n = clear_bookmarks()
         print(f"🧹 Cleared {n} bookmark(s)")
+        return
+
+    if args.remove_bookmark:
+        from clawler.bookmarks import remove_bookmark
+        if remove_bookmark(args.remove_bookmark):
+            print(f"✅ Removed bookmark: {args.remove_bookmark}")
+        else:
+            print(f"⚠️  Bookmark not found: {args.remove_bookmark}")
         return
 
     # --trending is shorthand for --min-sources 2
@@ -428,6 +441,11 @@ def main():
             srcs[a.source] = srcs.get(a.source, 0) + 1
         top = sorted(srcs.items(), key=lambda x: x[1], reverse=True)[:10]
         print(f"   Top sources: {', '.join(f'{s} ({n})' for s, n in top)}")
+        return
+
+    # Count-only mode (for scripting)
+    if args.count:
+        print(len(articles))
         return
 
     # Apply json-pretty shorthand

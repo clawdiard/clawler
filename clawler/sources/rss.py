@@ -110,7 +110,12 @@ class RSSSource(BaseSource):
             source = feed_cfg.get("source", url)
             category = feed_cfg.get("category", "general")
             try:
-                d = feedparser.parse(url, agent=HEADERS["User-Agent"])
+                # Fetch through base class for rate limiting + retries
+                raw = self.fetch_url(url)
+                if not raw:
+                    logger.warning(f"[RSS] Empty response from {source}")
+                    continue
+                d = feedparser.parse(raw)
                 for entry in d.entries[:20]:  # cap per feed
                     title = getattr(entry, "title", "").strip()
                     link = getattr(entry, "link", "").strip()

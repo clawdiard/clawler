@@ -76,15 +76,20 @@ class BaseSource(ABC):
         with _rate_limit_lock:
             _domain_last_request[domain] = time.time()
 
-    def fetch_url(self, url: str, **kwargs) -> str:
-        """Fetch URL content with retries, rate limiting, and error handling."""
+    def _fetch_with_retry(self, url: str, parse_json: bool = False, **kwargs):
+        """Shared fetch logic with retries, rate limiting, and error handling.
+
+        Returns response text (str) or parsed JSON (dict/list) on success.
+        Returns the appropriate empty value ("" for text, None for JSON) on failure.
+        """
         self._rate_limit(url)
+        empty = None if parse_json else ""
         for attempt in range(self.max_retries + 1):
             try:
                 resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
                                      timeout=self.timeout)
                 resp.raise_for_status()
-                return resp.text
+                return resp.json() if parse_json else resp.text
             except requests.RequestException as e:
                 if attempt < self.max_retries:
                     base_wait = self.retry_backoff * (2 ** attempt)
@@ -93,26 +98,15 @@ class BaseSource(ABC):
                     time.sleep(wait)
                 else:
                     logger.warning(f"[{self.name}] Failed to fetch {url} after {self.max_retries+1} attempts: {e}")
-        return ""
+        return empty
+
+    def fetch_url(self, url: str, **kwargs) -> str:
+        """Fetch URL content with retries, rate limiting, and error handling."""
+        return self._fetch_with_retry(url, parse_json=False, **kwargs)
 
     def fetch_json(self, url: str, **kwargs):
         """Fetch URL and parse JSON, with retries and rate limiting. Returns None on failure."""
-        self._rate_limit(url)
-        for attempt in range(self.max_retries + 1):
-            try:
-                resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
-                                     timeout=self.timeout)
-                resp.raise_for_status()
-                return resp.json()
-            except requests.RequestException as e:
-                if attempt < self.max_retries:
-                    base_wait = self.retry_backoff * (2 ** attempt)
-                    wait = base_wait + random.uniform(0, base_wait * self.retry_jitter)
-                    logger.info(f"[{self.name}] Retry {attempt+1}/{self.max_retries} for {url} in {wait:.1f}s")
-                    time.sleep(wait)
-                else:
-                    logger.warning(f"[{self.name}] Failed to fetch {url} after {self.max_retries+1} attempts: {e}")
-        return None
+        return self._fetch_with_retry(url, parse_json=True, **kwargs)
 
     @abstractmethod
     def crawl(self) -> List[Article]:

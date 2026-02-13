@@ -111,6 +111,12 @@ clawler --clear-bookmarks
 
 # Show deduplication statistics
 clawler --dedupe-stats
+
+# Remove a specific bookmark by URL
+clawler --remove-bookmark "https://example.com/article"
+
+# Count articles only (for scripting)
+clawler --category tech --count
 ```
 
 ## Sources
