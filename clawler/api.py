@@ -17,6 +17,12 @@ Profile-based relevance scoring:
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
+Interest-based filtering (no file needed):
+
+    articles = crawl(interests="AI, skateboarding, rust")
+    for a in articles:
+        print(f"[{a.relevance:.0%}] {a.title}")
+
 """
 from __future__ import annotations
 
@@ -50,6 +56,7 @@ def crawl(
     dedupe_threshold: float = 0.75,
     timeout: int = 15,
     profile: Optional[Union[str, dict]] = None,
+    interests: Optional[str] = None,
     min_relevance: float = 0.0,
 ) -> List[Article]:
     """One-liner crawl with filtering, dedup, and optional profile scoring.
@@ -68,6 +75,8 @@ def crawl(
         timeout: HTTP timeout in seconds.
         profile: Path to a YAML profile file, or a dict with 'interests' key.
                  Each interest has keywords and an optional weight.
+        interests: Comma-separated interest keywords (e.g. "AI,skateboarding").
+                   Simpler alternative to profile. Ignored if profile is set.
         min_relevance: Minimum relevance score (0.0-1.0) when profile is used.
 
     Returns:
@@ -122,8 +131,13 @@ def crawl(
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
 
     # Profile-based relevance scoring
-    if profile:
+    profile_data = profile
+    if not profile_data and interests:
+        from clawler.profile import interests_to_profile
+        profile_data = interests_to_profile(interests)
+
+    if profile_data:
         from clawler.profile import score_articles
-        articles = score_articles(articles, profile, min_relevance=min_relevance)
+        articles = score_articles(articles, profile_data, min_relevance=min_relevance)
 
     return articles[:limit]

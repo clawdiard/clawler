@@ -27,6 +27,22 @@ from clawler.models import Article
 logger = logging.getLogger(__name__)
 
 
+def interests_to_profile(interests_str: str) -> dict:
+    """Convert a comma-separated interests string into a profile dict.
+
+    Example: "AI, skateboarding, rust" ->
+        {"interests": [
+            {"keywords": ["AI"], "weight": 1.0},
+            {"keywords": ["skateboarding"], "weight": 1.0},
+            {"keywords": ["rust"], "weight": 1.0},
+        ]}
+    """
+    keywords = [k.strip() for k in interests_str.split(",") if k.strip()]
+    return {
+        "interests": [{"keywords": [kw], "weight": 1.0} for kw in keywords]
+    }
+
+
 def load_profile(profile: Union[str, dict]) -> dict:
     """Load a profile from a file path or dict."""
     if isinstance(profile, dict):

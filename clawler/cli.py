@@ -76,8 +76,11 @@ def main(argv=None):
                         help="Ignore config files (~/.clawler.yaml, ./clawler.yaml)")
     parser.add_argument("--profile", type=str, default=None, metavar="FILE",
                         help="Interest profile (YAML/JSON) for relevance scoring and sorting")
+    parser.add_argument("--interests", type=str, default=None,
+                        help="Comma-separated interest keywords for relevance scoring (e.g. 'AI,skateboarding,rust'). "
+                             "Simpler alternative to --profile.")
     parser.add_argument("--min-relevance", type=float, default=0.0, dest="min_relevance",
-                        help="Minimum relevance score (0.0-1.0) when using --profile (default: 0.0)")
+                        help="Minimum relevance score (0.0-1.0) when using --profile or --interests (default: 0.0)")
     parser.add_argument("--min-quality", type=float, default=0.0, dest="min_quality",
                         help="Minimum source quality score (0.0-1.0, default: 0.0)")
     parser.add_argument("--cache", action="store_true",
@@ -480,10 +483,17 @@ def main(argv=None):
     if args.reverse:
         articles.reverse()
 
-    # Profile-based relevance scoring
+    # Profile-based relevance scoring (--profile file or --interests string)
+    profile_data = None
     if args.profile:
+        profile_data = args.profile
+    elif args.interests:
+        from clawler.profile import interests_to_profile
+        profile_data = interests_to_profile(args.interests)
+
+    if profile_data:
         from clawler.profile import score_articles
-        articles = score_articles(articles, args.profile, min_relevance=args.min_relevance)
+        articles = score_articles(articles, profile_data, min_relevance=args.min_relevance)
 
     # Truncate summaries to configured length
     max_summary = args.summary_length
