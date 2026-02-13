@@ -150,6 +150,10 @@ def main(argv=None):
                         help="Show domain breakdown statistics after output")
     parser.add_argument("--workers", type=int, default=6,
                         help="Max parallel workers for crawling (default: 6)")
+    parser.add_argument("--exclude", type=str, default=None,
+                        help="Exclude articles matching keyword in title or summary (case-insensitive)")
+    parser.add_argument("--highlight", type=str, default=None,
+                        help="Highlight keyword in console output (bold, case-insensitive)")
 
     args = parser.parse_args(argv)
 
@@ -253,23 +257,7 @@ def main(argv=None):
             print(f"  {emoji} {source:25s}  success={rate:.0%}  crawls={info['total_crawls']}  avg_articles={info['avg_articles']}  last={info['last_success'] or 'never'}")
         return
 
-    # Dry run
-    if args.dry_run:
-        from clawler.sources.rss import DEFAULT_FEEDS
-        print("🧪 Dry run — sources that would be crawled:\n")
-        if not args.no_rss:
-            feeds = custom_feeds if custom_feeds else DEFAULT_FEEDS
-            print(f"  📡 RSS ({len(feeds)} feeds)")
-        if not args.no_hn:
-            print("  🔥 Hacker News (top stories)")
-        if not args.no_reddit:
-            print("  🤖 Reddit (5 subreddits)")
-        if not args.no_github:
-            print("  🐙 GitHub Trending (daily)")
-        print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
-        return
-
-    # Load custom feeds from OPML or feeds file
+    # Load custom feeds from OPML or feeds file (before --dry-run so it can report correct feed count)
     if args.import_opml:
         from clawler.opml import import_opml
         try:
@@ -290,6 +278,22 @@ def main(argv=None):
         except Exception as e:
             print(f"Error loading feeds file: {e}", file=sys.stderr)
             sys.exit(1)
+
+    # Dry run (after feeds loading so custom_feeds is populated)
+    if args.dry_run:
+        from clawler.sources.rss import DEFAULT_FEEDS
+        print("🧪 Dry run — sources that would be crawled:\n")
+        if not args.no_rss:
+            feeds = custom_feeds if custom_feeds else DEFAULT_FEEDS
+            print(f"  📡 RSS ({len(feeds)} feeds)")
+        if not args.no_hn:
+            print("  🔥 Hacker News (top stories)")
+        if not args.no_reddit:
+            print("  🤖 Reddit (5 subreddits)")
+        if not args.no_github:
+            print("  🐙 GitHub Trending (daily)")
+        print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
+        return
 
     # Feed autodiscovery
     if args.discover:
@@ -436,6 +440,11 @@ def main(argv=None):
     if args.search:
         kw = args.search.lower()
         articles = [a for a in articles if kw in a.title.lower() or kw in a.summary.lower()]
+
+    # Exclude by keyword (inverse of --search)
+    if args.exclude:
+        ekw = args.exclude.lower()
+        articles = [a for a in articles if ekw not in a.title.lower() and ekw not in a.summary.lower()]
 
     # Filter by time (--since)
     if args.since:

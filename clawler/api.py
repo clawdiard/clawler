@@ -38,6 +38,7 @@ def crawl(
     category: Optional[str] = None,
     source: Optional[str] = None,
     search: Optional[str] = None,
+    exclude: Optional[str] = None,
     since: Optional[str] = None,
     limit: int = 50,
     exclude_source: Optional[str] = None,
@@ -57,6 +58,7 @@ def crawl(
         category: Comma-separated category filter (e.g. "tech,science").
         source: Source name substring filter (case-insensitive).
         search: Keyword filter on title/summary (case-insensitive).
+        exclude: Exclude articles matching keyword in title/summary (case-insensitive).
         since: Relative time filter (e.g. "2h", "30m", "1d").
         limit: Max articles to return.
         exclude_source: Exclude sources matching this substring.
@@ -112,6 +114,9 @@ def crawl(
     if search:
         kw = search.lower()
         articles = [a for a in articles if kw in a.title.lower() or kw in a.summary.lower()]
+    if exclude:
+        ekw = exclude.lower()
+        articles = [a for a in articles if ekw not in a.title.lower() and ekw not in a.summary.lower()]
     if since:
         cutoff = _parse_since(since)
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]

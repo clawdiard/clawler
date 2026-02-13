@@ -1,7 +1,7 @@
 """Data models for Clawler."""
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 import hashlib
 
 
@@ -16,6 +16,7 @@ class Article:
     relevance: Optional[float] = None
     quality_score: float = 0.5
     source_count: int = 1  # how many sources covered this story (set during dedup)
+    tags: List[str] = field(default_factory=list)  # optional tags/labels (e.g. from HN, Reddit)
 
     @property
     def dedup_key(self) -> str:
