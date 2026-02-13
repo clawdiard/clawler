@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 from clawler.models import Article
+import random
 import requests
 import logging
 import time
@@ -50,6 +51,7 @@ class BaseSource(ABC):
     timeout: int = 15
     max_retries: int = 2
     retry_backoff: float = 1.0
+    retry_jitter: float = 0.5  # random jitter factor (0-1) added to backoff
 
     @staticmethod
     def _rate_limit(url: str):
@@ -85,7 +87,8 @@ class BaseSource(ABC):
                 return resp.text
             except requests.RequestException as e:
                 if attempt < self.max_retries:
-                    wait = self.retry_backoff * (2 ** attempt)
+                    base_wait = self.retry_backoff * (2 ** attempt)
+                    wait = base_wait + random.uniform(0, base_wait * self.retry_jitter)
                     logger.info(f"[{self.name}] Retry {attempt+1}/{self.max_retries} for {url} in {wait:.1f}s")
                     time.sleep(wait)
                 else:
@@ -103,7 +106,8 @@ class BaseSource(ABC):
                 return resp.json()
             except requests.RequestException as e:
                 if attempt < self.max_retries:
-                    wait = self.retry_backoff * (2 ** attempt)
+                    base_wait = self.retry_backoff * (2 ** attempt)
+                    wait = base_wait + random.uniform(0, base_wait * self.retry_jitter)
                     logger.info(f"[{self.name}] Retry {attempt+1}/{self.max_retries} for {url} in {wait:.1f}s")
                     time.sleep(wait)
                 else:

@@ -88,3 +88,31 @@ def clear_bookmarks(path: Path = DEFAULT_BOOKMARKS_PATH) -> int:
     if count:
         save_bookmarks([], path)
     return count
+
+
+def export_bookmarks(bookmarks: List[dict], output_path: str) -> None:
+    """Export bookmarks to a file. Format inferred from extension (.json, .md, .csv)."""
+    ext = Path(output_path).suffix.lower()
+    if ext == ".json":
+        Path(output_path).write_text(
+            json.dumps(bookmarks, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    elif ext == ".md":
+        lines = ["# Clawler Bookmarks\n"]
+        for b in bookmarks:
+            lines.append(f"- [{b['title']}]({b['url']}) — *{b['source']}* ({b.get('category', 'general')})")
+            if b.get("summary"):
+                lines.append(f"  > {b['summary'][:200]}")
+        Path(output_path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+    elif ext == ".csv":
+        import csv
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=["title", "url", "source", "category", "bookmarked_at"])
+            writer.writeheader()
+            for b in bookmarks:
+                writer.writerow({k: b.get(k, "") for k in writer.fieldnames})
+    else:
+        # Default to JSON
+        Path(output_path).write_text(
+            json.dumps(bookmarks, indent=2, ensure_ascii=False), encoding="utf-8"
+        )

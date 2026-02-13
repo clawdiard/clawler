@@ -114,6 +114,13 @@ def main():
                         help="Show deduplication statistics after crawling")
     parser.add_argument("--trending", action="store_true",
                         help="Shorthand for --min-sources 2 (stories covered by multiple sources)")
+    parser.add_argument("--today", action="store_true",
+                        help="Shorthand for --since 24h (articles from today)")
+    parser.add_argument("--this-week", action="store_true", dest="this_week",
+                        help="Shorthand for --since 7d (articles from this week)")
+    parser.add_argument("--export-bookmarks", type=str, default=None, metavar="FILE",
+                        dest="export_bookmarks",
+                        help="Export bookmarks to a file (format inferred from extension: .json, .md, .csv)")
 
     args = parser.parse_args()
 
@@ -152,6 +159,23 @@ def main():
     # --trending is shorthand for --min-sources 2
     if args.trending:
         args.min_sources = max(args.min_sources, 2)
+
+    # --today / --this-week shorthands
+    if args.today and not args.since:
+        args.since = "24h"
+    if args.this_week and not args.since:
+        args.since = "7d"
+
+    # Export bookmarks
+    if args.export_bookmarks:
+        from clawler.bookmarks import list_bookmarks, export_bookmarks
+        bookmarks = list_bookmarks()
+        if not bookmarks:
+            print("📚 No bookmarks to export.")
+            return
+        export_bookmarks(bookmarks, args.export_bookmarks)
+        print(f"✅ Exported {len(bookmarks)} bookmark(s) to {args.export_bookmarks}")
+        return
 
     # Health report
     if args.health:
