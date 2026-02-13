@@ -86,6 +86,14 @@ def main(argv=None):
                         help="Cache TTL in seconds (default: 300)")
     parser.add_argument("--clear-cache", action="store_true", dest="clear_cache",
                         help="Clear all cached results and exit")
+    parser.add_argument("--history", action="store_true",
+                        help="Enable persistent dedup history (suppress previously seen articles across runs)")
+    parser.add_argument("--history-ttl", type=str, default="24h", dest="history_ttl",
+                        help="History TTL — how long to remember seen articles (e.g. 12h, 2d, 1w; default: 24h)")
+    parser.add_argument("--clear-history", action="store_true", dest="clear_history",
+                        help="Clear persistent dedup history and exit")
+    parser.add_argument("--history-stats", action="store_true", dest="history_stats",
+                        help="Show persistent dedup history statistics and exit")
     parser.add_argument("--health", action="store_true",
                         help="Show per-source health report and exit")
     parser.add_argument("--json-pretty", action="store_true", dest="json_pretty",
@@ -153,6 +161,27 @@ def main(argv=None):
         from clawler.cache import clear_cache
         n = clear_cache()
         print(f"🧹 Cleared {n} cached file(s)")
+        return
+
+    # Clear history
+    if args.clear_history:
+        from clawler.history import clear_history
+        removed = clear_history()
+        print("🧹 Cleared dedup history" if removed else "ℹ️  No history to clear")
+        return
+
+    # History stats
+    if args.history_stats:
+        from clawler.history import history_stats
+        from clawler.utils import parse_since_seconds
+        ttl = parse_since_seconds(args.history_ttl)
+        stats = history_stats(ttl=ttl)
+        print(f"📊 Dedup History Stats:")
+        print(f"   Active entries: {stats['active_entries']}")
+        print(f"   Expired entries: {stats['expired_entries']}")
+        print(f"   Total entries: {stats['total_entries']}")
+        if stats['oldest_age_hours'] is not None:
+            print(f"   Oldest entry: {stats['oldest_age_hours']}h ago")
         return
 
     # Bookmarks management
@@ -448,6 +477,13 @@ def main(argv=None):
     for a in articles:
         if len(a.summary) > max_summary:
             a.summary = a.summary[:max_summary] + "..."
+
+    # Persistent dedup history — filter out previously seen articles
+    if args.history:
+        from clawler.history import filter_seen
+        from clawler.utils import parse_since_seconds
+        history_ttl = parse_since_seconds(args.history_ttl)
+        articles = filter_seen(articles, ttl=history_ttl)
 
     # Limit
     articles = articles[:args.limit]

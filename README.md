@@ -29,6 +29,7 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🔗 **Pipe-friendly output** — `--urls-only` and `--titles-only` for scripting
 - 🚫 **Dedup bypass** — `--no-dedup` to see all raw articles
 - 🌐 **Domain breakdown** — `--domains` for domain-level analytics
+- 🕰️ **Persistent dedup history** — `--history` remembers seen articles across runs (perfect for cron)
 
 
 ## Quick Start
@@ -78,6 +79,15 @@ clawler -v
 
 # List all sources
 clawler --list-sources
+
+# Persistent history — only show NEW articles since last run (great for cron)
+clawler --history
+
+# Custom history window (48 hours)
+clawler --history --history-ttl 48h
+
+# Check history stats
+clawler --history-stats
 
 # Check feed health
 clawler --check-feeds
