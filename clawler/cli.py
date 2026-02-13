@@ -5,7 +5,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, MarkdownFormatter
+from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, MarkdownFormatter
 
 from clawler import __version__
 
@@ -27,7 +27,7 @@ def main(argv=None):
         description="🗞️ Clawler — Advanced news crawling service",
     )
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("-f", "--format", choices=["console", "json", "jsonfeed", "markdown", "csv", "html"], default="console",
+    parser.add_argument("-f", "--format", choices=["console", "json", "jsonfeed", "atom", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", "--top", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -573,7 +573,8 @@ def main(argv=None):
         # Format
         formatters = {
             "console": ConsoleFormatter, "json": JSONFormatter, "jsonfeed": JSONFeedFormatter,
-            "markdown": MarkdownFormatter, "csv": CSVFormatter, "html": HTMLFormatter,
+            "atom": AtomFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter,
+            "html": HTMLFormatter,
         }
         output = formatters[args.format]().format(articles)
 

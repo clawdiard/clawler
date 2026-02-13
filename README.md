@@ -10,7 +10,7 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
-- 📊 **Multiple output formats** — Console, JSON, JSON Feed, Markdown, CSV, HTML
+- 📊 **Multiple output formats** — Console, JSON, JSON Feed, Atom, Markdown, CSV, HTML
 - 🏷️ **Category filtering** — tech, world, science, business, security, investigative, culture
 - ⚡ **Parallel crawling** — concurrent fetching across all sources
 - 🩺 **Health tracking** — per-source success rates with automatic score reduction
@@ -49,6 +49,9 @@ clawler
 
 # JSON output for piping
 clawler -f json
+
+# Atom feed output (subscribe in any feed reader)
+clawler -f atom -o feed.xml
 
 # Tech news only, top 20
 clawler --category tech -n 20
@@ -267,6 +270,7 @@ clawler/
     ├── console.py      # Rich terminal output
     ├── json_out.py     # JSON output
     ├── jsonfeed.py     # JSON Feed format
+    ├── atom.py         # Atom 1.0 feed format
     ├── markdown.py     # Markdown output
     ├── csv_out.py      # CSV output
     └── html_out.py     # HTML output
