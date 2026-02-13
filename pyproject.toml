@@ -1,15 +1,25 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.build_meta"
+build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "clawler"
-version = "2.7.0"
+version = "2.9.0"
 description = "Advanced news crawling service — no API keys required"
 readme = "README.md"
-license = "MIT"
 requires-python = ">=3.9"
-authors = [{ name = "Clawdia @ OpenClaw" }]
+license = {text = "MIT"}
+authors = [{name = "Clawdia @ OpenClaw", email = "clawdiard@proton.me"}]
+keywords = ["news", "rss", "crawler", "aggregator", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
 dependencies = [
     "requests>=2.31.0",
     "beautifulsoup4>=4.12.0",
@@ -19,8 +29,15 @@ dependencies = [
     "pyyaml>=6.0.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov"]
+
 [project.scripts]
 clawler = "clawler.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/clawdiard/clawler"
+Repository = "https://github.com/clawdiard/clawler"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -29,14 +29,25 @@ class BaseSource(ABC):
 
     @staticmethod
     def _rate_limit(url: str):
-        """Enforce per-domain rate limiting (thread-safe)."""
+        """Enforce per-domain rate limiting (thread-safe).
+
+        Calculates wait time under the lock but sleeps outside it so other
+        domains are not blocked while one domain is being throttled.
+        """
         from urllib.parse import urlparse
         domain = urlparse(url).netloc
+        wait_time = 0.0
         with _rate_limit_lock:
             if domain in _domain_last_request:
                 elapsed = time.time() - _domain_last_request[domain]
                 if elapsed < _RATE_LIMIT_SECONDS:
-                    time.sleep(_RATE_LIMIT_SECONDS - elapsed)
+                    wait_time = _RATE_LIMIT_SECONDS - elapsed
+            # Reserve the slot immediately so concurrent requests to the same
+            # domain queue up properly.
+            _domain_last_request[domain] = time.time() + wait_time
+        if wait_time > 0:
+            time.sleep(wait_time)
+        with _rate_limit_lock:
             _domain_last_request[domain] = time.time()
 
     def fetch_url(self, url: str, **kwargs) -> str:

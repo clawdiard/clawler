@@ -8,11 +8,12 @@ def parse_since(value: str) -> datetime:
 
     Raises ValueError on invalid input.
     """
-    match = re.match(r"^(\d+)\s*([mhdw])$", value.strip().lower())
+    match = re.match(r"^(\d+)\s*([smhdw])$", value.strip().lower())
     if not match:
-        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30m, 2h, 1d, 1w")
+        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30s, 30m, 2h, 1d, 1w")
     amount, unit = int(match.group(1)), match.group(2)
     deltas = {
+        "s": timedelta(seconds=amount),
         "m": timedelta(minutes=amount),
         "h": timedelta(hours=amount),
         "d": timedelta(days=amount),
