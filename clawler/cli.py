@@ -160,6 +160,10 @@ def main(argv=None):
     parser.add_argument("--export-feeds", type=str, default=None, metavar="FILE",
                         dest="export_feeds",
                         help="Export current feed list as YAML and exit")
+    parser.add_argument("--config-init", action="store_true", dest="config_init",
+                        help="Generate a starter config file (~/.clawler.yaml) and exit")
+    parser.add_argument("--source-health", action="store_true", dest="source_health",
+                        help="Show per-source health report (success rates, avg articles) and exit")
 
     args = parser.parse_args(argv)
 
@@ -183,6 +187,31 @@ def main(argv=None):
         from clawler.history import clear_history
         removed = clear_history()
         print("🧹 Cleared dedup history" if removed else "ℹ️  No history to clear")
+        return
+
+    # Config init
+    if args.config_init:
+        from clawler.config import generate_starter_config
+        path = generate_starter_config()
+        print(f"✅ Generated starter config at {path}")
+        print("   Edit it to customize your default settings.")
+        return
+
+    # Source health report
+    if args.source_health:
+        from clawler.health import HealthTracker
+        tracker = HealthTracker()
+        report = tracker.get_report()
+        if not report:
+            print("ℹ️  No health data yet. Run a crawl first.")
+            return
+        print("🩺 Source Health Report:\n")
+        print(f"   {'Source':<25} {'Success%':>8} {'Crawls':>7} {'Avg Articles':>13}")
+        print(f"   {'─'*25} {'─'*8} {'─'*7} {'─'*13}")
+        for entry in report:
+            pct = f"{entry['success_rate']:.0%}"
+            avg = f"{entry['avg_articles']:.1f}" if entry['avg_articles'] else "N/A"
+            print(f"   {entry['source']:<25} {pct:>8} {entry['total_crawls']:>7} {avg:>13}")
         return
 
     # History stats

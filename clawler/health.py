@@ -86,3 +86,20 @@ class HealthTracker:
                 "last_success": d.get("last_success"),
             }
         return result
+
+    def get_report(self):
+        """Return a sorted list of source health entries for display."""
+        summary = self.summary
+        if not summary:
+            return []
+        entries = []
+        for source, d in summary.items():
+            entries.append({
+                "source": source,
+                "success_rate": d["success_rate"],
+                "total_crawls": d["total_crawls"],
+                "avg_articles": d["avg_articles"],
+                "last_success": d["last_success"],
+            })
+        entries.sort(key=lambda e: e["success_rate"])
+        return entries

@@ -84,3 +84,48 @@ def apply_config_defaults(parser, args):
             setattr(args, key, str(value))
 
     return args
+
+
+_STARTER_CONFIG = """\
+# Clawler configuration — customize your defaults here.
+# CLI flags always override these values.
+# See: https://github.com/clawdiard/clawler
+
+# Output format: console, json, jsonl, jsonfeed, atom, markdown, csv, html
+# format: console
+
+# Max articles to display
+# limit: 50
+
+# Filter by category (comma-separated): tech, world, science, business, security, investigative, culture
+# category: all
+
+# Only show articles newer than this (e.g. 30m, 2h, 1d, 1w)
+# since: 6h
+
+# Suppress status messages
+# quiet: false
+
+# Skip specific sources
+# no_reddit: false
+# no_hn: false
+# no_github: false
+
+# Fuzzy dedup threshold (0.0-1.0, higher = stricter)
+# dedupe_threshold: 0.75
+
+# Max parallel workers
+# workers: 6
+
+# HTTP request timeout (seconds)
+# timeout: 15
+"""
+
+
+def generate_starter_config() -> Path:
+    """Write a starter config file to ~/.clawler.yaml (won't overwrite existing)."""
+    path = Path.home() / ".clawler.yaml"
+    if path.exists():
+        path = Path.home() / ".clawler.yaml.new"
+    path.write_text(_STARTER_CONFIG, encoding="utf-8")
+    return path

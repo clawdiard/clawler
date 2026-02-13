@@ -22,6 +22,9 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🔥 **Cross-source tracking** — see how many sources covered the same story
 - 📂 **Group-by output** — group results by category or source
 - 🔄 **Reverse sort** — flip any sort order
+- 🩺 **Source health report** — `--source-health` for per-source success rates and article counts
+- ⚙️ **Config generator** — `--config-init` creates a starter `~/.clawler.yaml`
+- 🔁 **CI pipeline** — GitHub Actions runs tests on Python 3.9–3.12
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
 - 🚦 **Rate limiting** — per-domain request throttling to be a good citizen
 - 📚 **Bookmarks** — save interesting articles locally for later reading
@@ -168,6 +171,12 @@ clawler --no-dedup
 
 # Show domain breakdown after output
 clawler --domains
+
+# Generate a starter config file
+clawler --config-init
+
+# Show per-source health report
+clawler --source-health
 ```
 
 ## Sources
