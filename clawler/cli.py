@@ -126,6 +126,12 @@ def main():
                         help="Remove a bookmark by URL and exit")
     parser.add_argument("--count", action="store_true",
                         help="Print only the article count (useful for scripting)")
+    parser.add_argument("--stale", type=str, default=None,
+                        help="Only show articles OLDER than this (e.g. 6h, 1d). Inverse of --since.")
+    parser.add_argument("--age-distribution", action="store_true", dest="age_distribution",
+                        help="Show article age distribution histogram after output")
+    parser.add_argument("--summary-length", type=int, default=300, dest="summary_length",
+                        help="Max characters for article summaries (default: 300)")
 
     args = parser.parse_args()
 
@@ -210,30 +216,18 @@ def main():
         from clawler.sources.rss import DEFAULT_FEEDS
         print("🧪 Dry run — sources that would be crawled:\n")
         if not args.no_rss:
-            feeds = custom_feeds if hasattr(args, '_custom_feeds') else DEFAULT_FEEDS
+            feeds = custom_feeds if custom_feeds else DEFAULT_FEEDS
             print(f"  📡 RSS ({len(feeds)} feeds)")
         if not args.no_hn:
             print("  🔥 Hacker News (top stories)")
         if not args.no_reddit:
             print("  🤖 Reddit (5 subreddits)")
+        if not args.no_github:
+            print("  🐙 GitHub Trending (daily)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
-    # Feed autodiscovery
-    if args.discover:
-        from clawler.discover import discover_feeds
-        feeds = discover_feeds(args.discover, timeout=args.timeout)
-        if feeds:
-            print(f"🔍 Found {len(feeds)} feed(s) on {args.discover}:\n")
-            for f in feeds:
-                print(f"   📡 {f['title']}")
-                print(f"      {f['url']}")
-                print(f"      Type: {f['type']}\n")
-        else:
-            print(f"No feeds found on {args.discover}")
-        return
-
-    # Determine RSS feeds to use
+    # Determine RSS feeds to use (needed by --dry-run, --list-sources, etc.)
     custom_feeds = None
     if args.import_opml:
         from clawler.opml import import_opml
@@ -255,6 +249,20 @@ def main():
         except Exception as e:
             print(f"Error loading feeds file: {e}", file=sys.stderr)
             sys.exit(1)
+
+    # Feed autodiscovery
+    if args.discover:
+        from clawler.discover import discover_feeds
+        feeds = discover_feeds(args.discover, timeout=args.timeout)
+        if feeds:
+            print(f"🔍 Found {len(feeds)} feed(s) on {args.discover}:\n")
+            for f in feeds:
+                print(f"   📡 {f['title']}")
+                print(f"      {f['url']}")
+                print(f"      Type: {f['type']}\n")
+        else:
+            print(f"No feeds found on {args.discover}")
+        return
 
     if args.export_opml:
         from clawler.opml import export_opml
@@ -395,6 +403,11 @@ def main():
         cutoff = _parse_since(args.max_age)
         articles = [a for a in articles if a.timestamp and a.timestamp >= cutoff]
 
+    # Filter by staleness (--stale) — only articles OLDER than threshold
+    if args.stale:
+        stale_cutoff = _parse_since(args.stale)
+        articles = [a for a in articles if a.timestamp and a.timestamp < stale_cutoff]
+
     # Filter by quality score
     if args.min_quality > 0:
         articles = [a for a in articles if a.quality_score >= args.min_quality]
@@ -418,6 +431,12 @@ def main():
     if args.profile:
         from clawler.profile import score_articles
         articles = score_articles(articles, args.profile, min_relevance=args.min_relevance)
+
+    # Truncate summaries to configured length
+    max_summary = args.summary_length
+    for a in articles:
+        if len(a.summary) > max_summary:
+            a.summary = a.summary[:max_summary] + "..."
 
     # Limit
     articles = articles[:args.limit]
@@ -504,6 +523,39 @@ def main():
         added = add_bookmarks(articles)
         if not args.quiet:
             print(f"📚 Bookmarked {added} new article(s)", file=sys.stderr)
+
+    # Age distribution
+    if args.age_distribution and articles:
+        from datetime import datetime as _dt, timezone as _tz
+        _now = _dt.now(tz=_tz.utc)
+        buckets = {"<1h": 0, "1-6h": 0, "6-12h": 0, "12-24h": 0, "1-2d": 0, "2-7d": 0, ">7d": 0, "unknown": 0}
+        for a in articles:
+            if not a.timestamp:
+                buckets["unknown"] += 1
+                continue
+            ts = a.timestamp if a.timestamp.tzinfo else a.timestamp.replace(tzinfo=_tz.utc)
+            age_h = (_now - ts).total_seconds() / 3600
+            if age_h < 1:
+                buckets["<1h"] += 1
+            elif age_h < 6:
+                buckets["1-6h"] += 1
+            elif age_h < 12:
+                buckets["6-12h"] += 1
+            elif age_h < 24:
+                buckets["12-24h"] += 1
+            elif age_h < 48:
+                buckets["1-2d"] += 1
+            elif age_h < 168:
+                buckets["2-7d"] += 1
+            else:
+                buckets[">7d"] += 1
+        max_count = max(buckets.values()) if any(buckets.values()) else 1
+        print(f"\n📊 Age Distribution ({len(articles)} articles):", file=sys.stderr)
+        for label, count in buckets.items():
+            if count == 0:
+                continue
+            bar = "█" * max(1, int(count / max_count * 30))
+            print(f"  {label:>8s} | {bar} {count}", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

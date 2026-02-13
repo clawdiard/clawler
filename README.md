@@ -117,6 +117,19 @@ clawler --remove-bookmark "https://example.com/article"
 
 # Count articles only (for scripting)
 clawler --category tech --count
+
+# Only show articles older than 12h (stale content analysis)
+clawler --stale 12h
+
+# Show article age distribution
+clawler --age-distribution
+
+# Use month/year time units
+clawler --since 3M
+clawler --max-age 1y
+
+# Control summary truncation length
+clawler --summary-length 150
 ```
 
 ## Sources

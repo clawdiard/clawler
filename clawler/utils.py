@@ -4,13 +4,13 @@ from datetime import datetime, timedelta, timezone
 
 
 def parse_since(value: str) -> datetime:
-    """Parse a relative time string like '1h', '30m', '2d' into a UTC datetime.
+    """Parse a relative time string like '1h', '30m', '2d', '3M', '1y' into a UTC datetime.
 
     Raises ValueError on invalid input.
     """
-    match = re.match(r"^(\d+)\s*([smhdw])$", value.strip().lower())
+    match = re.match(r"^(\d+)\s*([smhdwMy])$", value.strip())
     if not match:
-        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30s, 30m, 2h, 1d, 1w")
+        raise ValueError(f"Invalid since value '{value}'. Use e.g. 30s, 30m, 2h, 1d, 1w, 3M, 1y")
     amount, unit = int(match.group(1)), match.group(2)
     deltas = {
         "s": timedelta(seconds=amount),
@@ -18,6 +18,8 @@ def parse_since(value: str) -> datetime:
         "h": timedelta(hours=amount),
         "d": timedelta(days=amount),
         "w": timedelta(weeks=amount),
+        "M": timedelta(days=amount * 30),
+        "y": timedelta(days=amount * 365),
     }
     return datetime.now(timezone.utc) - deltas[unit]
 
