@@ -23,7 +23,7 @@ from typing import Any, Dict, Optional
 logger = logging.getLogger(__name__)
 
 _BOOL_FIELDS = {"verbose", "quiet", "no_reddit", "no_hn", "no_rss", "stats", "check_feeds", "list_sources"}
-_INT_FIELDS = {"limit", "timeout"}
+_INT_FIELDS = {"limit", "timeout", "workers"}
 _FLOAT_FIELDS = {"dedupe_threshold"}
 _STR_FIELDS = {"format", "category", "since", "output", "source", "search", "sort",
                "exclude_source", "exclude_category", "feeds", "export_opml", "import_opml"}

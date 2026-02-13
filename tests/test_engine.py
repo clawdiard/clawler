@@ -1,65 +1,74 @@
-"""Tests for the crawl engine."""
-from datetime import datetime, timezone
+"""Tests for clawler.engine — crawl orchestration."""
+from datetime import datetime, timezone, timedelta
+from unittest.mock import MagicMock
+
 from clawler.engine import CrawlEngine
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 
 
-class FakeSource(BaseSource):
-    name = "fake"
+class StubSource(BaseSource):
+    """Deterministic source for testing."""
 
-    def __init__(self, articles):
+    def __init__(self, name: str, articles: list[Article]):
+        self.name = name
         self._articles = articles
 
     def crawl(self):
-        return self._articles
+        return list(self._articles)
+
+
+class FailingSource(BaseSource):
+    name = "failing"
+
+    def crawl(self):
+        raise RuntimeError("boom")
+
+
+def _article(title, source="Test", hours_ago=1, quality=0.7):
+    ts = datetime.now(timezone.utc) - timedelta(hours=hours_ago)
+    a = Article(title=title, url=f"https://ex.com/{title}", source=source,
+                timestamp=ts, category="tech")
+    a.quality_score = quality
+    return a
 
 
 class TestCrawlEngine:
     def test_basic_crawl(self):
-        titles = ["Python 4.0 released today", "NASA finds water on Mars", "Stock market crashes hard",
-                  "New vaccine approved by FDA", "Olympics opening ceremony dazzles"]
-        arts = [Article(title=t, url=f"https://a.com/{i}", source="fake") for i, t in enumerate(titles)]
-        engine = CrawlEngine(sources=[FakeSource(arts)])
-        result, stats, _ds = engine.crawl()
-        assert len(result) == 5
-        assert stats["fake"] == 5
+        src = StubSource("stub", [_article("Hello"), _article("World")])
+        engine = CrawlEngine(sources=[src])
+        articles, stats, dedup_stats = engine.crawl()
+        assert len(articles) == 2
+        assert stats["stub"] == 2
 
     def test_dedup_across_sources(self):
-        a1 = Article(title="Same story here", url="https://a.com/1", source="s1")
-        a2 = Article(title="Same story here", url="https://a.com/1", source="s2")
-        engine = CrawlEngine(sources=[FakeSource([a1]), FakeSource([a2])])
-        result, stats, _ds = engine.crawl()
-        assert len(result) == 1
+        a1 = _article("Breaking news today", source="A", quality=0.5)
+        a2 = _article("Breaking news today", source="B", quality=0.9)
+        s1 = StubSource("s1", [a1])
+        s2 = StubSource("s2", [a2])
+        engine = CrawlEngine(sources=[s1, s2])
+        articles, stats, _ = engine.crawl()
+        assert len(articles) == 1
 
-    def test_sorts_newest_first(self):
-        old = Article(title="Old", url="https://a.com/old", source="s",
-                      timestamp=datetime(2025, 1, 1, tzinfo=timezone.utc))
-        new = Article(title="New", url="https://a.com/new", source="s",
-                      timestamp=datetime(2026, 1, 1, tzinfo=timezone.utc))
-        engine = CrawlEngine(sources=[FakeSource([old, new])])
-        result, stats, _ds = engine.crawl()
-        assert result[0].title == "New"
+    def test_failing_source_doesnt_crash(self):
+        good = StubSource("good", [_article("OK")])
+        bad = FailingSource()
+        engine = CrawlEngine(sources=[good, bad])
+        articles, stats, _ = engine.crawl()
+        assert len(articles) == 1
+        assert stats["failing"] == -1
 
-    def test_failed_source_doesnt_break(self):
-        class FailSource(BaseSource):
-            name = "fail"
-            def crawl(self):
-                raise RuntimeError("boom")
+    def test_sort_by_blended_score(self):
+        recent = _article("Recent", hours_ago=0.5, quality=0.5)
+        old_quality = _article("Old Quality", hours_ago=40, quality=0.95)
+        src = StubSource("s", [old_quality, recent])
+        engine = CrawlEngine(sources=[src])
+        articles, _, _ = engine.crawl()
+        # Recent article should rank higher due to recency weight
+        assert articles[0].title == "Recent"
 
-        ok = Article(title="OK", url="https://a.com/ok", source="ok")
-        engine = CrawlEngine(sources=[FailSource(), FakeSource([ok])])
-        result, stats, _ds = engine.crawl()
-        assert len(result) == 1
-        assert stats["fail"] == -1
-
-    def test_stats_returned(self):
-        src1 = FakeSource([Article(title="A", url="https://a.com/1", source="s")])
-        src1.name = "src1"
-        src2 = FakeSource([Article(title="B", url="https://b.com/1", source="s"),
-                           Article(title="C", url="https://c.com/1", source="s")])
-        src2.name = "src2"
-        engine = CrawlEngine(sources=[src1, src2])
-        result, stats, _ds = engine.crawl()
-        assert stats["src1"] == 1
-        assert stats["src2"] == 2
+    def test_empty_sources(self):
+        engine = CrawlEngine(sources=[StubSource("empty", [])])
+        articles, stats, _ = engine.crawl()
+        assert len(articles) == 0
+        assert stats["empty"] == 0

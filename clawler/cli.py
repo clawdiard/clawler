@@ -148,8 +148,13 @@ def main(argv=None):
                         help="Disable deduplication (useful for debugging)")
     parser.add_argument("--domains", action="store_true",
                         help="Show domain breakdown statistics after output")
+    parser.add_argument("--workers", type=int, default=6,
+                        help="Max parallel workers for crawling (default: 6)")
 
     args = parser.parse_args(argv)
+
+    # Determine custom feeds early (needed by --dry-run and other early-exit paths)
+    custom_feeds = None
 
     # Apply config file defaults (CLI args always win)
     if not args.no_config:
@@ -264,8 +269,7 @@ def main(argv=None):
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
-    # Determine RSS feeds to use (needed by --dry-run, --list-sources, etc.)
-    custom_feeds = None
+    # Load custom feeds from OPML or feeds file
     if args.import_opml:
         from clawler.opml import import_opml
         try:
@@ -372,7 +376,7 @@ def main(argv=None):
         print("Error: All sources disabled!", file=sys.stderr)
         sys.exit(1)
 
-    engine = CrawlEngine(sources=sources)
+    engine = CrawlEngine(sources=sources, max_workers=args.workers)
     if not args.quiet:
         print("🕷️  Crawling news sources...", file=sys.stderr)
 
