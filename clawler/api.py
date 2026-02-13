@@ -94,7 +94,7 @@ def crawl(
         return []
 
     engine = CrawlEngine(sources=sources)
-    articles, _stats = engine.crawl(dedupe_threshold=dedupe_threshold)
+    articles, _stats, _dedup_stats = engine.crawl(dedupe_threshold=dedupe_threshold)
 
     # Filters
     if category:

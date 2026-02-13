@@ -1,10 +1,36 @@
 """Deduplication engine for Clawler."""
-from typing import List
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import List, Optional
 from clawler.models import Article
 from difflib import SequenceMatcher
 
 
-def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> List[Article]:
+@dataclass
+class DedupStats:
+    """Statistics about deduplication results."""
+    total_input: int = 0
+    exact_dupes: int = 0
+    fingerprint_dupes: int = 0
+    fuzzy_dupes: int = 0
+    unique_output: int = 0
+
+    @property
+    def total_removed(self) -> int:
+        return self.exact_dupes + self.fingerprint_dupes + self.fuzzy_dupes
+
+    def summary(self) -> str:
+        return (
+            f"Dedup: {self.total_input} → {self.unique_output} "
+            f"(removed {self.total_removed}: "
+            f"{self.exact_dupes} exact, "
+            f"{self.fingerprint_dupes} fingerprint, "
+            f"{self.fuzzy_dupes} fuzzy)"
+        )
+
+
+def deduplicate(articles: List[Article], similarity_threshold: float = 0.75,
+                stats: DedupStats | None = None) -> List[Article]:
     """Remove duplicate articles using exact key + fingerprint + fuzzy title matching.
 
     Three-tier dedup strategy:
@@ -12,7 +38,13 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
     2. Title fingerprint match (sorted significant words) — O(1) lookup, catches
        obvious cross-source duplicates cheaply
     3. Fuzzy SequenceMatcher — O(n) per article, only reached if tiers 1-2 miss
+
+    Pass a DedupStats instance to collect per-tier statistics.
     """
+    if stats is None:
+        stats = DedupStats()
+    stats.total_input = len(articles)
+
     seen_keys: set = set()
     seen_fingerprints: dict = {}  # fingerprint -> index in unique
     seen_titles: List[tuple] = []  # (title_lower, title_len, index in unique)
@@ -21,11 +53,13 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
     for article in articles:
         # Tier 1: exact dedup
         if article.dedup_key in seen_keys:
+            stats.exact_dupes += 1
             continue
 
         # Tier 2: fingerprint dedup (cheap cross-source catch)
         fp = article.title_fingerprint
         if fp and fp in seen_fingerprints:
+            stats.fingerprint_dupes += 1
             # Keep the one with higher quality_score
             idx = seen_fingerprints[fp]
             unique[idx].source_count += 1
@@ -48,6 +82,7 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
             if abs(title_len - prev_len) > max(title_len, prev_len) * (1 - similarity_threshold):
                 continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
+                stats.fuzzy_dupes += 1
                 # Keep higher quality
                 unique[prev_idx].source_count += 1
                 if article.quality_score > unique[prev_idx].quality_score:
@@ -72,4 +107,5 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75) -> 
         seen_titles.append((title_lower, title_len, idx))
         unique.append(article)
 
+    stats.unique_output = len(unique)
     return unique

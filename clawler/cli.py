@@ -104,6 +104,16 @@ def main():
                         help="Continuously crawl at an interval (e.g. 5m, 1h). Press Ctrl+C to stop.")
     parser.add_argument("--compact", action="store_true",
                         help="One-line-per-article compact output (implies console format)")
+    parser.add_argument("--bookmark", action="store_true",
+                        help="Save crawled results to local bookmarks (~/.clawler/bookmarks.json)")
+    parser.add_argument("--list-bookmarks", action="store_true", dest="list_bookmarks",
+                        help="List saved bookmarks and exit")
+    parser.add_argument("--clear-bookmarks", action="store_true", dest="clear_bookmarks",
+                        help="Clear all saved bookmarks and exit")
+    parser.add_argument("--dedupe-stats", action="store_true", dest="dedupe_stats",
+                        help="Show deduplication statistics after crawling")
+    parser.add_argument("--trending", action="store_true",
+                        help="Shorthand for --min-sources 2 (stories covered by multiple sources)")
 
     args = parser.parse_args()
 
@@ -118,6 +128,30 @@ def main():
         n = clear_cache()
         print(f"🧹 Cleared {n} cached file(s)")
         return
+
+    # Bookmarks management
+    if args.list_bookmarks:
+        from clawler.bookmarks import list_bookmarks
+        bookmarks = list_bookmarks()
+        if not bookmarks:
+            print("📚 No bookmarks saved yet.")
+        else:
+            print(f"📚 {len(bookmarks)} bookmark(s):\n")
+            for b in bookmarks:
+                print(f"  • [{b['source']}] {b['title']}")
+                print(f"    {b['url']}")
+                print(f"    Saved: {b.get('bookmarked_at', 'unknown')}\n")
+        return
+
+    if args.clear_bookmarks:
+        from clawler.bookmarks import clear_bookmarks
+        n = clear_bookmarks()
+        print(f"🧹 Cleared {n} bookmark(s)")
+        return
+
+    # --trending is shorthand for --min-sources 2
+    if args.trending:
+        args.min_sources = max(args.min_sources, 2)
 
     # Health report
     if args.health:
@@ -263,6 +297,7 @@ def main():
     # Check cache first
     articles = None
     stats = None
+    _dedup_stats = None
     if args.cache:
         from clawler.cache import cache_key, load_cache, save_cache
         ckey = cache_key([s.name for s in sources], args.dedupe_threshold)
@@ -273,7 +308,7 @@ def main():
                 print("📦 Using cached results", file=sys.stderr)
 
     if articles is None:
-        articles, stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
+        articles, stats, _dedup_stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
         if args.cache:
             save_cache(ckey, articles, stats)
 
@@ -416,6 +451,17 @@ def main():
             print(f"✅ Wrote {len(articles)} articles to {args.output}", file=sys.stderr)
     else:
         print(output)
+
+    # Dedup stats
+    if args.dedupe_stats and _dedup_stats:
+        print(f"\n📊 {_dedup_stats.summary()}", file=sys.stderr)
+
+    # Bookmark results
+    if args.bookmark and articles:
+        from clawler.bookmarks import add_bookmarks
+        added = add_bookmarks(articles)
+        if not args.quiet:
+            print(f"📚 Bookmarked {added} new article(s)", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

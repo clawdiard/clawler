@@ -9,9 +9,33 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-HEADERS = {
-    "User-Agent": "Clawler/2.8 (News Aggregator; +https://github.com/clawdiard/clawler)"
-}
+def _build_headers():
+    from clawler import __version__
+    return {
+        "User-Agent": f"Clawler/{__version__} (News Aggregator; +https://github.com/clawdiard/clawler)"
+    }
+
+# Lazy-init to avoid circular imports; kept as module-level for back-compat
+class _LazyHeaders(dict):
+    _loaded = False
+    def _ensure(self):
+        if not self._loaded:
+            self.update(_build_headers())
+            self._loaded = True
+    def __getitem__(self, key):
+        self._ensure()
+        return super().__getitem__(key)
+    def __iter__(self):
+        self._ensure()
+        return super().__iter__()
+    def items(self):
+        self._ensure()
+        return super().items()
+    def __contains__(self, key):
+        self._ensure()
+        return super().__contains__(key)
+
+HEADERS = _LazyHeaders()
 
 # Per-domain rate limiting — minimum seconds between requests to the same domain
 _domain_last_request: dict = {}  # domain -> last request timestamp

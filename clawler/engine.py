@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 from clawler.sources import RSSSource, HackerNewsSource, RedditSource
-from clawler.dedup import deduplicate
+from clawler.dedup import deduplicate, DedupStats
 from clawler.weights import get_quality_score
 from clawler.health import HealthTracker
 
@@ -24,10 +24,11 @@ class CrawlEngine:
         self.max_workers = max_workers
         self.health = HealthTracker()
 
-    def crawl(self, dedupe_threshold: float = 0.75) -> Tuple[List[Article], Dict[str, int]]:
-        """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats."""
+    def crawl(self, dedupe_threshold: float = 0.75) -> Tuple[List[Article], Dict[str, int], DedupStats]:
+        """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats + dedup stats."""
         all_articles: List[Article] = []
         stats: Dict[str, int] = {}
+        dedup_stats = DedupStats()
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
             futures = {pool.submit(src.crawl): src for src in self.sources}
@@ -45,7 +46,7 @@ class CrawlEngine:
                     self.health.record_failure(src.name)
 
         logger.info(f"[Engine] Total raw: {len(all_articles)}")
-        unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold)
+        unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold, stats=dedup_stats)
         logger.info(f"[Engine] After dedup: {len(unique)}")
 
         # Inject quality scores with health modifier
@@ -70,4 +71,4 @@ class CrawlEngine:
         unique.sort(key=blended_key, reverse=True)
 
         self.health.save()
-        return unique, stats
+        return unique, stats, dedup_stats

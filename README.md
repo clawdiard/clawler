@@ -23,6 +23,9 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🔄 **Reverse sort** — flip any sort order
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
 - 🚦 **Rate limiting** — per-domain request throttling to be a good citizen
+- 📚 **Bookmarks** — save interesting articles locally for later reading
+- 📊 **Dedup statistics** — see per-tier dedup breakdown with `--dedupe-stats`
+- 🔥 **Trending shorthand** — `--trending` for multi-source stories
 
 
 ## Quick Start
@@ -93,6 +96,21 @@ clawler --reverse
 
 # Only stories covered by 2+ sources (trending)
 clawler --min-sources 2
+
+# Same thing, shorthand
+clawler --trending
+
+# Save results to bookmarks for later
+clawler --category tech --bookmark
+
+# List saved bookmarks
+clawler --list-bookmarks
+
+# Clear bookmarks
+clawler --clear-bookmarks
+
+# Show deduplication statistics
+clawler --dedupe-stats
 ```
 
 ## Sources
@@ -192,6 +210,7 @@ clawler/
 ├── profile.py          # Interest-based relevance scoring
 ├── discover.py         # Feed autodiscovery
 ├── opml.py             # OPML import/export
+├── bookmarks.py        # Local bookmark management
 ├── feeds_config.py     # Custom feed file loading
 ├── utils.py            # Shared utilities
 ├── sources/
