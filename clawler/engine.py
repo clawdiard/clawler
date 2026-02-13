@@ -24,7 +24,7 @@ class CrawlEngine:
         self.max_workers = max_workers
         self.health = HealthTracker()
 
-    def crawl(self, dedupe_threshold: float = 0.75) -> Tuple[List[Article], Dict[str, int], DedupStats]:
+    def crawl(self, dedupe_threshold: float = 0.75, dedupe_enabled: bool = True) -> Tuple[List[Article], Dict[str, int], DedupStats]:
         """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats + dedup stats."""
         all_articles: List[Article] = []
         stats: Dict[str, int] = {}
@@ -46,7 +46,7 @@ class CrawlEngine:
                     self.health.record_failure(src.name)
 
         logger.info(f"[Engine] Total raw: {len(all_articles)}")
-        unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold, stats=dedup_stats)
+        unique = deduplicate(all_articles, similarity_threshold=dedupe_threshold, stats=dedup_stats, enabled=dedupe_enabled)
         logger.info(f"[Engine] After dedup: {len(unique)}")
 
         # Inject quality scores with health modifier

@@ -26,6 +26,9 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 📚 **Bookmarks** — save interesting articles locally for later reading
 - 📊 **Dedup statistics** — see per-tier dedup breakdown with `--dedupe-stats`
 - 🔥 **Trending shorthand** — `--trending` for multi-source stories
+- 🔗 **Pipe-friendly output** — `--urls-only` and `--titles-only` for scripting
+- 🚫 **Dedup bypass** — `--no-dedup` to see all raw articles
+- 🌐 **Domain breakdown** — `--domains` for domain-level analytics
 
 
 ## Quick Start
@@ -130,6 +133,18 @@ clawler --max-age 1y
 
 # Control summary truncation length
 clawler --summary-length 150
+
+# Output just URLs (great for piping to other tools)
+clawler --category tech --urls-only
+
+# Output just titles
+clawler --titles-only
+
+# Disable deduplication (see all raw articles)
+clawler --no-dedup
+
+# Show domain breakdown after output
+clawler --domains
 ```
 
 ## Sources

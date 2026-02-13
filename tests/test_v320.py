@@ -1,4 +1,4 @@
-"""Tests for v3.3.0 features: --remove-bookmark, --count, DRY fetch, RSS rate limiting, version sync, build backend."""
+"""Tests for v3.4.0 features: --remove-bookmark, --count, DRY fetch, RSS rate limiting, version sync, build backend."""
 import json
 import tempfile
 from pathlib import Path
@@ -92,13 +92,13 @@ class TestFetchWithRetry:
 class TestVersionSync:
     def test_all_versions_match(self):
         from clawler import __version__
-        assert __version__ == "3.3.0"
+        assert __version__ == "3.4.0"
         # Check pyproject.toml
         pyproject = Path(__file__).parent.parent / "pyproject.toml"
-        assert 'version = "3.3.0"' in pyproject.read_text()
+        assert 'version = "3.4.0"' in pyproject.read_text()
         # Check setup.py
         setup = Path(__file__).parent.parent / "setup.py"
-        assert 'version="3.3.0"' in setup.read_text()
+        assert 'version="3.4.0"' in setup.read_text()
 
 
 class TestBuildBackend:

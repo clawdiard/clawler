@@ -21,7 +21,7 @@ def _parse_since(value: str) -> datetime:
         )
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="clawler",
         description="🗞️ Clawler — Advanced news crawling service",
@@ -132,8 +132,16 @@ def main():
                         help="Show article age distribution histogram after output")
     parser.add_argument("--summary-length", type=int, default=300, dest="summary_length",
                         help="Max characters for article summaries (default: 300)")
+    parser.add_argument("--urls-only", action="store_true", dest="urls_only",
+                        help="Output only article URLs, one per line (for piping)")
+    parser.add_argument("--titles-only", action="store_true", dest="titles_only",
+                        help="Output only article titles, one per line")
+    parser.add_argument("--no-dedup", action="store_true", dest="no_dedup",
+                        help="Disable deduplication (useful for debugging)")
+    parser.add_argument("--domains", action="store_true",
+                        help="Show domain breakdown statistics after output")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # Apply config file defaults (CLI args always win)
     if not args.no_config:
@@ -353,7 +361,10 @@ def main():
                 print("📦 Using cached results", file=sys.stderr)
 
     if articles is None:
-        articles, stats, _dedup_stats = engine.crawl(dedupe_threshold=args.dedupe_threshold)
+        articles, stats, _dedup_stats = engine.crawl(
+            dedupe_threshold=args.dedupe_threshold,
+            dedupe_enabled=not args.no_dedup,
+        )
         if args.cache:
             save_cache(ckey, articles, stats)
 
@@ -467,6 +478,18 @@ def main():
         print(len(articles))
         return
 
+    # URLs-only mode (for piping)
+    if args.urls_only:
+        for a in articles:
+            print(a.url)
+        return
+
+    # Titles-only mode
+    if args.titles_only:
+        for a in articles:
+            print(a.title)
+        return
+
     # Apply json-pretty shorthand
     if args.json_pretty:
         args.format = "json"
@@ -557,16 +580,28 @@ def main():
             bar = "█" * max(1, int(count / max_count * 30))
             print(f"  {label:>8s} | {bar} {count}", file=sys.stderr)
 
+    # Domain breakdown
+    if args.domains and articles:
+        from urllib.parse import urlparse
+        from collections import Counter
+        domains = Counter(urlparse(a.url).netloc for a in articles)
+        top_domains = domains.most_common(15)
+        max_count = top_domains[0][1] if top_domains else 1
+        print(f"\n🌐 Domain Breakdown ({len(domains)} unique domains):", file=sys.stderr)
+        for domain, count in top_domains:
+            bar = "█" * max(1, int(count / max_count * 25))
+            print(f"  {domain:>35s} | {bar} {count}", file=sys.stderr)
+
     # Watch mode: repeat crawl at interval
     if args.watch:
-        _watch_loop(args, parser)
+        _watch_loop(args)
 
 
-def _watch_loop(args, parser):
+def _watch_loop(args):
     """Continuously re-run crawl at the specified interval.
 
-    Saves and clears `--watch` before re-dispatching so main() doesn't
-    recurse back into _watch_loop. Restores it after each iteration.
+    Builds an explicit argv list from the original sys.argv with --watch
+    removed, so main() doesn't recurse back into _watch_loop.
     """
     import re as _re
     match = _re.match(r"^(\d+)\s*([mhs])$", args.watch.strip().lower())
@@ -576,6 +611,22 @@ def _watch_loop(args, parser):
     amount, unit = int(match.group(1)), match.group(2)
     seconds = {"s": 1, "m": 60, "h": 3600}[unit] * amount
     watch_val = args.watch
+
+    # Build argv without --watch to prevent recursion
+    raw = sys.argv[1:]
+    clean_argv = []
+    skip_next = False
+    for i, arg in enumerate(raw):
+        if skip_next:
+            skip_next = False
+            continue
+        if arg == "--watch":
+            skip_next = True  # skip the next arg (the interval value)
+            continue
+        if arg.startswith("--watch="):
+            continue
+        clean_argv.append(arg)
+
     if not args.quiet:
         print(f"\n⏰ Watch mode: refreshing every {watch_val}. Press Ctrl+C to stop.", file=sys.stderr)
     try:
@@ -584,9 +635,7 @@ def _watch_loop(args, parser):
             time.sleep(seconds)
             if not args.quiet:
                 print(f"\n🔄 Refreshing...", file=sys.stderr)
-            args.watch = None  # Prevent recursion
-            main()
-            args.watch = watch_val  # Restore for next iteration
+            main(argv=clean_argv)
     except KeyboardInterrupt:
         if not args.quiet:
             print("\n👋 Watch stopped.", file=sys.stderr)

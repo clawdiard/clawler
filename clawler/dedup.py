@@ -30,7 +30,7 @@ class DedupStats:
 
 
 def deduplicate(articles: List[Article], similarity_threshold: float = 0.75,
-                stats: DedupStats | None = None) -> List[Article]:
+                stats: DedupStats | None = None, enabled: bool = True) -> List[Article]:
     """Remove duplicate articles using exact key + fingerprint + fuzzy title matching.
 
     Three-tier dedup strategy:
@@ -40,10 +40,15 @@ def deduplicate(articles: List[Article], similarity_threshold: float = 0.75,
     3. Fuzzy SequenceMatcher — O(n) per article, only reached if tiers 1-2 miss
 
     Pass a DedupStats instance to collect per-tier statistics.
+    Set enabled=False to skip dedup entirely (pass-through).
     """
     if stats is None:
         stats = DedupStats()
     stats.total_input = len(articles)
+
+    if not enabled:
+        stats.unique_output = len(articles)
+        return list(articles)
 
     seen_keys: set = set()
     seen_fingerprints: dict = {}  # fingerprint -> index in unique
