@@ -63,11 +63,13 @@ def test_api_builds_all_sources_by_default():
         RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
         MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
         DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
+        BlueskySource,
     )
     expected_types = {
         RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
         MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
         DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
+        BlueskySource,
     }
     with patch('clawler.api.CrawlEngine') as MockEngine:
         instance = MockEngine.return_value

@@ -92,13 +92,11 @@ class TestFetchWithRetry:
 class TestVersionSync:
     def test_all_versions_match(self):
         from clawler import __version__
-        assert __version__ == "5.2.0"
-        # Check pyproject.toml
+        # All version strings should match __version__ (single source of truth)
         pyproject = Path(__file__).parent.parent / "pyproject.toml"
-        assert 'version = "5.2.0"' in pyproject.read_text()
-        # Check setup.py
+        assert f'version = "{__version__}"' in pyproject.read_text()
         setup = Path(__file__).parent.parent / "setup.py"
-        assert 'version="5.2.0"' in setup.read_text()
+        assert f'version="{__version__}"' in setup.read_text()
 
 
 class TestBuildBackend:

@@ -38,6 +38,30 @@ class _LazyHeaders(dict):
 
 HEADERS = _LazyHeaders()
 
+# Shared session for connection pooling (TCP keep-alive, connection reuse)
+_session: requests.Session | None = None
+_session_lock = threading.Lock()
+
+
+def _get_session() -> requests.Session:
+    """Return a shared requests.Session for connection pooling."""
+    global _session
+    if _session is None:
+        with _session_lock:
+            if _session is None:
+                s = requests.Session()
+                # Increase pool size for parallel crawling
+                adapter = requests.adapters.HTTPAdapter(
+                    pool_connections=20,
+                    pool_maxsize=20,
+                    max_retries=0,  # We handle retries ourselves
+                )
+                s.mount("https://", adapter)
+                s.mount("http://", adapter)
+                _session = s
+    return _session
+
+
 # Per-domain rate limiting — minimum seconds between requests to the same domain
 _domain_last_request: dict = {}  # domain -> last request timestamp
 _rate_limit_lock = threading.Lock()
@@ -86,7 +110,8 @@ class BaseSource(ABC):
         empty = None if parse_json else ""
         for attempt in range(self.max_retries + 1):
             try:
-                resp = requests.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
+                session = _get_session()
+                resp = session.get(url, headers={**HEADERS, **kwargs.get("extra_headers", {})},
                                      timeout=self.timeout)
                 resp.raise_for_status()
                 return resp.json() if parse_json else resp.text
