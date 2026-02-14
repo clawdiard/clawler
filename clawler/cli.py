@@ -66,6 +66,7 @@ def main(argv=None):
     parser.add_argument("--no-producthunt", action="store_true", help="Skip ProductHunt source")
     parser.add_argument("--no-bluesky", action="store_true", help="Skip Bluesky source")
     parser.add_argument("--no-tildes", action="store_true", help="Skip Tildes source")
+    parser.add_argument("--no-lemmy", action="store_true", help="Skip Lemmy source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -229,7 +230,7 @@ def main(argv=None):
     # --only sets no_* flags for sources NOT in the list
     if args.only:
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
-                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky", "tildes"}
+                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky", "tildes", "lemmy"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -624,6 +625,12 @@ def main(argv=None):
     if not args.no_tildes:
         from clawler.sources import TildesSource
         src = TildesSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_lemmy:
+        from clawler.sources import LemmySource
+        src = LemmySource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **70+ individual sources across 13 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **75+ individual sources across 14 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **70+ sources across 13 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes
+- 📡 **75+ sources across 14 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances)
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -47,6 +47,7 @@ Clawler aggregates news from **70+ individual sources across 13 source types** u
 - 🚀 **ProductHunt source** — trending products (`--no-producthunt` to skip)
 - 🦋 **Bluesky source** — trending shared links from the AT Protocol network (`--no-bluesky` to skip)
 - 🏛️ **Tildes source** — quality discussion community topics from tildes.net (`--no-tildes` to skip)
+- 🐝 **Lemmy source** — trending posts from Fediverse link aggregator instances (`--no-lemmy` to skip)
 - 📅 **`--since today/this-week/this-month`** — named time periods relative to current calendar boundaries
 - 🚫 **`--exclude-domain`** — filter out articles from specific domains (comma-separated)
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
