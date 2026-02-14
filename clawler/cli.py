@@ -189,6 +189,12 @@ def main(argv=None):
                         help="List all configured sources with type and quality weight, then exit")
     parser.add_argument("--show-discussions", action="store_true", dest="show_discussions",
                         help="Include discussion URLs in console output when available")
+    parser.add_argument("--exclude-tag", type=str, default=None, dest="exclude_tag",
+                        help="Exclude articles matching tag (substring match, case-insensitive)")
+    parser.add_argument("--exclude-author", type=str, default=None, dest="exclude_author",
+                        help="Exclude articles by author name (substring match, case-insensitive)")
+    parser.add_argument("--age-stats", action="store_true", dest="age_stats",
+                        help="Show article age statistics (min/max/avg/median) after output")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
 
@@ -642,6 +648,16 @@ def main(argv=None):
         tq = args.tag.lower()
         articles = [a for a in articles if any(tq in t.lower() for t in a.tags)]
 
+    # Exclude by tag
+    if args.exclude_tag:
+        etq = args.exclude_tag.lower()
+        articles = [a for a in articles if not any(etq in t.lower() for t in a.tags)]
+
+    # Exclude by author
+    if args.exclude_author:
+        eaq = args.exclude_author.lower()
+        articles = [a for a in articles if eaq not in a.author.lower()]
+
     # Filter by time (--since)
     if args.since:
         cutoff = _parse_since(args.since)
@@ -860,6 +876,32 @@ def main(argv=None):
         for domain, count in top_domains:
             bar = "█" * max(1, int(count / max_count * 25))
             print(f"  {domain:>35s} | {bar} {count}", file=sys.stderr)
+
+    # Age statistics
+    if args.age_stats and articles:
+        from datetime import datetime as _dt, timezone as _tz
+        _now = _dt.now(tz=_tz.utc)
+        ages_h = []
+        for a in articles:
+            if a.timestamp:
+                ts = a.timestamp if a.timestamp.tzinfo else a.timestamp.replace(tzinfo=_tz.utc)
+                ages_h.append((_now - ts).total_seconds() / 3600)
+        if ages_h:
+            ages_h.sort()
+            _min = ages_h[0]
+            _max = ages_h[-1]
+            _avg = sum(ages_h) / len(ages_h)
+            _med = ages_h[len(ages_h) // 2]
+
+            def _fmt_age(h):
+                if h < 1:
+                    return f"{h * 60:.0f}m"
+                if h < 24:
+                    return f"{h:.1f}h"
+                return f"{h / 24:.1f}d"
+
+            print(f"\n⏱️  Age Statistics ({len(ages_h)}/{len(articles)} with timestamps):", file=sys.stderr)
+            print(f"   Newest: {_fmt_age(_min)}  |  Oldest: {_fmt_age(_max)}  |  Avg: {_fmt_age(_avg)}  |  Median: {_fmt_age(_med)}", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

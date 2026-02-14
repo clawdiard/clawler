@@ -170,4 +170,4 @@ def test_producthunt_weight():
 
 def test_version_500():
     from clawler import __version__
-    assert __version__ == "5.0.0"
+    assert __version__ == "5.1.0"

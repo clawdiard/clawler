@@ -183,7 +183,7 @@ class TestV450CLI:
 
     def test_version_bumped(self):
         from clawler import __version__
-        assert __version__ == "5.0.0"
+        assert __version__ == "5.1.0"
 
     def test_lobsters_in_sources_init(self):
         from clawler.sources import LobstersSource

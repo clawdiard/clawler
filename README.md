@@ -46,6 +46,8 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 - 📰 **TechMeme source** — curated tech news river (`--no-techmeme` to skip)
 - 🚀 **ProductHunt source** — trending products (`--no-producthunt` to skip)
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
+- 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
+- ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 
 
 ## Quick Start

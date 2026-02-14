@@ -104,7 +104,7 @@ class TestCategoryMapping(unittest.TestCase):
 
 class TestVersionSync(unittest.TestCase):
     def test_version_is_430(self):
-        self.assertEqual(__version__, "5.0.0")
+        self.assertEqual(__version__, "5.1.0")
 
 
 if __name__ == "__main__":
