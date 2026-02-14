@@ -1,10 +1,13 @@
 """JSON output."""
 import json
-from typing import List
+from typing import List, Optional
 from clawler.models import Article
 
 
 class JSONFormatter:
+    def __init__(self, indent: Optional[int] = 2):
+        self.indent = indent
+
     def format(self, articles: List[Article]) -> str:
         return json.dumps([{
             "title": a.title,
@@ -16,4 +19,4 @@ class JSONFormatter:
             "quality_score": round(a.quality_score, 3),
             "source_count": a.source_count,
             "tags": a.tags,
-        } for a in articles], indent=2)
+        } for a in articles], indent=self.indent, ensure_ascii=False)

@@ -57,9 +57,44 @@ def load_config() -> Dict[str, Any]:
     return config
 
 
+def load_env_config() -> Dict[str, Any]:
+    """Load config from CLAWLER_* environment variables.
+
+    Maps CLAWLER_CATEGORY=tech → category=tech, CLAWLER_LIMIT=20 → limit=20, etc.
+    Boolean vars: CLAWLER_QUIET=1, CLAWLER_NO_REDDIT=true, etc.
+    """
+    prefix = "CLAWLER_"
+    config: Dict[str, Any] = {}
+    for key, value in os.environ.items():
+        if not key.startswith(prefix):
+            continue
+        field = key[len(prefix):].lower()
+        if field in _BOOL_FIELDS:
+            config[field] = value.lower() in ("1", "true", "yes", "on")
+        elif field in _INT_FIELDS:
+            try:
+                config[field] = int(value)
+            except ValueError:
+                pass
+        elif field in _FLOAT_FIELDS:
+            try:
+                config[field] = float(value)
+            except ValueError:
+                pass
+        elif field in _STR_FIELDS:
+            config[field] = value
+    return config
+
+
 def apply_config_defaults(parser, args):
-    """Apply config file defaults to unset CLI args (CLI always wins)."""
+    """Apply config file defaults to unset CLI args (CLI always wins).
+
+    Priority: CLI flags > env vars (CLAWLER_*) > config files > parser defaults.
+    """
     config = load_config()
+    env_config = load_env_config()
+    # Env vars override file config
+    config.update(env_config)
     if not config:
         return args
 

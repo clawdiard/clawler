@@ -34,6 +34,11 @@ Clawler aggregates news from 46+ sources using RSS feeds, APIs, and web scraping
 - 🚫 **Dedup bypass** — `--no-dedup` to see all raw articles
 - 🌐 **Domain breakdown** — `--domains` for domain-level analytics
 - 🕰️ **Persistent dedup history** — `--history` remembers seen articles across runs (perfect for cron)
+- 🌍 **Environment variable config** — `CLAWLER_*` env vars for containerized/CI usage
+- 🔇 **Auto-quiet when piped** — suppresses stderr noise when output is piped
+- 🎲 **Random sampling** — `--sample N` for serendipitous discovery
+- 📦 **Compact JSON** — `--json-compact` for minified single-line JSON
+- 🎨 **NO_COLOR support** — `--no-color` or `NO_COLOR=1` env var
 
 
 ## Quick Start
@@ -177,6 +182,21 @@ clawler --config-init
 
 # Show per-source health report
 clawler --source-health
+
+# Random sample of 10 articles (serendipity mode)
+clawler --sample 10
+
+# Compact JSON (single line, great for streaming/logging)
+clawler --json-compact
+
+# Disable colors
+clawler --no-color
+
+# Configure via environment variables (great for containers)
+CLAWLER_CATEGORY=tech CLAWLER_LIMIT=20 clawler
+
+# Pipe-friendly: stderr is auto-suppressed when piped
+clawler -f json | jq '.[] | .title'
 ```
 
 ## Sources
@@ -295,6 +315,24 @@ clawler/
     ├── csv_out.py      # CSV output
     └── html_out.py     # HTML output
 ```
+
+## Environment Variables
+
+All CLI flags can be set via `CLAWLER_*` environment variables (CLI flags always win):
+
+| Variable | Example | Equivalent Flag |
+|----------|---------|----------------|
+| `CLAWLER_CATEGORY` | `tech,science` | `--category tech,science` |
+| `CLAWLER_LIMIT` | `25` | `-n 25` |
+| `CLAWLER_SINCE` | `6h` | `--since 6h` |
+| `CLAWLER_QUIET` | `true` | `--quiet` |
+| `CLAWLER_NO_REDDIT` | `1` | `--no-reddit` |
+| `CLAWLER_FORMAT` | `json` | `-f json` |
+| `CLAWLER_WORKERS` | `4` | `--workers 4` |
+| `CLAWLER_DEDUPE_THRESHOLD` | `0.8` | `--dedupe-threshold 0.8` |
+| `NO_COLOR` | `1` | `--no-color` |
+
+Priority: CLI flags > environment variables > config files > defaults.
 
 ## License
 

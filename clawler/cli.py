@@ -164,8 +164,29 @@ def main(argv=None):
                         help="Generate a starter config file (~/.clawler.yaml) and exit")
     parser.add_argument("--source-health", action="store_true", dest="source_health",
                         help="Show per-source health report (success rates, avg articles) and exit")
+    parser.add_argument("--sample", type=int, default=0,
+                        help="Randomly sample N articles from results (useful for discovery)")
+    parser.add_argument("--json-compact", action="store_true", dest="json_compact",
+                        help="Minified single-line JSON output (implies -f json)")
+    parser.add_argument("--no-color", action="store_true", dest="no_color",
+                        help="Disable colored output (also set via NO_COLOR env var)")
+    parser.add_argument("--silent", action="store_true",
+                        help="Alias for --quiet (suppress all status messages on stderr)")
 
     args = parser.parse_args(argv)
+
+    # --silent is an alias for --quiet
+    if args.silent:
+        args.quiet = True
+
+    # Auto-quiet when stdout is not a TTY (piped output)
+    if not sys.stdout.isatty() and not args.verbose:
+        args.quiet = True
+
+    # NO_COLOR env var support (https://no-color.org/)
+    import os
+    if args.no_color or os.environ.get("NO_COLOR"):
+        os.environ["NO_COLOR"] = "1"
 
     # Determine custom feeds early (needed by --dry-run and other early-exit paths)
     custom_feeds = None
@@ -552,6 +573,11 @@ def main(argv=None):
     # Limit
     articles = articles[:args.limit]
 
+    # Random sampling (after all filters + limit)
+    if args.sample > 0 and len(articles) > args.sample:
+        import random as _random
+        articles = _random.sample(articles, args.sample)
+
     # Stats mode
     if args.stats:
         total = sum(v for v in stats.values() if v >= 0)
@@ -594,6 +620,10 @@ def main(argv=None):
     if args.json_pretty:
         args.format = "json"
 
+    # Apply json-compact shorthand
+    if args.json_compact:
+        args.format = "json"
+
     # Compact one-liner output
     if args.compact:
         from clawler.utils import relative_time
@@ -623,12 +653,16 @@ def main(argv=None):
     else:
         # Format
         formatters = {
-            "console": ConsoleFormatter, "json": JSONFormatter, "jsonl": JSONLFormatter,
+            "console": ConsoleFormatter, "jsonl": JSONLFormatter,
             "jsonfeed": JSONFeedFormatter,
             "atom": AtomFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter,
             "html": HTMLFormatter,
         }
-        output = formatters[args.format]().format(articles)
+        if args.format == "json":
+            indent = None if args.json_compact else 2
+            output = JSONFormatter(indent=indent).format(articles)
+        else:
+            output = formatters[args.format]().format(articles)
 
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:

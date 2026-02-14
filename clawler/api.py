@@ -58,6 +58,7 @@ def crawl(
     profile: Optional[Union[str, dict]] = None,
     interests: Optional[str] = None,
     min_relevance: float = 0.0,
+    sample: int = 0,
 ) -> List[Article]:
     """One-liner crawl with filtering, dedup, and optional profile scoring.
 
@@ -78,6 +79,7 @@ def crawl(
         interests: Comma-separated interest keywords (e.g. "AI,skateboarding").
                    Simpler alternative to profile. Ignored if profile is set.
         min_relevance: Minimum relevance score (0.0-1.0) when profile is used.
+        sample: Randomly sample N articles from results (0 = disabled).
 
     Returns:
         List of Article objects, sorted by time (or relevance if profile given).
@@ -140,4 +142,11 @@ def crawl(
         from clawler.profile import score_articles
         articles = score_articles(articles, profile_data, min_relevance=min_relevance)
 
-    return articles[:limit]
+    result = articles[:limit]
+
+    # Random sampling
+    if sample > 0 and len(result) > sample:
+        import random
+        result = random.sample(result, sample)
+
+    return result
