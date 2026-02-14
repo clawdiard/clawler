@@ -43,6 +43,7 @@ def _article_to_dict(a: Article) -> dict:
         "relevance": a.relevance,
         "quality_score": a.quality_score,
         "source_count": a.source_count,
+        "tags": a.tags,
     }
 
 
@@ -61,6 +62,7 @@ def _dict_to_article(d: dict) -> Article:
         relevance=d.get("relevance"),
         quality_score=d.get("quality_score", 0.5),
         source_count=d.get("source_count", 1),
+        tags=d.get("tags", []),
     )
 
 

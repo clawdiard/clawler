@@ -65,3 +65,7 @@ sources:
   ArXiv CS.LG: 0.82
   HN Best: 0.76
   IEEE AI: 0.78
+  Mastodon (mastodon.social): 0.65
+  Mastodon (mastodon.online): 0.60
+  Mastodon (fosstodon.org): 0.70
+  Mastodon (hachyderm.io): 0.68

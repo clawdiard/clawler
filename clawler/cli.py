@@ -55,6 +55,9 @@ def main(argv=None):
     parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
     parser.add_argument("--no-github", action="store_true", help="Skip GitHub Trending source")
+    parser.add_argument("--no-mastodon", action="store_true", help="Skip Mastodon Trending source")
+    parser.add_argument("--tag", type=str, default=None,
+                        help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
                         help="HTTP request timeout in seconds (default: 15)")
     parser.add_argument("--retries", type=int, default=2,
@@ -348,6 +351,8 @@ def main(argv=None):
             print("  🤖 Reddit (5 subreddits)")
         if not args.no_github:
             print("  🐙 GitHub Trending (daily)")
+        if not args.no_mastodon:
+            print("  🐘 Mastodon Trending (4 instances)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -392,6 +397,7 @@ def main(argv=None):
             print(f"   {f.get('source', f['url']):20s} [{f.get('category', 'general')}] — {f['url']}")
         print("\n🔥 Hacker News — https://hacker-news.firebaseio.com/v0/topstories.json")
         print("🤖 Reddit — subreddits: worldnews, technology, science, news, programming")
+        print("🐘 Mastodon — instances: mastodon.social, mastodon.online, fosstodon.org, hachyderm.io")
         return
 
     if args.check_feeds:
@@ -418,7 +424,7 @@ def main(argv=None):
     )
 
     # Build source list
-    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource
+    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource
     sources = []
     if not args.no_rss:
         src = RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource()
@@ -437,6 +443,11 @@ def main(argv=None):
         sources.append(src)
     if not args.no_github:
         src = GitHubTrendingSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_mastodon:
+        src = MastodonSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
@@ -510,6 +521,11 @@ def main(argv=None):
     if args.exclude:
         ekw = args.exclude.lower()
         articles = [a for a in articles if ekw not in a.title.lower() and ekw not in a.summary.lower()]
+
+    # Filter by tag
+    if args.tag:
+        tq = args.tag.lower()
+        articles = [a for a in articles if any(tq in t.lower() for t in a.tags)]
 
     # Filter by time (--since)
     if args.since:
