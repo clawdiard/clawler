@@ -1,5 +1,6 @@
 """Core crawl engine."""
 import logging
+import time
 from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from clawler.models import Article
@@ -24,6 +25,14 @@ class CrawlEngine:
         self.max_workers = max_workers
         self.health = HealthTracker()
 
+    @staticmethod
+    def _timed_crawl(src: BaseSource):
+        """Run a source's crawl and return (articles, elapsed_ms)."""
+        t0 = time.monotonic()
+        articles = src.crawl()
+        elapsed_ms = (time.monotonic() - t0) * 1000
+        return articles, elapsed_ms
+
     def crawl(self, dedupe_threshold: float = 0.75, dedupe_enabled: bool = True) -> Tuple[List[Article], Dict[str, int], DedupStats]:
         """Run all sources in parallel, deduplicate, and return sorted articles + per-source stats + dedup stats."""
         all_articles: List[Article] = []
@@ -31,14 +40,14 @@ class CrawlEngine:
         dedup_stats = DedupStats()
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
-            futures = {pool.submit(src.crawl): src for src in self.sources}
+            futures = {pool.submit(self._timed_crawl, src): src for src in self.sources}
             for future in as_completed(futures):
                 src = futures[future]
                 try:
-                    articles = future.result()
-                    logger.info(f"[Engine] {src.name} returned {len(articles)} articles")
+                    articles, elapsed_ms = future.result()
+                    logger.info(f"[Engine] {src.name} returned {len(articles)} articles in {elapsed_ms:.0f}ms")
                     stats[src.name] = len(articles)
-                    self.health.record_success(src.name, len(articles))
+                    self.health.record_success(src.name, len(articles), response_ms=elapsed_ms)
                     all_articles.extend(articles)
                 except Exception as e:
                     logger.error(f"[Engine] {src.name} failed: {e}")

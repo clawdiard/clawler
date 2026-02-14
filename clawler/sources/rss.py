@@ -69,6 +69,10 @@ DEFAULT_FEEDS = [
     # --- Aggregator ---
     {"url": "https://news.google.com/rss", "source": "Google News", "category": "world"},
     {"url": "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB", "source": "Google News (Tech)", "category": "tech"},
+    # --- Tech (v4.4.0) ---
+    {"url": "https://dev.to/feed", "source": "DEV Community", "category": "tech"},
+    {"url": "https://rss.slashdot.org/Slashdot/slashdotMain", "source": "Slashdot", "category": "tech"},
+    {"url": "https://www.theregister.com/headlines.atom", "source": "The Register", "category": "tech"},
 ]
 
 

@@ -5,7 +5,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
-from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, JSONLFormatter, MarkdownFormatter
+from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, JSONLFormatter, MarkdownFormatter, RSSFormatter
 
 from clawler import __version__
 
@@ -27,7 +27,7 @@ def main(argv=None):
         description="🗞️ Clawler — Advanced news crawling service",
     )
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("-f", "--format", choices=["console", "json", "jsonl", "jsonfeed", "atom", "markdown", "csv", "html"], default="console",
+    parser.add_argument("-f", "--format", choices=["console", "json", "jsonl", "jsonfeed", "atom", "rss", "markdown", "csv", "html"], default="console",
                         help="Output format (default: console)")
     parser.add_argument("-n", "--limit", "--top", type=int, default=50,
                         help="Max articles to display (default: 50)")
@@ -174,6 +174,8 @@ def main(argv=None):
                         help="Minified single-line JSON output (implies -f json)")
     parser.add_argument("--no-color", action="store_true", dest="no_color",
                         help="Disable colored output (also set via NO_COLOR env var)")
+    parser.add_argument("--slow-sources", action="store_true", dest="slow_sources",
+                        help="Show sources ranked by average response time and exit")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
 
@@ -237,6 +239,21 @@ def main(argv=None):
             pct = f"{entry['success_rate']:.0%}"
             avg = f"{entry['avg_articles']:.1f}" if entry['avg_articles'] else "N/A"
             print(f"   {entry['source']:<25} {pct:>8} {entry['total_crawls']:>7} {avg:>13}")
+        return
+
+    # Slow sources report (by response time)
+    if args.slow_sources:
+        from clawler.health import HealthTracker
+        tracker = HealthTracker()
+        timing = tracker.get_timing_report()
+        if not timing:
+            print("ℹ️  No timing data yet. Run a crawl first.")
+            return
+        print("🐢 Sources by Average Response Time:\n")
+        print(f"   {'Source':<25} {'Avg ms':>8} {'Min ms':>8} {'Max ms':>8} {'Samples':>8}")
+        print(f"   {'─'*25} {'─'*8} {'─'*8} {'─'*8} {'─'*8}")
+        for entry in timing:
+            print(f"   {entry['source']:<25} {entry['avg_ms']:>8.0f} {entry['min_ms']:>8.0f} {entry['max_ms']:>8.0f} {entry['samples']:>8}")
         return
 
     # History stats
@@ -680,7 +697,7 @@ def main(argv=None):
         formatters = {
             "console": ConsoleFormatter, "jsonl": JSONLFormatter,
             "jsonfeed": JSONFeedFormatter,
-            "atom": AtomFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter,
+            "atom": AtomFormatter, "rss": RSSFormatter, "markdown": MarkdownFormatter, "csv": CSVFormatter,
             "html": HTMLFormatter,
         }
         if args.format == "json":

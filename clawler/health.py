@@ -42,12 +42,18 @@ class HealthTracker:
                 "last_success": None,
             }
 
-    def record_success(self, source: str, article_count: int):
+    def record_success(self, source: str, article_count: int, response_ms: float = 0):
         self._ensure(source)
         d = self.data[source]
         d["total_crawls"] += 1
         d["total_articles"] += article_count
         d["last_success"] = datetime.now(tz=timezone.utc).isoformat()
+        if response_ms > 0:
+            timings = d.setdefault("response_times_ms", [])
+            timings.append(round(response_ms, 1))
+            # Keep last 50 samples to avoid unbounded growth
+            if len(timings) > 50:
+                d["response_times_ms"] = timings[-50:]
 
     def record_failure(self, source: str):
         self._ensure(source)
@@ -102,4 +108,21 @@ class HealthTracker:
                 "last_success": d["last_success"],
             })
         entries.sort(key=lambda e: e["success_rate"])
+        return entries
+
+    def get_timing_report(self):
+        """Return sources sorted by average response time (slowest first)."""
+        entries = []
+        for source, d in self.data.items():
+            timings = d.get("response_times_ms", [])
+            if not timings:
+                continue
+            entries.append({
+                "source": source,
+                "avg_ms": sum(timings) / len(timings),
+                "min_ms": min(timings),
+                "max_ms": max(timings),
+                "samples": len(timings),
+            })
+        entries.sort(key=lambda e: e["avg_ms"], reverse=True)
         return entries

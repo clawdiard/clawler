@@ -30,7 +30,7 @@ def _make_articles(n=10):
 
 class TestVersion:
     def test_version_is_410(self):
-        assert __version__ == "4.3.0"
+        assert __version__ == "4.4.0"
 
 
 class TestEnvConfig:
