@@ -56,6 +56,7 @@ def main(argv=None):
     parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
     parser.add_argument("--no-github", action="store_true", help="Skip GitHub Trending source")
     parser.add_argument("--no-mastodon", action="store_true", help="Skip Mastodon Trending source")
+    parser.add_argument("--no-wikipedia", action="store_true", help="Skip Wikipedia Current Events source")
     parser.add_argument("--tag", type=str, default=None,
                         help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
@@ -353,6 +354,8 @@ def main(argv=None):
             print("  🐙 GitHub Trending (daily)")
         if not args.no_mastodon:
             print("  🐘 Mastodon Trending (4 instances)")
+        if not args.no_wikipedia:
+            print("  📖 Wikipedia Current Events")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -448,6 +451,12 @@ def main(argv=None):
         sources.append(src)
     if not args.no_mastodon:
         src = MastodonSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_wikipedia:
+        from clawler.sources import WikipediaCurrentEventsSource
+        src = WikipediaCurrentEventsSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

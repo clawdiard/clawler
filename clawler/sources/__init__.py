@@ -4,5 +4,6 @@ from .hackernews import HackerNewsSource
 from .reddit import RedditSource
 from .github_trending import GitHubTrendingSource
 from .mastodon import MastodonSource
+from .wikipedia import WikipediaCurrentEventsSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource"]
