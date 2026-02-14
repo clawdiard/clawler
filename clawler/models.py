@@ -18,6 +18,7 @@ class Article:
     source_count: int = 1  # how many sources covered this story (set during dedup)
     tags: List[str] = field(default_factory=list)  # optional tags/labels (e.g. from HN, Reddit)
     author: str = ""  # article author (when available from source)
+    discussion_url: str = ""  # URL to discussion thread (HN, Lobsters, Reddit, etc.)
 
     @property
     def dedup_key(self) -> str:

@@ -31,15 +31,17 @@ class HackerNewsSource(BaseSource):
             score = item.get("score", 0)
             author = item.get("by", "")
             ts = item.get("time")
+            discussion = f"https://news.ycombinator.com/item?id={story_id}"
             return Article(
                 title=title,
                 url=url,
                 source=f"Hacker News (↑{score})",
-                summary=f"Score: {score} | By: {author} | Comments: {item.get('descendants', 0)} | HN discussion: https://news.ycombinator.com/item?id={story_id}",
+                summary=f"Score: {score} | By: {author} | Comments: {item.get('descendants', 0)} | HN discussion: {discussion}",
                 timestamp=datetime.fromtimestamp(ts, tz=timezone.utc) if ts else None,
                 category="tech",
                 tags=[f"hn:{author}"] if author else [],
                 author=author,
+                discussion_url=discussion,
             )
         except Exception as e:
             logger.debug(f"[HN] Failed item {story_id}: {e}")

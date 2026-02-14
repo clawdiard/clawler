@@ -20,4 +20,5 @@ class JSONFormatter:
             "source_count": a.source_count,
             "tags": a.tags,
             "author": a.author,
+            "discussion_url": a.discussion_url or None,
         } for a in articles], indent=self.indent, ensure_ascii=False)

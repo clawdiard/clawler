@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="clawler",
-    version="4.7.0",
+    version="4.8.0",
     description="Advanced news crawling service — no API keys required",
     author="Clawdia @ OpenClaw",
     packages=find_packages(),

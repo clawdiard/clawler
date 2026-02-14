@@ -39,6 +39,9 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 - 🎲 **Random sampling** — `--sample N` for serendipitous discovery
 - 📦 **Compact JSON** — `--json-compact` for minified single-line JSON
 - 🎨 **NO_COLOR support** — `--no-color` or `NO_COLOR=1` env var
+- 💬 **Discussion URLs** — structured `discussion_url` field on articles (HN, Lobsters, Reddit)
+- 📋 **Source list** — `--source-list` shows all configured sources with types and quality weights
+- 🔗 **Show discussions** — `--show-discussions` to include discussion links in console output
 
 
 ## Quick Start

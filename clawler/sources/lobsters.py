@@ -74,6 +74,7 @@ class LobstersSource(BaseSource):
                         timestamp=ts,
                         category=category,
                         tags=[f"lobsters:{t}" for t in tags],
+                        discussion_url=comments_url,
                     )
                 )
             except Exception as e:

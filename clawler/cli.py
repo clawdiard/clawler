@@ -180,6 +180,10 @@ def main(argv=None):
                         help="Disable colored output (also set via NO_COLOR env var)")
     parser.add_argument("--slow-sources", action="store_true", dest="slow_sources",
                         help="Show sources ranked by average response time and exit")
+    parser.add_argument("--source-list", action="store_true", dest="source_list",
+                        help="List all configured sources with type and quality weight, then exit")
+    parser.add_argument("--show-discussions", action="store_true", dest="show_discussions",
+                        help="Include discussion URLs in console output when available")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
 
@@ -243,6 +247,34 @@ def main(argv=None):
             pct = f"{entry['success_rate']:.0%}"
             avg = f"{entry['avg_articles']:.1f}" if entry['avg_articles'] else "N/A"
             print(f"   {entry['source']:<25} {pct:>8} {entry['total_crawls']:>7} {avg:>13}")
+        return
+
+    # Source list
+    if args.source_list:
+        from clawler.weights import get_quality_score
+        from clawler.sources import (RSSSource, HackerNewsSource, RedditSource,
+                                      GitHubTrendingSource, MastodonSource,
+                                      WikipediaCurrentEventsSource, LobstersSource, DevToSource)
+        api_sources = [
+            ("Hacker News", "api", "hackernews"),
+            ("Reddit", "api", "reddit"),
+            ("GitHub Trending", "scrape", "github_trending"),
+            ("Mastodon Trending", "api", "mastodon"),
+            ("Wikipedia Current Events", "scrape", "wikipedia"),
+            ("Lobsters", "api", "lobsters"),
+            ("Dev.to", "api", "dev.to"),
+        ]
+        rss = RSSSource()
+        print("📡 Configured Sources:\n")
+        print(f"   {'Source':<30} {'Type':<8} {'Weight':>7}")
+        print(f"   {'─'*30} {'─'*8} {'─'*7}")
+        for name, stype, key in api_sources:
+            w = get_quality_score(name)
+            print(f"   {name:<30} {stype:<8} {w:>7.2f}")
+        for feed in rss.feeds:
+            name = feed.get("source", feed.get("url", ""))
+            w = get_quality_score(name)
+            print(f"   {name:<30} {'rss':<8} {w:>7.2f}")
         return
 
     # Slow sources report (by response time)

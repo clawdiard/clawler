@@ -24,6 +24,8 @@ class JSONLFormatter:
                 obj["tags"] = a.tags
             if a.author:
                 obj["author"] = a.author
+            if a.discussion_url:
+                obj["discussion_url"] = a.discussion_url
             if a.relevance is not None:
                 obj["relevance"] = round(a.relevance, 4)
             lines.append(json.dumps(obj, ensure_ascii=False))

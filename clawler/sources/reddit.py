@@ -49,6 +49,7 @@ class RedditSource(BaseSource):
                               "science": "science", "worldnews": "world",
                               "news": "world"}.get(sub, "general"),
                         author=author,
+                        discussion_url=permalink,
                     ))
                 logger.info(f"[Reddit] r/{sub}: {len(data.get('data', {}).get('children', []))} posts")
             except Exception as e:
