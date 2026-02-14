@@ -60,6 +60,10 @@ def main(argv=None):
     parser.add_argument("--no-lobsters", action="store_true", help="Skip Lobsters source")
     parser.add_argument("--no-devto", action="store_true", help="Skip Dev.to source")
     parser.add_argument("--no-arxiv", action="store_true", help="Skip ArXiv source")
+    parser.add_argument("--no-techmeme", action="store_true", help="Skip TechMeme source")
+    parser.add_argument("--no-producthunt", action="store_true", help="Skip ProductHunt source")
+    parser.add_argument("--fresh", action="store_true",
+                        help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
                         help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
@@ -345,6 +349,8 @@ def main(argv=None):
         args.since = "24h"
     if args.this_week and not args.since:
         args.since = "7d"
+    if args.fresh and not args.since:
+        args.since = "1h"
 
     # Export bookmarks
     if args.export_bookmarks:
@@ -417,6 +423,10 @@ def main(argv=None):
             print("  📝 Dev.to (latest articles)")
         if not args.no_arxiv:
             print("  📄 ArXiv (recent papers)")
+        if not args.no_techmeme:
+            print("  📰 TechMeme (curated tech news)")
+        if not args.no_producthunt:
+            print("  🚀 ProductHunt (trending products)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -536,6 +546,18 @@ def main(argv=None):
     if not args.no_arxiv:
         from clawler.sources import ArXivSource
         src = ArXivSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_techmeme:
+        from clawler.sources import TechMemeSource
+        src = TechMemeSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_producthunt:
+        from clawler.sources import ProductHuntSource
+        src = ProductHuntSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

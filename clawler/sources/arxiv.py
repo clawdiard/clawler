@@ -2,7 +2,9 @@
 import logging
 import re
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Optional
+import feedparser
+from dateutil import parser as dateparser
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 
@@ -37,87 +39,66 @@ class ArXivSource(BaseSource):
         if not text:
             return []
 
-        return self._parse_atom(text)
+        return self._parse_feed(text)
 
-    def _parse_atom(self, xml_text: str) -> List[Article]:
-        """Parse ArXiv Atom feed into Articles."""
-        try:
-            from bs4 import BeautifulSoup
-        except ImportError:
-            logger.error("[ArXiv] beautifulsoup4 required")
-            return []
-
-        import warnings
-        try:
-            from bs4 import XMLParsedAsHTMLWarning
-            warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
-        except ImportError:
-            pass
-        soup = BeautifulSoup(xml_text, "html.parser")
+    def _parse_feed(self, xml_text: str) -> List[Article]:
+        """Parse ArXiv Atom feed into Articles using feedparser."""
+        feed = feedparser.parse(xml_text)
         articles: List[Article] = []
 
-        for entry in soup.find_all("entry"):
-            title_tag = entry.find("title")
-            if not title_tag:
-                continue
-            title = re.sub(r"\s+", " ", title_tag.get_text()).strip()
+        for entry in feed.entries:
+            title = getattr(entry, "title", "").strip()
+            title = re.sub(r"\s+", " ", title)
             if not title:
                 continue
 
             # Get the abstract link (html page)
-            link_url = ""
-            pdf_url = ""
-            for link in entry.find_all("link"):
-                href = link.get("href", "")
-                link_type = link.get("type", "")
-                link_title = link.get("title", "")
-                if link_title == "pdf" or "pdf" in href:
-                    pdf_url = href
-                elif "abs" in href or link_type == "text/html":
-                    link_url = href
-                elif not link_url and href:
-                    link_url = href
-
+            link_url = getattr(entry, "link", "").strip()
             if not link_url:
                 continue
 
+            # PDF link from alternate links
+            pdf_url = ""
+            for link in getattr(entry, "links", []):
+                href = link.get("href", "")
+                if link.get("title") == "pdf" or "pdf" in href:
+                    pdf_url = href
+                    break
+
             # Summary
-            summary_tag = entry.find("summary")
-            summary = ""
-            if summary_tag:
-                summary = re.sub(r"\s+", " ", summary_tag.get_text()).strip()
-                # Truncate long abstracts
-                if len(summary) > 300:
-                    summary = summary[:297] + "..."
+            summary = getattr(entry, "summary", "").strip()
+            summary = re.sub(r"\s+", " ", summary)
+            if len(summary) > 300:
+                summary = summary[:297] + "..."
 
             # Timestamp
-            published = entry.find("published")
             timestamp = None
-            if published:
-                try:
-                    ts_text = published.get_text().strip()
-                    timestamp = datetime.fromisoformat(ts_text.replace("Z", "+00:00"))
-                except (ValueError, AttributeError):
-                    pass
+            for field in ("published", "updated"):
+                raw = getattr(entry, field, None)
+                if raw:
+                    try:
+                        timestamp = dateparser.parse(raw)
+                        break
+                    except (ValueError, OverflowError):
+                        pass
 
             # Authors
             authors = []
-            for author_tag in entry.find_all("author"):
-                name_tag = author_tag.find("name")
-                if name_tag:
-                    authors.append(name_tag.get_text().strip())
+            for author in getattr(entry, "authors", []):
+                name = author.get("name", "").strip()
+                if name:
+                    authors.append(name)
             author_str = ", ".join(authors[:3])
             if len(authors) > 3:
                 author_str += f" +{len(authors) - 3} more"
 
             # Categories / tags
             tags = []
-            for cat in entry.find_all("category"):
-                term = cat.get("term", "")
+            for tag in getattr(entry, "tags", []):
+                term = tag.get("term", "")
                 if term:
                     tags.append(term)
 
-            # Map to broad category
             category = self._map_category(tags)
 
             articles.append(Article(

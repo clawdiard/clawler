@@ -51,9 +51,9 @@ def test_arxiv_source_custom_init():
     assert src.limit == 10
 
 
-def test_arxiv_parse_atom():
+def test_arxiv_parse_feed():
     src = ArXivSource()
-    articles = src._parse_atom(SAMPLE_ARXIV_ATOM)
+    articles = src._parse_feed(SAMPLE_ARXIV_ATOM)
     # Empty-title entry should be skipped
     assert len(articles) == 2
 
@@ -76,8 +76,8 @@ def test_arxiv_parse_atom():
 
 def test_arxiv_parse_empty():
     src = ArXivSource()
-    assert src._parse_atom("") == []
-    assert src._parse_atom("<feed></feed>") == []
+    assert src._parse_feed("") == []
+    assert src._parse_feed("<feed></feed>") == []
 
 
 def test_arxiv_crawl_returns_articles():
@@ -112,7 +112,7 @@ def test_arxiv_long_summary_truncated():
         <published>2026-01-01T00:00:00Z</published>
         <category term="cs.AI"/>
     </entry></feed>"""
-    articles = src._parse_atom(xml)
+    articles = src._parse_feed(xml)
     assert len(articles) == 1
     assert len(articles[0].summary) <= 303  # 300 + "..."
 

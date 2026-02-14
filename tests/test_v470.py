@@ -19,7 +19,7 @@ def _article(title="Test", author="", **kwargs):
 
 class TestVersionSync:
     def test_version_is_4_7_0(self):
-        assert __version__ == "4.9.0"
+        assert __version__ == "5.0.0"
 
 
 class TestAuthorField:

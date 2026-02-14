@@ -6,7 +6,7 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 
 ## Features
 
-- 📡 **50+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending, Mastodon Trending, Lobsters, Wikipedia Current Events, Dev.to, ArXiv
+- 📡 **50+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending, Mastodon Trending, Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -43,6 +43,9 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 - 📋 **Source list** — `--source-list` shows all configured sources with types and quality weights
 - 🔗 **Show discussions** — `--show-discussions` to include discussion links in console output
 - 📄 **ArXiv source** — recent CS/AI/ML/physics papers from arXiv's public API (`--no-arxiv` to skip)
+- 📰 **TechMeme source** — curated tech news river (`--no-techmeme` to skip)
+- 🚀 **ProductHunt source** — trending products (`--no-producthunt` to skip)
+- ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 
 
 ## Quick Start
@@ -255,6 +258,8 @@ clawler -f json | jq '.[] | .title'
 | Google News | RSS | world | 0.60 |
 | Google News (Tech) | RSS | tech | 0.60 |
 | GitHub Trending | Scrape | tech | 0.72 |
+| TechMeme | RSS | tech | 0.79 |
+| ProductHunt | RSS | tech | 0.66 |
 
 ## Quality Weighting
 

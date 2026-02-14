@@ -8,5 +8,7 @@ from .wikipedia import WikipediaCurrentEventsSource
 from .lobsters import LobstersSource
 from .devto import DevToSource
 from .arxiv import ArXivSource
+from .techmeme import TechMemeSource
+from .producthunt import ProductHuntSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource"]
