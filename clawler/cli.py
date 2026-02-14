@@ -57,6 +57,7 @@ def main(argv=None):
     parser.add_argument("--no-github", action="store_true", help="Skip GitHub Trending source")
     parser.add_argument("--no-mastodon", action="store_true", help="Skip Mastodon Trending source")
     parser.add_argument("--no-wikipedia", action="store_true", help="Skip Wikipedia Current Events source")
+    parser.add_argument("--no-lobsters", action="store_true", help="Skip Lobsters source")
     parser.add_argument("--tag", type=str, default=None,
                         help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
@@ -373,6 +374,8 @@ def main(argv=None):
             print("  🐘 Mastodon Trending (4 instances)")
         if not args.no_wikipedia:
             print("  📖 Wikipedia Current Events")
+        if not args.no_lobsters:
+            print("  🦞 Lobsters (hottest stories)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -418,6 +421,7 @@ def main(argv=None):
         print("\n🔥 Hacker News — https://hacker-news.firebaseio.com/v0/topstories.json")
         print("🤖 Reddit — subreddits: worldnews, technology, science, news, programming")
         print("🐘 Mastodon — instances: mastodon.social, mastodon.online, fosstodon.org, hachyderm.io")
+        print("🦞 Lobsters — https://lobste.rs/hottest.json")
         return
 
     if args.check_feeds:
@@ -444,7 +448,7 @@ def main(argv=None):
     )
 
     # Build source list
-    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource
+    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource, LobstersSource
     sources = []
     if not args.no_rss:
         src = RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource()
@@ -474,6 +478,11 @@ def main(argv=None):
     if not args.no_wikipedia:
         from clawler.sources import WikipediaCurrentEventsSource
         src = WikipediaCurrentEventsSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_lobsters:
+        src = LobstersSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
