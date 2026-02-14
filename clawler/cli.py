@@ -47,7 +47,7 @@ def main(argv=None):
                         help="Exclude categories (comma-separated, e.g. business,science)")
     parser.add_argument("--stats", action="store_true",
                         help="Print crawl statistics summary and exit (no articles)")
-    parser.add_argument("--sort", choices=["time", "title", "source"], default="time",
+    parser.add_argument("--sort", choices=["time", "title", "source", "quality"], default="time",
                         help="Sort order (default: time)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
     parser.add_argument("-q", "--quiet", action="store_true", help="Suppress status messages on stderr")
@@ -161,6 +161,8 @@ def main(argv=None):
                         help="Max parallel workers for crawling (default: 6)")
     parser.add_argument("--exclude", type=str, default=None,
                         help="Exclude articles matching keyword in title or summary (case-insensitive)")
+    parser.add_argument("--author", type=str, default=None,
+                        help="Filter articles by author name (substring match, case-insensitive)")
     parser.add_argument("--highlight", type=str, default=None,
                         help="Highlight keyword in console output (bold, case-insensitive)")
     parser.add_argument("--export-feeds", type=str, default=None, metavar="FILE",
@@ -566,6 +568,11 @@ def main(argv=None):
         ekw = args.exclude.lower()
         articles = [a for a in articles if ekw not in a.title.lower() and ekw not in a.summary.lower()]
 
+    # Filter by author
+    if args.author:
+        aq = args.author.lower()
+        articles = [a for a in articles if aq in a.author.lower()]
+
     # Filter by tag
     if args.tag:
         tq = args.tag.lower()
@@ -599,6 +606,8 @@ def main(argv=None):
         articles.sort(key=lambda a: a.title.lower())
     elif args.sort == "source":
         articles.sort(key=lambda a: a.source.lower())
+    elif args.sort == "quality":
+        articles.sort(key=lambda a: a.quality_score, reverse=True)
     # time sort is already applied by the engine
 
     # Reverse sort if requested

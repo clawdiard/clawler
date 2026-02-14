@@ -1,4 +1,4 @@
-"""Tests for v4.6.0: Dev.to source, version sync fix."""
+"""Tests for v4.7.0: Dev.to source, version sync fix."""
 import json
 from unittest.mock import patch, MagicMock
 from clawler.sources.devto import DevToSource

@@ -19,4 +19,5 @@ class JSONFormatter:
             "quality_score": round(a.quality_score, 3),
             "source_count": a.source_count,
             "tags": a.tags,
+            "author": a.author,
         } for a in articles], indent=self.indent, ensure_ascii=False)

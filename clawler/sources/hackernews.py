@@ -39,6 +39,7 @@ class HackerNewsSource(BaseSource):
                 timestamp=datetime.fromtimestamp(ts, tz=timezone.utc) if ts else None,
                 category="tech",
                 tags=[f"hn:{author}"] if author else [],
+                author=author,
             )
         except Exception as e:
             logger.debug(f"[HN] Failed item {story_id}: {e}")

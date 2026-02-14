@@ -104,7 +104,8 @@ class DevToSource(BaseSource):
                 summary=summary[:300],
                 timestamp=timestamp,
                 category=category,
-                tags=tags_str[:5] if tags_str else None,
+                tags=tags_str[:5] if tags_str else [],
+                author=author,
             ))
 
         logger.info(f"[Dev.to] Fetched {len(articles)} articles")

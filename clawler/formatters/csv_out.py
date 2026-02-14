@@ -9,12 +9,13 @@ class CSVFormatter:
     def format(self, articles: List[Article]) -> str:
         buf = io.StringIO()
         writer = csv.writer(buf)
-        writer.writerow(["title", "url", "source", "summary", "timestamp", "category"])
+        writer.writerow(["title", "url", "source", "author", "summary", "timestamp", "category"])
         for a in articles:
             writer.writerow([
                 a.title,
                 a.url,
                 a.source,
+                a.author,
                 a.summary,
                 a.timestamp.isoformat() if a.timestamp else "",
                 a.category,

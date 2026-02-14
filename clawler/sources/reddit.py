@@ -35,6 +35,7 @@ class RedditSource(BaseSource):
                     selftext = d.get("selftext", "")[:200]
                     permalink = f"https://reddit.com{d.get('permalink', '')}"
                     score = d.get("score", 0)
+                    author = d.get("author", "")
                     created = d.get("created_utc")
 
                     summary = selftext if selftext else f"↑{score} on r/{sub} — {permalink}"
@@ -47,6 +48,7 @@ class RedditSource(BaseSource):
                         category={"technology": "tech", "programming": "tech",
                               "science": "science", "worldnews": "world",
                               "news": "world"}.get(sub, "general"),
+                        author=author,
                     ))
                 logger.info(f"[Reddit] r/{sub}: {len(data.get('data', {}).get('children', []))} posts")
             except Exception as e:

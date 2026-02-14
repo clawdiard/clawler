@@ -91,7 +91,7 @@ class TestCSVFormatter:
         output = CSVFormatter().format(_articles())
         reader = csv.reader(io.StringIO(output))
         rows = list(reader)
-        assert rows[0] == ["title", "url", "source", "summary", "timestamp", "category"]
+        assert rows[0] == ["title", "url", "source", "author", "summary", "timestamp", "category"]
         assert len(rows) == 3  # header + 2 articles
 
     def test_empty(self):
