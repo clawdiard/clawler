@@ -195,6 +195,8 @@ def main(argv=None):
                         help="Exclude articles by author name (substring match, case-insensitive)")
     parser.add_argument("--age-stats", action="store_true", dest="age_stats",
                         help="Show article age statistics (min/max/avg/median) after output")
+    parser.add_argument("--top-sources", action="store_true", dest="top_sources",
+                        help="Show top contributing sources after output (by article count)")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
 
@@ -902,6 +904,17 @@ def main(argv=None):
 
             print(f"\n⏱️  Age Statistics ({len(ages_h)}/{len(articles)} with timestamps):", file=sys.stderr)
             print(f"   Newest: {_fmt_age(_min)}  |  Oldest: {_fmt_age(_max)}  |  Avg: {_fmt_age(_avg)}  |  Median: {_fmt_age(_med)}", file=sys.stderr)
+
+    # Top sources breakdown
+    if args.top_sources and articles:
+        from collections import Counter
+        src_counts = Counter(a.source for a in articles)
+        top = src_counts.most_common(10)
+        max_count = top[0][1] if top else 1
+        print(f"\n📡 Top Sources ({len(src_counts)} total):", file=sys.stderr)
+        for src_name, count in top:
+            bar = "█" * max(1, int(count / max_count * 25))
+            print(f"  {src_name:>30s} | {bar} {count}", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

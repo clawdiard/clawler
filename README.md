@@ -48,6 +48,7 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 - 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
+- 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles
 
 
 ## Quick Start

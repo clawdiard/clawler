@@ -1,4 +1,4 @@
-"""Tests for v5.1.0 features: --exclude-tag, --exclude-author, --age-stats."""
+"""Tests for v5.2.0 features: --exclude-tag, --exclude-author, --age-stats."""
 import io
 import sys
 from datetime import datetime, timezone, timedelta
@@ -145,4 +145,4 @@ class TestCLIArgs:
 class TestVersionBump:
     def test_version_is_510(self):
         from clawler import __version__
-        assert __version__ == "5.1.0"
+        assert __version__ == "5.2.0"

@@ -80,4 +80,4 @@ class TestCLINewFlags:
 class TestVersionSync:
     def test_version_is_4_0_0(self):
         from clawler import __version__
-        assert __version__ == "5.1.0"
+        assert __version__ == "5.2.0"
