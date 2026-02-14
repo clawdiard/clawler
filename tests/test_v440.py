@@ -11,7 +11,7 @@ from clawler.models import Article
 
 class TestVersionSync:
     def test_version_is_440(self):
-        assert __version__ == "4.5.0"
+        assert __version__ == "4.6.0"
 
 
 # -- RSS 2.0 formatter --

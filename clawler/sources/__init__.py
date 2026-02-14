@@ -6,5 +6,6 @@ from .github_trending import GitHubTrendingSource
 from .mastodon import MastodonSource
 from .wikipedia import WikipediaCurrentEventsSource
 from .lobsters import LobstersSource
+from .devto import DevToSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource"]

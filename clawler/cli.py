@@ -58,6 +58,7 @@ def main(argv=None):
     parser.add_argument("--no-mastodon", action="store_true", help="Skip Mastodon Trending source")
     parser.add_argument("--no-wikipedia", action="store_true", help="Skip Wikipedia Current Events source")
     parser.add_argument("--no-lobsters", action="store_true", help="Skip Lobsters source")
+    parser.add_argument("--no-devto", action="store_true", help="Skip Dev.to source")
     parser.add_argument("--tag", type=str, default=None,
                         help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
@@ -376,6 +377,8 @@ def main(argv=None):
             print("  📖 Wikipedia Current Events")
         if not args.no_lobsters:
             print("  🦞 Lobsters (hottest stories)")
+        if not args.no_devto:
+            print("  📝 Dev.to (latest articles)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -483,6 +486,12 @@ def main(argv=None):
         sources.append(src)
     if not args.no_lobsters:
         src = LobstersSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_devto:
+        from clawler.sources import DevToSource
+        src = DevToSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
