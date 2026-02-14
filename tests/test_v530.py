@@ -188,5 +188,6 @@ class TestBlueskyAPIIntegration:
             result = crawl(no_bluesky=True, limit=1, no_rss=True, no_hn=True,
                           no_reddit=True, no_github=True, no_mastodon=True,
                           no_wikipedia=True, no_lobsters=True, no_devto=True,
-                          no_arxiv=True, no_techmeme=True, no_producthunt=True)
+                          no_arxiv=True, no_techmeme=True, no_producthunt=True,
+                          no_tildes=True)
             assert result == []

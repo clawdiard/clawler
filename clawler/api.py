@@ -39,7 +39,7 @@ from clawler.sources import (
     RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
     MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
     DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
-    BlueskySource,
+    BlueskySource, TildesSource,
 )
 
 
@@ -70,6 +70,7 @@ def crawl(
     no_techmeme: bool = False,
     no_producthunt: bool = False,
     no_bluesky: bool = False,
+    no_tildes: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -119,6 +120,7 @@ def crawl(
             "devto": "no_devto", "arxiv": "no_arxiv",
             "techmeme": "no_techmeme", "producthunt": "no_producthunt",
             "bluesky": "no_bluesky",
+            "tildes": "no_tildes",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -137,6 +139,7 @@ def crawl(
         no_techmeme = _locals.get("no_techmeme", no_techmeme)
         no_producthunt = _locals.get("no_producthunt", no_producthunt)
         no_bluesky = _locals.get("no_bluesky", no_bluesky)
+        no_tildes = _locals.get("no_tildes", no_tildes)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -151,6 +154,7 @@ def crawl(
         (no_techmeme, TechMemeSource),
         (no_producthunt, ProductHuntSource),
         (no_bluesky, BlueskySource),
+        (no_tildes, TildesSource),
     ]
     sources = []
     for disabled, cls in _source_map:

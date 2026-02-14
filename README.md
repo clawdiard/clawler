@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **65+ individual sources** across **12 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **70+ individual sources across 13 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **65+ sources across 12 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky
+- 📡 **70+ sources across 13 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -46,6 +46,9 @@ Clawler aggregates news from **65+ individual sources** across **12 source types
 - 📰 **TechMeme source** — curated tech news river (`--no-techmeme` to skip)
 - 🚀 **ProductHunt source** — trending products (`--no-producthunt` to skip)
 - 🦋 **Bluesky source** — trending shared links from the AT Protocol network (`--no-bluesky` to skip)
+- 🏛️ **Tildes source** — quality discussion community topics from tildes.net (`--no-tildes` to skip)
+- 📅 **`--since today/this-week/this-month`** — named time periods relative to current calendar boundaries
+- 🚫 **`--exclude-domain`** — filter out articles from specific domains (comma-separated)
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 - 📅 **ISO date support** — `--since 2026-02-14` or `--since 2026-02-14T10:00:00Z` for absolute time filters
 - 🔗 **Smarter URL dedup** — normalizes `www.` prefixes and trailing slashes for better duplicate detection
@@ -348,7 +351,8 @@ clawler/
 │   ├── arxiv.py        # ArXiv CS/AI/ML papers
 │   ├── techmeme.py     # TechMeme curated tech news
 │   ├── producthunt.py  # ProductHunt trending
-│   └── bluesky.py      # Bluesky AT Protocol trending
+│   ├── bluesky.py      # Bluesky AT Protocol trending
+│   └── tildes.py       # Tildes community topics
 └── formatters/
     ├── console.py      # Rich terminal output
     ├── json_out.py     # JSON output

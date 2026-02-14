@@ -45,6 +45,8 @@ def main(argv=None):
                         help="Exclude articles from sources matching this substring (case-insensitive)")
     parser.add_argument("--exclude-category", type=str, default=None,
                         help="Exclude categories (comma-separated, e.g. business,science)")
+    parser.add_argument("--exclude-domain", type=str, default=None, dest="exclude_domain",
+                        help="Exclude articles from domains (comma-separated, e.g. reddit.com,twitter.com)")
     parser.add_argument("--stats", action="store_true",
                         help="Print crawl statistics summary and exit (no articles)")
     parser.add_argument("--sort", choices=["time", "title", "source", "quality"], default="time",
@@ -63,6 +65,7 @@ def main(argv=None):
     parser.add_argument("--no-techmeme", action="store_true", help="Skip TechMeme source")
     parser.add_argument("--no-producthunt", action="store_true", help="Skip ProductHunt source")
     parser.add_argument("--no-bluesky", action="store_true", help="Skip Bluesky source")
+    parser.add_argument("--no-tildes", action="store_true", help="Skip Tildes source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -226,7 +229,7 @@ def main(argv=None):
     # --only sets no_* flags for sources NOT in the list
     if args.only:
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
-                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky"}
+                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky", "tildes"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -618,6 +621,12 @@ def main(argv=None):
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
+    if not args.no_tildes:
+        from clawler.sources import TildesSource
+        src = TildesSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
 
     if not sources:
         print("Error: All sources disabled!", file=sys.stderr)
@@ -687,6 +696,18 @@ def main(argv=None):
     if args.exclude_category:
         excl_cats = set(c.strip().lower() for c in args.exclude_category.split(","))
         articles = [a for a in articles if a.category not in excl_cats]
+
+    # Exclude domains
+    if args.exclude_domain:
+        from urllib.parse import urlparse as _urlparse
+        excl_domains = set(d.strip().lower() for d in args.exclude_domain.split(","))
+        def _domain_match(url):
+            try:
+                host = _urlparse(url).netloc.lower()
+                return any(host == d or host.endswith("." + d) for d in excl_domains)
+            except Exception:
+                return False
+        articles = [a for a in articles if not _domain_match(a.url)]
 
     # Filter by keyword search
     if args.search:

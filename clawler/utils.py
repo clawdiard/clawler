@@ -21,6 +21,10 @@ def parse_since(value: str) -> datetime:
         "last-week": timedelta(weeks=1),
         "last-month": timedelta(days=30),
         "last-year": timedelta(days=365),
+        "today": timedelta(hours=datetime.now(timezone.utc).hour,
+                           minutes=datetime.now(timezone.utc).minute),
+        "this-week": timedelta(days=datetime.now(timezone.utc).weekday()),
+        "this-month": timedelta(days=datetime.now(timezone.utc).day - 1),
     }
     if stripped.lower() in named:
         return datetime.now(timezone.utc) - named[stripped.lower()]
