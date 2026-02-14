@@ -49,6 +49,9 @@ Clawler aggregates news from **65+ individual sources** across **12 source types
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 - 📅 **ISO date support** — `--since 2026-02-14` or `--since 2026-02-14T10:00:00Z` for absolute time filters
 - 🔗 **Smarter URL dedup** — normalizes `www.` prefixes and trailing slashes for better duplicate detection
+- 🔁 **Source-level retry** — failed sources are retried with exponential backoff (`--source-retries N`, `--no-retry`)
+- 📅 **Named time periods** — `--since yesterday`, `--since last-week`, `--since last-month`, `--since last-year`
+- 📤 **Export health as JSON** — `--export-health FILE` for machine-readable source health data
 - 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 - 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles

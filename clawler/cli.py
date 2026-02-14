@@ -200,6 +200,13 @@ def main(argv=None):
                         help="Show top contributing sources after output (by article count)")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
+    parser.add_argument("--source-retries", type=int, default=1, dest="source_retries",
+                        help="Number of retries for failed sources (default: 1, 0 to disable)")
+    parser.add_argument("--no-retry", action="store_true", dest="no_retry",
+                        help="Disable source-level retries (equivalent to --source-retries 0)")
+    parser.add_argument("--export-health", type=str, default=None, metavar="FILE",
+                        dest="export_health",
+                        help="Export source health data as JSON to FILE")
 
     args = parser.parse_args(argv)
 
@@ -261,6 +268,17 @@ def main(argv=None):
             pct = f"{entry['success_rate']:.0%}"
             avg = f"{entry['avg_articles']:.1f}" if entry['avg_articles'] else "N/A"
             print(f"   {entry['source']:<25} {pct:>8} {entry['total_crawls']:>7} {avg:>13}")
+        return
+
+    # Export health as JSON
+    if args.export_health:
+        import json as _json
+        from clawler.health import HealthTracker
+        tracker = HealthTracker()
+        report = tracker.get_report()
+        with open(args.export_health, "w", encoding="utf-8") as f:
+            _json.dump(report, f, indent=2)
+        print(f"✅ Exported health data for {len(report)} sources to {args.export_health}")
         return
 
     # Source list
@@ -583,7 +601,8 @@ def main(argv=None):
         print("Error: All sources disabled!", file=sys.stderr)
         sys.exit(1)
 
-    engine = CrawlEngine(sources=sources, max_workers=args.workers)
+    retries = 0 if args.no_retry else args.source_retries
+    engine = CrawlEngine(sources=sources, max_workers=args.workers, retries=retries)
     if not args.quiet:
         print("🕷️  Crawling news sources...", file=sys.stderr)
 

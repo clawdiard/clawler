@@ -15,6 +15,16 @@ def parse_since(value: str) -> datetime:
     """
     stripped = value.strip()
 
+    # Named periods
+    named = {
+        "yesterday": timedelta(days=1),
+        "last-week": timedelta(weeks=1),
+        "last-month": timedelta(days=30),
+        "last-year": timedelta(days=365),
+    }
+    if stripped.lower() in named:
+        return datetime.now(timezone.utc) - named[stripped.lower()]
+
     # Try relative time first
     match = re.match(r"^(\d+)\s*([smhdwMy])$", stripped)
     if match:

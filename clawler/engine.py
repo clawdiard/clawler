@@ -16,13 +16,14 @@ logger = logging.getLogger(__name__)
 class CrawlEngine:
     """Orchestrates crawling across all sources."""
 
-    def __init__(self, sources: Optional[List[BaseSource]] = None, max_workers: int = 6):
+    def __init__(self, sources: Optional[List[BaseSource]] = None, max_workers: int = 6, retries: int = 1):
         self.sources = sources or [
             RSSSource(),
             HackerNewsSource(),
             RedditSource(),
         ]
         self.max_workers = max_workers
+        self.retries = retries
         self.health = HealthTracker()
 
     @staticmethod
@@ -41,6 +42,7 @@ class CrawlEngine:
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
             futures = {pool.submit(self._timed_crawl, src): src for src in self.sources}
+            failed_sources = []
             for future in as_completed(futures):
                 src = futures[future]
                 try:
@@ -51,6 +53,24 @@ class CrawlEngine:
                     all_articles.extend(articles)
                 except Exception as e:
                     logger.error(f"[Engine] {src.name} failed: {e}")
+                    failed_sources.append(src)
+
+            # Retry failed sources (sequential, with backoff)
+            for src in failed_sources:
+                retried = False
+                for attempt in range(1, self.retries + 1):
+                    time.sleep(2 * attempt)
+                    try:
+                        articles, elapsed_ms = self._timed_crawl(src)
+                        logger.info(f"[Engine] {src.name} retry {attempt} succeeded: {len(articles)} articles in {elapsed_ms:.0f}ms")
+                        stats[src.name] = len(articles)
+                        self.health.record_success(src.name, len(articles), response_ms=elapsed_ms)
+                        all_articles.extend(articles)
+                        retried = True
+                        break
+                    except Exception as e:
+                        logger.error(f"[Engine] {src.name} retry {attempt} failed: {e}")
+                if not retried:
                     stats[src.name] = -1
                     self.health.record_failure(src.name)
 
