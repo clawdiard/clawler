@@ -98,7 +98,7 @@ class TestVersionSync:
         import ast
         with open("setup.py", "r") as f:
             content = f.read()
-        assert '"5.4.0"' in content or "'5.4.0'" in content or '"5.5.0"' in content or "'5.5.0'" in content
+        assert '"5.4.0"' in content or "'5.4.0'" in content or '"5.5.0"' in content or "'5.5.0'" in content or '"5.6.0"' in content or "'5.6.0'" in content
 
 
 class TestRelativeTimeEdgeCases:

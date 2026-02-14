@@ -207,12 +207,34 @@ def main(argv=None):
     parser.add_argument("--export-health", type=str, default=None, metavar="FILE",
                         dest="export_health",
                         help="Export source health data as JSON to FILE")
+    parser.add_argument("--only", type=str, default=None,
+                        help="Enable ONLY these sources (comma-separated: rss,hn,reddit,github,mastodon,"
+                             "wikipedia,lobsters,devto,arxiv,techmeme,producthunt,bluesky)")
+    parser.add_argument("--json-lines", action="store_true", dest="json_lines",
+                        help="Alias for -f jsonl (JSON Lines output)")
 
     args = parser.parse_args(argv)
 
     # --silent is an alias for --quiet
     if args.silent:
         args.quiet = True
+
+    # --json-lines is an alias for -f jsonl
+    if args.json_lines:
+        args.format = "jsonl"
+
+    # --only sets no_* flags for sources NOT in the list
+    if args.only:
+        _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
+                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky"}
+        enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
+        unknown = enabled - _SOURCE_NAMES
+        if unknown:
+            print(f"Warning: unknown source(s) in --only: {', '.join(unknown)}", file=sys.stderr)
+        for src_name in _SOURCE_NAMES:
+            flag = f"no_{src_name}"
+            if src_name not in enabled:
+                setattr(args, flag, True)
 
     # Auto-quiet when stdout is not a TTY (piped output)
     if not sys.stdout.isatty() and not args.verbose:
@@ -620,12 +642,17 @@ def main(argv=None):
                 print("📦 Using cached results", file=sys.stderr)
 
     if articles is None:
+        import time as _time
+        _crawl_start = _time.monotonic()
         articles, stats, _dedup_stats = engine.crawl(
             dedupe_threshold=args.dedupe_threshold,
             dedupe_enabled=not args.no_dedup,
         )
+        _crawl_elapsed = _time.monotonic() - _crawl_start
         if args.cache:
             save_cache(ckey, articles, stats)
+    else:
+        _crawl_elapsed = None
 
     # Check if all sources failed
     if all(v == -1 for v in stats.values()):
@@ -637,6 +664,9 @@ def main(argv=None):
         for name, count in stats.items():
             status = f"{count} articles" if count >= 0 else "FAILED"
             print(f"   {'✓' if count >= 0 else '✗'} {name}: {status}", file=sys.stderr)
+        if _crawl_elapsed is not None:
+            total_raw = sum(v for v in stats.values() if v >= 0)
+            print(f"   ⏱️  Crawled {total_raw} articles from {len(stats)} sources in {_crawl_elapsed:.1f}s", file=sys.stderr)
 
     # Parse multi-category filter
     if args.category != "all":

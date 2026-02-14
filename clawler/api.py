@@ -70,6 +70,7 @@ def crawl(
     no_techmeme: bool = False,
     no_producthunt: bool = False,
     no_bluesky: bool = False,
+    only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
     timeout: int = 15,
@@ -108,7 +109,35 @@ def crawl(
     Returns:
         List of Article objects, sorted by time (or relevance if profile given).
     """
-    # Build sources — all 11 sources, matching CLI parity
+    # Build sources — all 12 sources, matching CLI parity
+    # --only support: if specified, disable all sources not in the list
+    if only:
+        _name_to_flag = {
+            "rss": "no_rss", "hn": "no_hn", "reddit": "no_reddit",
+            "github": "no_github", "mastodon": "no_mastodon",
+            "wikipedia": "no_wikipedia", "lobsters": "no_lobsters",
+            "devto": "no_devto", "arxiv": "no_arxiv",
+            "techmeme": "no_techmeme", "producthunt": "no_producthunt",
+            "bluesky": "no_bluesky",
+        }
+        enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
+        _locals = locals()
+        for src_name, flag in _name_to_flag.items():
+            if src_name not in enabled_set:
+                _locals[flag] = True
+        no_rss = _locals.get("no_rss", no_rss)
+        no_hn = _locals.get("no_hn", no_hn)
+        no_reddit = _locals.get("no_reddit", no_reddit)
+        no_github = _locals.get("no_github", no_github)
+        no_mastodon = _locals.get("no_mastodon", no_mastodon)
+        no_wikipedia = _locals.get("no_wikipedia", no_wikipedia)
+        no_lobsters = _locals.get("no_lobsters", no_lobsters)
+        no_devto = _locals.get("no_devto", no_devto)
+        no_arxiv = _locals.get("no_arxiv", no_arxiv)
+        no_techmeme = _locals.get("no_techmeme", no_techmeme)
+        no_producthunt = _locals.get("no_producthunt", no_producthunt)
+        no_bluesky = _locals.get("no_bluesky", no_bluesky)
+
     _source_map = [
         (no_rss, RSSSource),
         (no_hn, HackerNewsSource),

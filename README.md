@@ -55,6 +55,9 @@ Clawler aggregates news from **65+ individual sources** across **12 source types
 - 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 - 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles
+- 🎯 **`--only` source filter** — `--only rss,hn` enables only those sources (cleaner than disabling everything else)
+- ⏱️ **Crawl timing** — total crawl time shown on stderr after each run
+- 📄 **`--json-lines` alias** — discoverable alias for `-f jsonl`
 
 
 ## Quick Start
@@ -80,6 +83,9 @@ clawler -f jsonl
 
 # Pipe JSONL to jq for custom filtering
 clawler -f jsonl | jq 'select(.category == "tech")'
+
+# Same thing with --json-lines alias
+clawler --json-lines | jq 'select(.category == "tech")'
 
 # Export current feed list as YAML
 clawler --export-feeds my-feeds.yaml
@@ -216,6 +222,12 @@ clawler --no-color
 
 # Configure via environment variables (great for containers)
 CLAWLER_CATEGORY=tech CLAWLER_LIMIT=20 clawler
+
+# Only enable specific sources (cleaner than multiple --no-* flags)
+clawler --only rss,hn
+
+# Only Hacker News and Reddit
+clawler --only hn,reddit
 
 # Pipe-friendly: stderr is auto-suppressed when piped
 clawler -f json | jq '.[] | .title'
