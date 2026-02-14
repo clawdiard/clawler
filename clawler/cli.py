@@ -62,6 +62,7 @@ def main(argv=None):
     parser.add_argument("--no-arxiv", action="store_true", help="Skip ArXiv source")
     parser.add_argument("--no-techmeme", action="store_true", help="Skip TechMeme source")
     parser.add_argument("--no-producthunt", action="store_true", help="Skip ProductHunt source")
+    parser.add_argument("--no-bluesky", action="store_true", help="Skip Bluesky source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -435,6 +436,8 @@ def main(argv=None):
             print("  📰 TechMeme (curated tech news)")
         if not args.no_producthunt:
             print("  🚀 ProductHunt (trending products)")
+        if not args.no_bluesky:
+            print("  🦋 Bluesky (trending shared links)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -566,6 +569,12 @@ def main(argv=None):
     if not args.no_producthunt:
         from clawler.sources import ProductHuntSource
         src = ProductHuntSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_bluesky:
+        from clawler.sources import BlueskySource
+        src = BlueskySource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

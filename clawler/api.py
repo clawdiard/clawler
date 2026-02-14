@@ -23,8 +23,8 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 11 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
-Dev.to, ArXiv, TechMeme, ProductHunt) are enabled by default.
+All 12 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky) are enabled by default.
 Disable any with no_<source>=True.
 
 """
@@ -39,6 +39,7 @@ from clawler.sources import (
     RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
     MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
     DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
+    BlueskySource,
 )
 
 
@@ -68,6 +69,7 @@ def crawl(
     no_arxiv: bool = False,
     no_techmeme: bool = False,
     no_producthunt: bool = False,
+    no_bluesky: bool = False,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
     timeout: int = 15,
@@ -119,6 +121,7 @@ def crawl(
         (no_arxiv, ArXivSource),
         (no_techmeme, TechMemeSource),
         (no_producthunt, ProductHuntSource),
+        (no_bluesky, BlueskySource),
     ]
     sources = []
     for disabled, cls in _source_map:

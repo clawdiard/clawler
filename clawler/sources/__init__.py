@@ -10,5 +10,6 @@ from .devto import DevToSource
 from .arxiv import ArXivSource
 from .techmeme import TechMemeSource
 from .producthunt import ProductHuntSource
+from .bluesky import BlueskySource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource"]
