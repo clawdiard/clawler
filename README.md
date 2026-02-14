@@ -6,7 +6,7 @@ Clawler aggregates news from **75+ individual sources across 14 source types** u
 
 ## Features
 
-- 📡 **75+ sources across 14 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances)
+- 📡 **80+ sources across 15 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -48,6 +48,7 @@ Clawler aggregates news from **75+ individual sources across 14 source types** u
 - 🦋 **Bluesky source** — trending shared links from the AT Protocol network (`--no-bluesky` to skip)
 - 🏛️ **Tildes source** — quality discussion community topics from tildes.net (`--no-tildes` to skip)
 - 🐝 **Lemmy source** — trending posts from Fediverse link aggregator instances (`--no-lemmy` to skip)
+- 💾 **Slashdot source** — classic tech news and discussion from Slashdot RSS (`--no-slashdot` to skip)
 - 📅 **`--since today/this-week/this-month`** — named time periods relative to current calendar boundaries
 - 🚫 **`--exclude-domain`** — filter out articles from specific domains (comma-separated)
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`

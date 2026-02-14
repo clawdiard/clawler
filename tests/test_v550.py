@@ -142,4 +142,4 @@ class TestCLIFlags:
 class TestVersionSync:
     def test_version_is_550(self):
         from clawler import __version__
-        assert __version__ == "5.7.0"
+        assert __version__ == "5.9.0"

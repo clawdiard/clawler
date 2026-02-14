@@ -69,7 +69,7 @@ class TestOnlyFlag:
             # Should create engine with all 12 sources
             call_kwargs = MockEngine.call_args[1] if MockEngine.call_args[1] else {}
             sources = call_kwargs.get("sources", MockEngine.call_args.kwargs.get("sources", []))
-            assert len(sources) == 13
+            assert len(sources) == 14
 
 
 class TestJsonLinesAlias:
@@ -154,4 +154,4 @@ class TestVersionSync:
 
     def test_version_is_560(self):
         from clawler import __version__
-        assert __version__ == "5.7.0"
+        assert __version__ == "5.9.0"
