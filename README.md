@@ -47,6 +47,8 @@ Clawler aggregates news from **65+ individual sources** across **12 source types
 - 🚀 **ProductHunt source** — trending products (`--no-producthunt` to skip)
 - 🦋 **Bluesky source** — trending shared links from the AT Protocol network (`--no-bluesky` to skip)
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
+- 📅 **ISO date support** — `--since 2026-02-14` or `--since 2026-02-14T10:00:00Z` for absolute time filters
+- 🔗 **Smarter URL dedup** — normalizes `www.` prefixes and trailing slashes for better duplicate detection
 - 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 - 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles
@@ -99,6 +101,12 @@ clawler --no-github
 
 # Only articles from last 6 hours
 clawler --max-age 6h
+
+# Articles since a specific date (ISO-8601)
+clawler --since 2026-02-14
+
+# Articles since a specific datetime
+clawler --since 2026-02-14T10:00:00Z
 
 # Custom retry count
 clawler --retries 3

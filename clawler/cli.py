@@ -17,7 +17,7 @@ def _parse_since(value: str) -> datetime:
         return parse_since(value)
     except ValueError:
         raise argparse.ArgumentTypeError(
-            f"Invalid --since value '{value}'. Use e.g. 30m, 2h, 1d, 1w"
+            f"Invalid --since value '{value}'. Use relative (30m, 2h, 1d) or ISO date (2026-02-14)"
         )
 
 

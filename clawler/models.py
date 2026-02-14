@@ -2,7 +2,21 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
+from urllib.parse import urlparse
 import hashlib
+
+
+def _normalize_url(url: str) -> str:
+    """Normalize a URL for dedup: strip www., trailing slash, query tracking params."""
+    try:
+        parsed = urlparse(url)
+        host = parsed.netloc.lower()
+        if host.startswith("www."):
+            host = host[4:]
+        path = parsed.path.rstrip("/") or "/"
+        return f"{parsed.scheme}://{host}{path}"
+    except Exception:
+        return url
 
 
 @dataclass
@@ -24,8 +38,8 @@ class Article:
     def dedup_key(self) -> str:
         """Generate a deduplication key from normalized title + URL."""
         normalized = self.title.lower().strip()
-        # Use title + domain for dedup (same story from same source)
-        return hashlib.md5(f"{normalized}|{self.url}".encode()).hexdigest()
+        norm_url = _normalize_url(self.url)
+        return hashlib.md5(f"{normalized}|{norm_url}".encode()).hexdigest()
 
     @property
     def title_fingerprint(self) -> str:
