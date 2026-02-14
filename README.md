@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **65+ individual sources** across **12 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **50+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending, Mastodon Trending, Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky
+- 📡 **65+ sources across 12 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -303,7 +303,7 @@ clawler/
 ├── dedup.py            # 3-tier deduplication (quality-aware)
 ├── weights.py          # Source quality score lookups
 ├── health.py           # Per-source health tracking
-├── source_weights.yaml # Quality scores for all 42+ sources
+├── source_weights.yaml # Quality scores for all 65+ sources
 ├── cache.py            # File-based result caching
 ├── config.py           # Config file support
 ├── profile.py          # Interest-based relevance scoring
@@ -312,12 +312,20 @@ clawler/
 ├── bookmarks.py        # Local bookmark management
 ├── feeds_config.py     # Custom feed file loading
 ├── utils.py            # Shared utilities
-├── sources/
+├── sources/            # 12 source types, 65+ individual sources
 │   ├── base.py         # Abstract base source
-│   ├── rss.py          # RSS/Atom feed crawler (39 feeds)
+│   ├── rss.py          # RSS/Atom feed crawler (48 feeds)
 │   ├── hackernews.py   # HN Firebase API
-│   ├── reddit.py       # Reddit JSON endpoints
-│   └── github_trending.py # GitHub Trending scraper
+│   ├── reddit.py       # Reddit JSON (5 subreddits)
+│   ├── github_trending.py # GitHub Trending scraper
+│   ├── mastodon.py     # Mastodon trending (4 instances)
+│   ├── lobsters.py     # Lobsters hottest
+│   ├── wikipedia.py    # Wikipedia Current Events
+│   ├── devto.py        # Dev.to top articles
+│   ├── arxiv.py        # ArXiv CS/AI/ML papers
+│   ├── techmeme.py     # TechMeme curated tech news
+│   ├── producthunt.py  # ProductHunt trending
+│   └── bluesky.py      # Bluesky AT Protocol trending
 └── formatters/
     ├── console.py      # Rich terminal output
     ├── json_out.py     # JSON output
