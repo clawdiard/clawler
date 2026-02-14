@@ -57,7 +57,7 @@ class TestOnlyFlag:
 
     def test_only_all_sources(self):
         """--only with all sources should not disable any."""
-        all_srcs = "rss,hn,reddit,github,mastodon,wikipedia,lobsters,devto,arxiv,techmeme,producthunt,bluesky,tildes"
+        all_srcs = "rss,hn,reddit,github,mastodon,wikipedia,lobsters,devto,arxiv,techmeme,producthunt,bluesky,tildes,slashdot,stackoverflow"
         with patch("clawler.cli.CrawlEngine") as MockEngine:
             mock_instance = MagicMock()
             mock_instance.crawl.return_value = ([], {"src": 0}, MagicMock())
@@ -69,7 +69,7 @@ class TestOnlyFlag:
             # Should create engine with all 12 sources
             call_kwargs = MockEngine.call_args[1] if MockEngine.call_args[1] else {}
             sources = call_kwargs.get("sources", MockEngine.call_args.kwargs.get("sources", []))
-            assert len(sources) == 14
+            assert len(sources) == 15
 
 
 class TestJsonLinesAlias:
