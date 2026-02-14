@@ -95,10 +95,10 @@ class TestVersionSync:
         assert __version__ >= "5.9.0"
 
     def test_setup_version(self):
-        import ast
+        from clawler import __version__
         with open("setup.py", "r") as f:
             content = f.read()
-        assert '"5.9.0"' in content or "'5.9.0'" in content
+        assert f'"{__version__}"' in content
 
 
 class TestRelativeTimeEdgeCases:

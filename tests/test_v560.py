@@ -154,4 +154,4 @@ class TestVersionSync:
 
     def test_version_is_560(self):
         from clawler import __version__
-        assert __version__ == "5.9.0"
+        assert __version__ == "6.1.0"

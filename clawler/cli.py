@@ -555,97 +555,37 @@ def main(argv=None):
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
 
-    # Build source list
-    from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource, LobstersSource
-    sources = []
-    if not args.no_rss:
-        src = RSSSource(feeds=custom_feeds) if custom_feeds else RSSSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_hn:
-        src = HackerNewsSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_reddit:
-        src = RedditSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_github:
-        src = GitHubTrendingSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_mastodon:
-        src = MastodonSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_wikipedia:
-        from clawler.sources import WikipediaCurrentEventsSource
-        src = WikipediaCurrentEventsSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_lobsters:
-        src = LobstersSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_devto:
-        from clawler.sources import DevToSource
-        src = DevToSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_arxiv:
-        from clawler.sources import ArXivSource
-        src = ArXivSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_techmeme:
-        from clawler.sources import TechMemeSource
-        src = TechMemeSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_producthunt:
-        from clawler.sources import ProductHuntSource
-        src = ProductHuntSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_bluesky:
-        from clawler.sources import BlueskySource
-        src = BlueskySource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_tildes:
-        from clawler.sources import TildesSource
-        src = TildesSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_lemmy:
-        from clawler.sources import LemmySource
-        src = LemmySource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
-    if not args.no_slashdot:
-        from clawler.sources import SlashdotSource
-        src = SlashdotSource()
-        src.timeout = args.timeout
-        src.max_retries = args.retries
-        sources.append(src)
+    # Build source list — data-driven to reduce repetition
+    from clawler.sources import (RSSSource, HackerNewsSource, RedditSource,
+        GitHubTrendingSource, MastodonSource, LobstersSource,
+        WikipediaCurrentEventsSource, DevToSource, ArXivSource,
+        TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
+        LemmySource, SlashdotSource, StackOverflowSource)
 
-    if not args.no_stackoverflow:
-        from clawler.sources import StackOverflowSource
-        src = StackOverflowSource()
+    _SOURCE_REGISTRY = [
+        ("rss", RSSSource),
+        ("hn", HackerNewsSource),
+        ("reddit", RedditSource),
+        ("github", GitHubTrendingSource),
+        ("mastodon", MastodonSource),
+        ("wikipedia", WikipediaCurrentEventsSource),
+        ("lobsters", LobstersSource),
+        ("devto", DevToSource),
+        ("arxiv", ArXivSource),
+        ("techmeme", TechMemeSource),
+        ("producthunt", ProductHuntSource),
+        ("bluesky", BlueskySource),
+        ("tildes", TildesSource),
+        ("lemmy", LemmySource),
+        ("slashdot", SlashdotSource),
+        ("stackoverflow", StackOverflowSource),
+    ]
+
+    sources = []
+    for flag_name, cls in _SOURCE_REGISTRY:
+        if getattr(args, f"no_{flag_name}", False):
+            continue
+        src = cls(feeds=custom_feeds) if (flag_name == "rss" and custom_feeds) else cls()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
