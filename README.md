@@ -6,7 +6,7 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 
 ## Features
 
-- 📡 **50+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending, Mastodon Trending, Lobsters, Wikipedia Current Events, Dev.to
+- 📡 **50+ sources** — RSS feeds (43 outlets), Hacker News API, Reddit JSON, GitHub Trending, Mastodon Trending, Lobsters, Wikipedia Current Events, Dev.to, ArXiv
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -42,6 +42,7 @@ Clawler aggregates news from 50+ sources using RSS feeds, APIs, and web scraping
 - 💬 **Discussion URLs** — structured `discussion_url` field on articles (HN, Lobsters, Reddit)
 - 📋 **Source list** — `--source-list` shows all configured sources with types and quality weights
 - 🔗 **Show discussions** — `--show-discussions` to include discussion links in console output
+- 📄 **ArXiv source** — recent CS/AI/ML/physics papers from arXiv's public API (`--no-arxiv` to skip)
 
 
 ## Quick Start

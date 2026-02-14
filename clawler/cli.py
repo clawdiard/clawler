@@ -59,6 +59,7 @@ def main(argv=None):
     parser.add_argument("--no-wikipedia", action="store_true", help="Skip Wikipedia Current Events source")
     parser.add_argument("--no-lobsters", action="store_true", help="Skip Lobsters source")
     parser.add_argument("--no-devto", action="store_true", help="Skip Dev.to source")
+    parser.add_argument("--no-arxiv", action="store_true", help="Skip ArXiv source")
     parser.add_argument("--tag", type=str, default=None,
                         help="Filter articles by tag (substring match, case-insensitive)")
     parser.add_argument("--timeout", type=int, default=15,
@@ -263,6 +264,7 @@ def main(argv=None):
             ("Wikipedia Current Events", "scrape", "wikipedia"),
             ("Lobsters", "api", "lobsters"),
             ("Dev.to", "api", "dev.to"),
+            ("ArXiv", "api", "arxiv"),
         ]
         rss = RSSSource()
         print("📡 Configured Sources:\n")
@@ -413,6 +415,8 @@ def main(argv=None):
             print("  🦞 Lobsters (hottest stories)")
         if not args.no_devto:
             print("  📝 Dev.to (latest articles)")
+        if not args.no_arxiv:
+            print("  📄 ArXiv (recent papers)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -526,6 +530,12 @@ def main(argv=None):
     if not args.no_devto:
         from clawler.sources import DevToSource
         src = DevToSource()
+        src.timeout = args.timeout
+        src.max_retries = args.retries
+        sources.append(src)
+    if not args.no_arxiv:
+        from clawler.sources import ArXivSource
+        src = ArXivSource()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

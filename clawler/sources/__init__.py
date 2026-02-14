@@ -7,5 +7,6 @@ from .mastodon import MastodonSource
 from .wikipedia import WikipediaCurrentEventsSource
 from .lobsters import LobstersSource
 from .devto import DevToSource
+from .arxiv import ArXivSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource"]

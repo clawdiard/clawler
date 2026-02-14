@@ -114,4 +114,4 @@ def test_source_list_flag():
 
 def test_version_480():
     from clawler import __version__
-    assert __version__ == "4.8.0"
+    assert __version__ == "4.9.0"
