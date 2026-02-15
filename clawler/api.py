@@ -48,6 +48,7 @@ from clawler.sources import (
     YouTubeSource,
     MediumSource,
     SubstackSource,
+    GoogleNewsSource,
 )
 
 
@@ -92,6 +93,7 @@ def crawl(
     no_youtube: bool = False,
     no_medium: bool = False,
     no_substack: bool = False,
+    no_googlenews: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -153,6 +155,7 @@ def crawl(
             "youtube": "no_youtube",
             "medium": "no_medium",
             "substack": "no_substack",
+            "googlenews": "no_googlenews",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -185,6 +188,7 @@ def crawl(
         no_youtube = _locals.get("no_youtube", no_youtube)
         no_medium = _locals.get("no_medium", no_medium)
         no_substack = _locals.get("no_substack", no_substack)
+        no_googlenews = _locals.get("no_googlenews", no_googlenews)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -213,6 +217,7 @@ def crawl(
         (no_youtube, YouTubeSource),
         (no_medium, MediumSource),
         (no_substack, SubstackSource),
+        (no_googlenews, GoogleNewsSource),
     ]
     sources = []
     for disabled, cls in _source_map:

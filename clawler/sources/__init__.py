@@ -25,5 +25,6 @@ from .hackernoon import HackerNoonSource
 from .youtube import YouTubeSource
 from .medium import MediumSource
 from .substack import SubstackSource
+from .googlenews import GoogleNewsSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource"]
