@@ -110,18 +110,38 @@ class HealthTracker:
         entries.sort(key=lambda e: e["success_rate"])
         return entries
 
+    @staticmethod
+    def _percentile(sorted_vals: list, p: float) -> float:
+        """Return the p-th percentile (0-100) from a pre-sorted list."""
+        if not sorted_vals:
+            return 0.0
+        k = (len(sorted_vals) - 1) * (p / 100.0)
+        f = int(k)
+        c = f + 1
+        if c >= len(sorted_vals):
+            return sorted_vals[-1]
+        d = k - f
+        return sorted_vals[f] + d * (sorted_vals[c] - sorted_vals[f])
+
     def get_timing_report(self):
-        """Return sources sorted by average response time (slowest first)."""
+        """Return sources sorted by average response time (slowest first).
+
+        Includes p50, p95, and p99 percentiles for each source.
+        """
         entries = []
         for source, d in self.data.items():
             timings = d.get("response_times_ms", [])
             if not timings:
                 continue
+            sorted_t = sorted(timings)
             entries.append({
                 "source": source,
-                "avg_ms": sum(timings) / len(timings),
+                "avg_ms": round(sum(timings) / len(timings), 1),
                 "min_ms": min(timings),
                 "max_ms": max(timings),
+                "p50_ms": round(self._percentile(sorted_t, 50), 1),
+                "p95_ms": round(self._percentile(sorted_t, 95), 1),
+                "p99_ms": round(self._percentile(sorted_t, 99), 1),
                 "samples": len(timings),
             })
         entries.sort(key=lambda e: e["avg_ms"], reverse=True)
