@@ -23,10 +23,10 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 22 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 23 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
-Changelog) are enabled by default. Disable any with no_<source>=True.
+Changelog, Hacker Noon) are enabled by default. Disable any with no_<source>=True.
 
 """
 from __future__ import annotations
@@ -43,6 +43,7 @@ from clawler.sources import (
     BlueskySource, TildesSource, LemmySource, SlashdotSource,
     StackOverflowSource, PinboardSource, IndieHackersSource,
     EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
+    HackerNoonSource,
 )
 
 
@@ -83,6 +84,7 @@ def crawl(
     no_hashnode: bool = False,
     no_freecodecamp: bool = False,
     no_changelog: bool = False,
+    no_hackernoon: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -124,7 +126,7 @@ def crawl(
     Returns:
         List of Article objects, sorted by time (or relevance if profile given).
     """
-    # Build sources — all 12 sources, matching CLI parity
+    # Build sources — all 22 sources, matching CLI parity
     # --only support: if specified, disable all sources not in the list
     if only:
         _name_to_flag = {
@@ -140,6 +142,7 @@ def crawl(
             "hashnode": "no_hashnode",
             "freecodecamp": "no_freecodecamp",
             "changelog": "no_changelog",
+            "hackernoon": "no_hackernoon",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -168,6 +171,7 @@ def crawl(
         no_hashnode = _locals.get("no_hashnode", no_hashnode)
         no_freecodecamp = _locals.get("no_freecodecamp", no_freecodecamp)
         no_changelog = _locals.get("no_changelog", no_changelog)
+        no_hackernoon = _locals.get("no_hackernoon", no_hackernoon)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -192,6 +196,7 @@ def crawl(
         (no_hashnode, HashnodeSource),
         (no_freecodecamp, FreeCodeCampSource),
         (no_changelog, ChangelogSource),
+        (no_hackernoon, HackerNoonSource),
     ]
     sources = []
     for disabled, cls in _source_map:

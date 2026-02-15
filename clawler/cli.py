@@ -75,6 +75,7 @@ def main(argv=None):
     parser.add_argument("--no-hashnode", action="store_true", help="Skip Hashnode source")
     parser.add_argument("--no-freecodecamp", action="store_true", help="Skip freeCodeCamp source")
     parser.add_argument("--no-changelog", action="store_true", help="Skip Changelog source")
+    parser.add_argument("--no-hackernoon", action="store_true", help="Skip Hacker Noon source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -404,6 +405,7 @@ def main(argv=None):
             ("Dev.to", "api", "dev.to"),
             ("ArXiv", "api", "arxiv"),
             ("Indie Hackers", "scrape", "indiehackers"),
+            ("Hacker Noon", "rss", "hackernoon"),
         ]
         rss = RSSSource()
         print("📡 Configured Sources:\n")
@@ -653,7 +655,7 @@ def main(argv=None):
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
-        ChangelogSource)
+        ChangelogSource, HackerNoonSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -678,6 +680,7 @@ def main(argv=None):
         ("hashnode", HashnodeSource),
         ("freecodecamp", FreeCodeCampSource),
         ("changelog", ChangelogSource),
+        ("hackernoon", HackerNoonSource),
     ]
 
     sources = []

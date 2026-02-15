@@ -21,5 +21,6 @@ from .echojs import EchoJSSource
 from .hashnode import HashnodeSource
 from .freecodecamp import FreeCodeCampSource
 from .changelog import ChangelogSource
+from .hackernoon import HackerNoonSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource"]
