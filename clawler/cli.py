@@ -73,6 +73,9 @@ def main(argv=None):
     parser.add_argument("--no-indiehackers", action="store_true", help="Skip Indie Hackers source")
     parser.add_argument("--no-echojs", action="store_true", help="Skip EchoJS source")
     parser.add_argument("--no-hashnode", action="store_true", help="Skip Hashnode source")
+    parser.add_argument("--no-freecodecamp", action="store_true", help="Skip freeCodeCamp source")
+    parser.add_argument("--digest", action="store_true",
+                        help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -428,6 +431,17 @@ def main(argv=None):
     if args.fresh and not args.since:
         args.since = "1h"
 
+    # Digest mode shorthand
+    if args.digest:
+        if not args.since:
+            args.since = "24h"
+        if not args.group_by:
+            args.group_by = "category"
+        if args.sort == "time":  # only override if user didn't explicitly set
+            args.sort = "quality"
+        if args.format == "console":  # only override default
+            args.format = "markdown"
+
     # Export bookmarks
     if args.export_bookmarks:
         from clawler.bookmarks import list_bookmarks, export_bookmarks
@@ -582,7 +596,7 @@ def main(argv=None):
         WikipediaCurrentEventsSource, DevToSource, ArXivSource,
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
-        IndieHackersSource, EchoJSSource, HashnodeSource)
+        IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -605,6 +619,7 @@ def main(argv=None):
         ("indiehackers", IndieHackersSource),
         ("echojs", EchoJSSource),
         ("hashnode", HashnodeSource),
+        ("freecodecamp", FreeCodeCampSource),
     ]
 
     sources = []

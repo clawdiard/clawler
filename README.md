@@ -6,7 +6,7 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 
 ## Features
 
-- 📡 **98+ sources across 20 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds)
+- 📡 **98+ sources across 21 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -67,6 +67,8 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - 🎯 **`--only` source filter** — `--only rss,hn` enables only those sources (cleaner than disabling everything else)
 - ⏱️ **Crawl timing** — total crawl time shown on stderr after each run
 - 📄 **`--json-lines` alias** — discoverable alias for `-f jsonl`
+- 📚 **freeCodeCamp source** — developer tutorials and articles from freeCodeCamp.org (`--no-freecodecamp` to skip)
+- 📰 **Digest mode** — `--digest` shorthand for `--since 24h --group-by category --sort quality --format markdown`
 
 
 ## Quick Start
