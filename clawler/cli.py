@@ -76,6 +76,7 @@ def main(argv=None):
     parser.add_argument("--no-freecodecamp", action="store_true", help="Skip freeCodeCamp source")
     parser.add_argument("--no-changelog", action="store_true", help="Skip Changelog source")
     parser.add_argument("--no-hackernoon", action="store_true", help="Skip Hacker Noon source")
+    parser.add_argument("--no-youtube", action="store_true", help="Skip YouTube source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -270,7 +271,7 @@ def main(argv=None):
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
                          "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky",
                          "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
-                         "indiehackers", "echojs", "hashnode", "freecodecamp"}
+                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -406,6 +407,7 @@ def main(argv=None):
             ("ArXiv", "api", "arxiv"),
             ("Indie Hackers", "scrape", "indiehackers"),
             ("Hacker Noon", "rss", "hackernoon"),
+            ("YouTube", "rss", "youtube"),
         ]
         rss = RSSSource()
         print("📡 Configured Sources:\n")
@@ -577,6 +579,8 @@ def main(argv=None):
             print("  🚀 ProductHunt (trending products)")
         if not args.no_bluesky:
             print("  🦋 Bluesky (trending shared links)")
+        if not getattr(args, 'no_youtube', False):
+            print("  📺 YouTube (22 curated channels)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -655,7 +659,7 @@ def main(argv=None):
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
-        ChangelogSource, HackerNoonSource)
+        ChangelogSource, HackerNoonSource, YouTubeSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -681,6 +685,7 @@ def main(argv=None):
         ("freecodecamp", FreeCodeCampSource),
         ("changelog", ChangelogSource),
         ("hackernoon", HackerNoonSource),
+        ("youtube", YouTubeSource),
     ]
 
     sources = []

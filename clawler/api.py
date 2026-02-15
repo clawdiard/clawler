@@ -23,10 +23,10 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 23 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 24 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
-Changelog, Hacker Noon) are enabled by default. Disable any with no_<source>=True.
+Changelog, Hacker Noon, YouTube) are enabled by default. Disable any with no_<source>=True.
 
 """
 from __future__ import annotations
@@ -44,6 +44,7 @@ from clawler.sources import (
     StackOverflowSource, PinboardSource, IndieHackersSource,
     EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
     HackerNoonSource,
+    YouTubeSource,
 )
 
 
@@ -85,6 +86,7 @@ def crawl(
     no_freecodecamp: bool = False,
     no_changelog: bool = False,
     no_hackernoon: bool = False,
+    no_youtube: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -143,6 +145,7 @@ def crawl(
             "freecodecamp": "no_freecodecamp",
             "changelog": "no_changelog",
             "hackernoon": "no_hackernoon",
+            "youtube": "no_youtube",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -172,6 +175,7 @@ def crawl(
         no_freecodecamp = _locals.get("no_freecodecamp", no_freecodecamp)
         no_changelog = _locals.get("no_changelog", no_changelog)
         no_hackernoon = _locals.get("no_hackernoon", no_hackernoon)
+        no_youtube = _locals.get("no_youtube", no_youtube)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -197,6 +201,7 @@ def crawl(
         (no_freecodecamp, FreeCodeCampSource),
         (no_changelog, ChangelogSource),
         (no_hackernoon, HackerNoonSource),
+        (no_youtube, YouTubeSource),
     ]
     sources = []
     for disabled, cls in _source_map:
