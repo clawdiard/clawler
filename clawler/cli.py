@@ -70,6 +70,7 @@ def main(argv=None):
     parser.add_argument("--no-slashdot", action="store_true", help="Skip Slashdot source")
     parser.add_argument("--no-stackoverflow", action="store_true", help="Skip Stack Overflow source")
     parser.add_argument("--no-pinboard", action="store_true", help="Skip Pinboard Popular source")
+    parser.add_argument("--no-indiehackers", action="store_true", help="Skip Indie Hackers source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -325,6 +326,7 @@ def main(argv=None):
             ("Lobsters", "api", "lobsters"),
             ("Dev.to", "api", "dev.to"),
             ("ArXiv", "api", "arxiv"),
+            ("Indie Hackers", "scrape", "indiehackers"),
         ]
         rss = RSSSource()
         print("📡 Configured Sources:\n")
@@ -561,7 +563,8 @@ def main(argv=None):
         GitHubTrendingSource, MastodonSource, LobstersSource,
         WikipediaCurrentEventsSource, DevToSource, ArXivSource,
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
-        LemmySource, SlashdotSource, StackOverflowSource, PinboardSource)
+        LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
+        IndieHackersSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -581,6 +584,7 @@ def main(argv=None):
         ("slashdot", SlashdotSource),
         ("stackoverflow", StackOverflowSource),
         ("pinboard", PinboardSource),
+        ("indiehackers", IndieHackersSource),
     ]
 
     sources = []
