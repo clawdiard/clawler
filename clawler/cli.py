@@ -206,6 +206,8 @@ def main(argv=None):
                         help="Show article age statistics (min/max/avg/median) after output")
     parser.add_argument("--top-sources", action="store_true", dest="top_sources",
                         help="Show top contributing sources after output (by article count)")
+    parser.add_argument("--top-tags", action="store_true", dest="top_tags",
+                        help="Show most common tags across results after output")
     parser.add_argument("--silent", action="store_true",
                         help="Alias for --quiet (suppress all status messages on stderr)")
     parser.add_argument("--source-retries", type=int, default=1, dest="source_retries",
@@ -962,6 +964,23 @@ def main(argv=None):
         for src_name, count in top:
             bar = "█" * max(1, int(count / max_count * 25))
             print(f"  {src_name:>30s} | {bar} {count}", file=sys.stderr)
+
+    # Top tags breakdown
+    if args.top_tags and articles:
+        from collections import Counter
+        tag_counts = Counter()
+        for a in articles:
+            for tag in a.tags:
+                tag_counts[tag.lower()] += 1
+        if tag_counts:
+            top = tag_counts.most_common(15)
+            max_count = top[0][1] if top else 1
+            print(f"\n🏷️  Top Tags ({len(tag_counts)} unique):", file=sys.stderr)
+            for tag_name, count in top:
+                bar = "█" * max(1, int(count / max_count * 25))
+                print(f"  {tag_name:>25s} | {bar} {count}", file=sys.stderr)
+        else:
+            print(f"\n🏷️  No tags found in results.", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

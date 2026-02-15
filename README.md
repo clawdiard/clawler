@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **85+ individual sources across 16 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **91+ individual sources across 16 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **85+ sources across 18 source types** — 48 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers
+- 📡 **91+ sources across 18 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -63,6 +63,7 @@ Clawler aggregates news from **85+ individual sources across 16 source types** u
 - 🚫 **Exclude filters** — `--exclude-tag` and `--exclude-author` for precise result trimming
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 - 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles
+- 🏷️ **Top tags analytics** — `--top-tags` shows the most common tags across results
 - 🎯 **`--only` source filter** — `--only rss,hn` enables only those sources (cleaner than disabling everything else)
 - ⏱️ **Crawl timing** — total crawl time shown on stderr after each run
 - 📄 **`--json-lines` alias** — discoverable alias for `-f jsonl`
@@ -75,6 +76,15 @@ git clone https://github.com/clawdiard/clawler.git
 cd clawler
 pip install -e .
 clawler
+```
+
+## Docker
+
+```bash
+docker build -t clawler .
+docker run --rm clawler                          # default: top 50 stories
+docker run --rm clawler --category tech -n 20    # tech news, top 20
+docker run --rm clawler -f json | jq '.[0]'      # JSON output
 ```
 
 ## Usage

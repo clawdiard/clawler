@@ -73,6 +73,13 @@ DEFAULT_FEEDS = [
     {"url": "https://dev.to/feed", "source": "DEV Community", "category": "tech"},
     {"url": "https://rss.slashdot.org/Slashdot/slashdotMain", "source": "Slashdot", "category": "tech"},
     {"url": "https://www.theregister.com/headlines.atom", "source": "The Register", "category": "tech"},
+    # --- Tech (v6.4.0) ---
+    {"url": "https://www.freecodecamp.org/news/rss/", "source": "freeCodeCamp", "category": "tech"},
+    {"url": "https://changelog.com/feed", "source": "The Changelog", "category": "tech"},
+    {"url": "https://daringfireball.net/feeds/main", "source": "Daring Fireball", "category": "tech"},
+    {"url": "https://www.anandtech.com/rss/", "source": "AnandTech", "category": "tech"},
+    {"url": "https://this-week-in-rust.org/atom.xml", "source": "This Week in Rust", "category": "tech"},
+    {"url": "https://blog.golang.org/feed.atom", "source": "Go Blog", "category": "tech"},
 ]
 
 
