@@ -245,8 +245,8 @@ def main(argv=None):
                         help="Filter articles by language (comma-separated ISO 639-1 codes, e.g. 'en,es')")
     parser.add_argument("--exclude-lang", type=str, default=None, dest="exclude_lang",
                         help="Exclude articles in these languages (comma-separated, e.g. 'zh,ja')")
-    parser.add_argument("--json-pretty", action="store_true", dest="json_pretty",
-                        help="Pretty-print JSON output with indentation (use with --format json)")
+    parser.add_argument("--top-authors", action="store_true", dest="top_authors",
+                        help="Show most prolific authors across results after output")
 
     args = parser.parse_args(argv)
 
@@ -261,7 +261,9 @@ def main(argv=None):
     # --only sets no_* flags for sources NOT in the list
     if args.only:
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
-                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky", "tildes", "lemmy", "slashdot", "stackoverflow"}
+                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky",
+                         "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
+                         "indiehackers", "echojs", "hashnode", "freecodecamp"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -1081,6 +1083,23 @@ def main(argv=None):
                 print(f"  {tag_name:>25s} | {bar} {count}", file=sys.stderr)
         else:
             print(f"\n🏷️  No tags found in results.", file=sys.stderr)
+
+    # Top authors breakdown
+    if args.top_authors and articles:
+        from collections import Counter
+        author_counts = Counter()
+        for a in articles:
+            if a.author and a.author.strip():
+                author_counts[a.author.strip()] += 1
+        if author_counts:
+            top = author_counts.most_common(15)
+            max_count = top[0][1] if top else 1
+            print(f"\n✍️  Top Authors ({len(author_counts)} unique):", file=sys.stderr)
+            for author_name, count in top:
+                bar = "█" * max(1, int(count / max_count * 25))
+                print(f"  {author_name:>30s} | {bar} {count}", file=sys.stderr)
+        else:
+            print(f"\n✍️  No author data found in results.", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

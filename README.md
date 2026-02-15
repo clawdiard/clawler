@@ -68,6 +68,7 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - ⏱️ **Age statistics** — `--age-stats` shows min/max/avg/median article age
 - 📡 **Top sources analytics** — `--top-sources` shows which sources contributed the most articles
 - 🏷️ **Top tags analytics** — `--top-tags` shows the most common tags across results
+- ✍️ **Top authors analytics** — `--top-authors` shows the most prolific authors across results
 - 🎯 **`--only` source filter** — `--only rss,hn` enables only those sources (cleaner than disabling everything else)
 - ⏱️ **Crawl timing** — total crawl time shown on stderr after each run
 - 📄 **`--json-lines` alias** — discoverable alias for `-f jsonl`
