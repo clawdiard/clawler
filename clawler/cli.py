@@ -74,6 +74,8 @@ def main(argv=None):
     parser.add_argument("--no-echojs", action="store_true", help="Skip EchoJS source")
     parser.add_argument("--no-hashnode", action="store_true", help="Skip Hashnode source")
     parser.add_argument("--no-freecodecamp", action="store_true", help="Skip freeCodeCamp source")
+    parser.add_argument("--no-changelog", action="store_true", help="Skip Changelog source")
+    parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
     parser.add_argument("--fresh", action="store_true",
@@ -650,7 +652,8 @@ def main(argv=None):
         WikipediaCurrentEventsSource, DevToSource, ArXivSource,
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
-        IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource)
+        IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
+        ChangelogSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -674,6 +677,7 @@ def main(argv=None):
         ("echojs", EchoJSSource),
         ("hashnode", HashnodeSource),
         ("freecodecamp", FreeCodeCampSource),
+        ("changelog", ChangelogSource),
     ]
 
     sources = []
@@ -1148,6 +1152,21 @@ def main(argv=None):
                 print(f"  {src:>25s} | {bar} {avg_q:.2f} ({count} articles)", file=sys.stderr)
         else:
             print(f"\n⚖️  No source quality data.", file=sys.stderr)
+
+    # Category stats breakdown
+    if args.category_stats and articles:
+        from collections import Counter
+        cat_counts = Counter(a.category for a in articles if a.category)
+        if cat_counts:
+            top = cat_counts.most_common()
+            max_count = top[0][1] if top else 1
+            print(f"\n📂 Category Breakdown ({len(cat_counts)} categories):", file=sys.stderr)
+            for cat_name, count in top:
+                bar = "█" * max(1, int(count / max_count * 25))
+                pct = count / len(articles) * 100
+                print(f"  {cat_name:>20s} | {bar} {count} ({pct:.0f}%)", file=sys.stderr)
+        else:
+            print(f"\n📂 No category data available.", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:

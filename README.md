@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **98+ individual sources across 18 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **100+ individual sources across 22 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **98+ sources across 21 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp
+- 📡 **100+ sources across 22 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -78,6 +78,8 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - 📰 **Digest mode** — `--digest` shorthand for `--since 24h --group-by category --sort quality --format markdown`
 - 🎭 **Tone filtering** — `--tone positive/negative/neutral` for sentiment-based filtering
 - 🚫 **No-doom mode** — `--no-doom` to exclude strongly negative/doom articles
+- 📰 **Changelog source** — developer news and podcasts from changelog.com (`--no-changelog` to skip)
+- 📂 **Category stats** — `--category-stats` shows article count per category with percentages
 - 🎯 **Profile generator** — `--profile-init` creates a starter interest profile YAML
 
 
