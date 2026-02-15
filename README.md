@@ -38,6 +38,7 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - 🔇 **Auto-quiet when piped** — suppresses stderr noise when output is piped
 - 🎲 **Random sampling** — `--sample N` for serendipitous discovery
 - 📦 **Compact JSON** — `--json-compact` for minified single-line JSON
+- ⏱️ **Reading time estimation** — `--show-read-time` displays estimated read time; `--min-read`/`--max-read` to filter by duration
 - 🎨 **NO_COLOR support** — `--no-color` or `NO_COLOR=1` env var
 - 💬 **Discussion URLs** — structured `discussion_url` field on articles (HN, Lobsters, Reddit)
 - 📋 **Source list** — `--source-list` shows all configured sources with types and quality weights

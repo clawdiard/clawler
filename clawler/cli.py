@@ -235,6 +235,12 @@ def main(argv=None):
                         help="Exclude strongly negative/doom articles")
     parser.add_argument("--profile-init", action="store_true", dest="profile_init",
                         help="Generate a starter interest profile YAML and exit")
+    parser.add_argument("--show-read-time", action="store_true", dest="show_read_time",
+                        help="Show estimated reading time for each article in console output")
+    parser.add_argument("--min-read", type=int, default=None, dest="min_read", metavar="MIN",
+                        help="Minimum estimated reading time in minutes (inclusive)")
+    parser.add_argument("--max-read", type=int, default=None, dest="max_read", metavar="MAX",
+                        help="Maximum estimated reading time in minutes (inclusive)")
 
     args = parser.parse_args(argv)
 
@@ -802,6 +808,11 @@ def main(argv=None):
         from clawler.sentiment import filter_by_tone
         articles = filter_by_tone(articles, tone=args.tone, no_doom=args.no_doom)
 
+    # Reading time filtering (--min-read, --max-read)
+    if args.min_read is not None or args.max_read is not None:
+        from clawler.readtime import filter_by_read_time
+        articles = filter_by_read_time(articles, min_minutes=args.min_read, max_minutes=args.max_read)
+
     # Filter by cross-source coverage
     if args.min_sources > 0:
         articles = [a for a in articles if a.source_count >= args.min_sources]
@@ -905,7 +916,11 @@ def main(argv=None):
         for a in articles:
             age = relative_time(a.timestamp) if a.timestamp else "—"
             sc = f" ×{a.source_count}" if a.source_count > 1 else ""
-            lines.append(f"[{a.source:15s}] [{age:>7s}]{sc}  {a.title}")
+            rt = ""
+            if args.show_read_time:
+                from clawler.readtime import estimate_read_minutes, format_read_time
+                rt = f" [{format_read_time(estimate_read_minutes(a))}]"
+            lines.append(f"[{a.source:15s}] [{age:>7s}]{sc}{rt}  {a.title}")
             lines.append(f"  {a.url}")
         output = "\n".join(lines) if lines else "No articles found."
     # Group-by output (text mode only, overrides formatter)
