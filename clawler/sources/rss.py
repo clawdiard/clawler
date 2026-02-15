@@ -138,6 +138,36 @@ DEFAULT_FEEDS = [
     {"url": "https://www.abc.net.au/news/feed/2942460/rss.xml", "source": "ABC Australia", "category": "world"},
     {"url": "https://timesofindia.indiatimes.com/rssfeedstopstories.cms", "source": "Times of India", "category": "world"},
     {"url": "https://www.jpost.com/rss/rssfeedsfrontpage.aspx", "source": "Jerusalem Post", "category": "world"},
+    # --- Health (expanded) ---
+    {"url": "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml", "source": "WHO News", "category": "health"},
+    {"url": "https://www.healthline.com/rss", "source": "Healthline", "category": "health"},
+    {"url": "https://www.psychologytoday.com/us/blog/feed", "source": "Psychology Today", "category": "health"},
+    # --- Sports (expanded) ---
+    {"url": "https://www.bbc.co.uk/sport/rss.xml", "source": "BBC Sport", "category": "sports"},
+    {"url": "https://www.si.com/.rss/full/", "source": "Sports Illustrated", "category": "sports"},
+    # --- Design (expanded) ---
+    {"url": "https://www.designweek.co.uk/feed/", "source": "Design Week", "category": "design"},
+    {"url": "https://uxdesign.cc/feed", "source": "UX Collective", "category": "design"},
+    {"url": "https://css-tricks.com/feed/", "source": "CSS-Tricks", "category": "design"},
+    # --- Music (expanded) ---
+    {"url": "https://consequenceofsound.net/feed/", "source": "Consequence of Sound", "category": "music"},
+    {"url": "https://www.nme.com/feed", "source": "NME", "category": "music"},
+    # --- Food (expanded) ---
+    {"url": "https://www.bonappetit.com/feed/rss", "source": "Bon Appetit", "category": "food"},
+    {"url": "https://www.foodandwine.com/feeds/all", "source": "Food & Wine", "category": "food"},
+    # --- Photography & Art ---
+    {"url": "https://petapixel.com/feed/", "source": "PetaPixel", "category": "photography"},
+    {"url": "https://www.thisiscolossal.com/feed/", "source": "Colossal", "category": "art"},
+    # --- Economics & Markets ---
+    {"url": "https://www.economist.com/finance-and-economics/rss.xml", "source": "The Economist (Finance)", "category": "finance"},
+    {"url": "https://www.ft.com/rss/home", "source": "Financial Times", "category": "finance"},
+    # --- Parenting & Family ---
+    {"url": "https://www.todaysparent.com/feed/", "source": "Today's Parent", "category": "family"},
+    # --- Architecture ---
+    {"url": "https://www.dezeen.com/feed/", "source": "Dezeen", "category": "architecture"},
+    {"url": "https://www.archdaily.com/feed", "source": "ArchDaily", "category": "architecture"},
+    # --- History ---
+    {"url": "https://www.smithsonianmag.com/rss/history/", "source": "Smithsonian History", "category": "history"},
 ]
 
 
