@@ -72,6 +72,7 @@ def main(argv=None):
     parser.add_argument("--no-pinboard", action="store_true", help="Skip Pinboard Popular source")
     parser.add_argument("--no-indiehackers", action="store_true", help="Skip Indie Hackers source")
     parser.add_argument("--no-echojs", action="store_true", help="Skip EchoJS source")
+    parser.add_argument("--no-hashnode", action="store_true", help="Skip Hashnode source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -581,7 +582,7 @@ def main(argv=None):
         WikipediaCurrentEventsSource, DevToSource, ArXivSource,
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
-        IndieHackersSource, EchoJSSource)
+        IndieHackersSource, EchoJSSource, HashnodeSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -603,6 +604,7 @@ def main(argv=None):
         ("pinboard", PinboardSource),
         ("indiehackers", IndieHackersSource),
         ("echojs", EchoJSSource),
+        ("hashnode", HashnodeSource),
     ]
 
     sources = []
