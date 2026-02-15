@@ -247,6 +247,10 @@ def main(argv=None):
                         help="Exclude articles in these languages (comma-separated, e.g. 'zh,ja')")
     parser.add_argument("--top-authors", action="store_true", dest="top_authors",
                         help="Show most prolific authors across results after output")
+    parser.add_argument("--top-words", action="store_true", dest="top_words",
+                        help="Show most common words in article titles (excludes stop words)")
+    parser.add_argument("--source-quality", action="store_true", dest="source_quality",
+                        help="Show average quality score per source after output")
 
     args = parser.parse_args(argv)
 
@@ -1100,6 +1104,50 @@ def main(argv=None):
                 print(f"  {author_name:>30s} | {bar} {count}", file=sys.stderr)
         else:
             print(f"\n✍️  No author data found in results.", file=sys.stderr)
+
+    # Top words in titles
+    if args.top_words and articles:
+        from collections import Counter
+        STOP_WORDS = frozenset({
+            "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+            "of", "with", "by", "from", "is", "it", "its", "are", "was", "were",
+            "be", "been", "has", "have", "had", "do", "does", "did", "will", "can",
+            "this", "that", "not", "you", "your", "how", "what", "why", "when",
+            "who", "all", "new", "more", "no", "than", "into", "about", "up",
+            "out", "over", "just", "after", "before", "now", "as", "so", "if",
+        })
+        word_counts = Counter()
+        for a in articles:
+            words = [w.lower().strip(".,!?:;\"'()[]{}") for w in a.title.split()]
+            words = [w for w in words if len(w) > 2 and w not in STOP_WORDS and w.isalpha()]
+            word_counts.update(words)
+        if word_counts:
+            top = word_counts.most_common(20)
+            max_count = top[0][1] if top else 1
+            print(f"\n📝 Top Words in Titles ({len(word_counts)} unique):", file=sys.stderr)
+            for word, count in top:
+                bar = "█" * max(1, int(count / max_count * 25))
+                print(f"  {word:>20s} | {bar} {count}", file=sys.stderr)
+        else:
+            print(f"\n📝 No significant words found in titles.", file=sys.stderr)
+
+    # Source quality breakdown
+    if args.source_quality and articles:
+        from collections import defaultdict
+        source_scores = defaultdict(list)
+        for a in articles:
+            source_scores[a.source].append(a.quality_score)
+        if source_scores:
+            summary = sorted(
+                [(src, sum(scores) / len(scores), len(scores)) for src, scores in source_scores.items()],
+                key=lambda x: x[1], reverse=True,
+            )
+            print(f"\n⚖️  Source Quality Breakdown ({len(summary)} sources):", file=sys.stderr)
+            for src, avg_q, count in summary:
+                bar = "█" * max(1, int(avg_q * 25))
+                print(f"  {src:>25s} | {bar} {avg_q:.2f} ({count} articles)", file=sys.stderr)
+        else:
+            print(f"\n⚖️  No source quality data.", file=sys.stderr)
 
     # Watch mode: repeat crawl at interval
     if args.watch:
