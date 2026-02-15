@@ -44,6 +44,8 @@ def _article_to_dict(a: Article) -> dict:
         "quality_score": a.quality_score,
         "source_count": a.source_count,
         "tags": a.tags,
+        "author": a.author,
+        "discussion_url": a.discussion_url,
     }
 
 
@@ -63,6 +65,8 @@ def _dict_to_article(d: dict) -> Article:
         quality_score=d.get("quality_score", 0.5),
         source_count=d.get("source_count", 1),
         tags=d.get("tags", []),
+        author=d.get("author", ""),
+        discussion_url=d.get("discussion_url", ""),
     )
 
 
@@ -127,3 +131,63 @@ def clear_cache(cache_dir: Path = DEFAULT_CACHE_DIR) -> int:
         f.unlink()
         count += 1
     return count
+
+
+def cache_info(cache_dir: Path = DEFAULT_CACHE_DIR) -> dict:
+    """Return cache directory statistics: file count, total size, age of oldest/newest.
+
+    Returns a dict with keys: directory, file_count, total_size_bytes,
+    total_size_human, oldest_age_human, newest_age_human.
+    """
+    result = {
+        "directory": str(cache_dir),
+        "file_count": 0,
+        "total_size_bytes": 0,
+        "total_size_human": "0 B",
+        "oldest_age_human": "",
+        "newest_age_human": "",
+    }
+    if not cache_dir.exists():
+        return result
+
+    files = list(cache_dir.glob("*.json"))
+    if not files:
+        return result
+
+    total_size = 0
+    oldest_mtime = float("inf")
+    newest_mtime = 0.0
+    for f in files:
+        stat = f.stat()
+        total_size += stat.st_size
+        oldest_mtime = min(oldest_mtime, stat.st_mtime)
+        newest_mtime = max(newest_mtime, stat.st_mtime)
+
+    now = time.time()
+    result["file_count"] = len(files)
+    result["total_size_bytes"] = total_size
+    result["total_size_human"] = _human_size(total_size)
+    result["oldest_age_human"] = _human_duration(now - oldest_mtime)
+    result["newest_age_human"] = _human_duration(now - newest_mtime)
+    return result
+
+
+def _human_size(nbytes: int) -> str:
+    """Format bytes as a human-readable string."""
+    for unit in ("B", "KB", "MB", "GB"):
+        if nbytes < 1024:
+            return f"{nbytes:.1f} {unit}" if unit != "B" else f"{nbytes} {unit}"
+        nbytes /= 1024
+    return f"{nbytes:.1f} TB"
+
+
+def _human_duration(seconds: float) -> str:
+    """Format seconds as a human-readable duration."""
+    if seconds < 60:
+        return f"{seconds:.0f}s"
+    elif seconds < 3600:
+        return f"{seconds / 60:.0f}m"
+    elif seconds < 86400:
+        return f"{seconds / 3600:.1f}h"
+    else:
+        return f"{seconds / 86400:.1f}d"

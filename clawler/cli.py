@@ -109,6 +109,8 @@ def main(argv=None):
                         help="Cache TTL in seconds (default: 300)")
     parser.add_argument("--clear-cache", action="store_true", dest="clear_cache",
                         help="Clear all cached results and exit")
+    parser.add_argument("--cache-info", action="store_true", dest="cache_info",
+                        help="Show cache directory stats (file count, total size, oldest/newest) and exit")
     parser.add_argument("--history", action="store_true",
                         help="Enable persistent dedup history (suppress previously seen articles across runs)")
     parser.add_argument("--history-ttl", type=str, default="24h", dest="history_ttl",
@@ -268,6 +270,18 @@ def main(argv=None):
         from clawler.cache import clear_cache
         n = clear_cache()
         print(f"🧹 Cleared {n} cached file(s)")
+        return
+
+    # Cache info
+    if args.cache_info:
+        from clawler.cache import cache_info
+        info = cache_info()
+        print(f"📦 Cache directory: {info['directory']}")
+        print(f"   Files: {info['file_count']}")
+        print(f"   Total size: {info['total_size_human']}")
+        if info['file_count'] > 0:
+            print(f"   Oldest: {info['oldest_age_human']} ago")
+            print(f"   Newest: {info['newest_age_human']} ago")
         return
 
     # Clear history

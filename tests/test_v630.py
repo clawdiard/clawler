@@ -75,7 +75,7 @@ class TestVersionSync630(unittest.TestCase):
 
     def test_all_versions_match(self):
         from clawler import __version__
-        self.assertEqual(__version__, "6.4.0")
+        self.assertEqual(__version__, "6.5.0")
 
         pyproject = Path(__file__).parent.parent / "pyproject.toml"
         self.assertIn(f'version = "{__version__}"', pyproject.read_text())
