@@ -110,6 +110,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.france24.com/en/rss", "source": "France24", "category": "world"},
     {"url": "https://www3.nhk.or.jp/nhkworld/en/news/feeds/", "source": "NHK World", "category": "world"},
     {"url": "https://www.scmp.com/rss/91/feed", "source": "South China Morning Post", "category": "world"},
+    # --- Space ---
+    {"url": "https://www.space.com/feeds/all", "source": "Space.com", "category": "science"},
+    {"url": "https://spacenews.com/feed/", "source": "SpaceNews", "category": "science"},
+    {"url": "https://www.nasaspaceflight.com/feed/", "source": "NASASpaceFlight", "category": "science"},
+    # --- Environment & Climate ---
+    {"url": "https://grist.org/feed/", "source": "Grist", "category": "environment"},
+    {"url": "https://www.carbonbrief.org/feed/", "source": "Carbon Brief", "category": "environment"},
+    {"url": "https://insideclimatenews.org/feed/", "source": "Inside Climate News", "category": "environment"},
+    # --- Education ---
+    {"url": "https://www.edsurge.com/articles_rss", "source": "EdSurge", "category": "education"},
+    {"url": "https://theconversation.com/us/articles.atom", "source": "The Conversation US", "category": "education"},
+    # --- Law & Policy ---
+    {"url": "https://www.lawfaremedia.org/feed", "source": "Lawfare", "category": "policy"},
+    {"url": "https://www.scotusblog.com/feed/", "source": "SCOTUSblog", "category": "policy"},
+    # --- Automotive & EV ---
+    {"url": "https://electrek.co/feed/", "source": "Electrek", "category": "automotive"},
+    {"url": "https://insideevs.com/rss/news/", "source": "InsideEVs", "category": "automotive"},
+    # --- Real Estate ---
+    {"url": "https://www.curbed.com/rss/index.xml", "source": "Curbed", "category": "realestate"},
+    # --- Lifestyle ---
+    {"url": "https://lifehacker.com/rss", "source": "Lifehacker", "category": "lifestyle"},
+    # --- Startups & VC ---
+    {"url": "https://news.crunchbase.com/feed/", "source": "Crunchbase News", "category": "business"},
+    {"url": "https://sifted.eu/feed", "source": "Sifted (EU Startups)", "category": "business"},
+    # --- International (more) ---
+    {"url": "https://www.abc.net.au/news/feed/2942460/rss.xml", "source": "ABC Australia", "category": "world"},
+    {"url": "https://timesofindia.indiatimes.com/rssfeedstopstories.cms", "source": "Times of India", "category": "world"},
+    {"url": "https://www.jpost.com/rss/rssfeedsfrontpage.aspx", "source": "Jerusalem Post", "category": "world"},
 ]
 
 
