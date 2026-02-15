@@ -22,11 +22,22 @@ from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
-_BOOL_FIELDS = {"verbose", "quiet", "no_reddit", "no_hn", "no_rss", "stats", "check_feeds", "list_sources"}
-_INT_FIELDS = {"limit", "timeout", "workers"}
-_FLOAT_FIELDS = {"dedupe_threshold"}
+_BOOL_FIELDS = {"verbose", "quiet", "no_reddit", "no_hn", "no_rss", "no_github",
+                "no_mastodon", "no_wikipedia", "no_lobsters", "no_devto", "no_arxiv",
+                "no_techmeme", "no_producthunt", "no_bluesky", "no_tildes", "no_lemmy",
+                "no_slashdot", "no_stackoverflow", "no_pinboard", "no_indiehackers",
+                "no_echojs", "no_hashnode", "no_freecodecamp",
+                "stats", "check_feeds", "list_sources", "cache", "history",
+                "digest", "fresh", "no_dedup", "dedupe_stats", "urls_only",
+                "titles_only", "domains", "trending", "no_color", "show_read_time",
+                "show_discussions", "json_compact", "json_pretty"}
+_INT_FIELDS = {"limit", "timeout", "workers", "retries", "cache_ttl", "sample",
+               "min_read", "max_read"}
+_FLOAT_FIELDS = {"dedupe_threshold", "min_relevance", "min_quality"}
 _STR_FIELDS = {"format", "category", "since", "output", "source", "search", "sort",
-               "exclude_source", "exclude_category", "feeds", "export_opml", "import_opml"}
+               "exclude_source", "exclude_category", "exclude_domain", "feeds",
+               "export_opml", "import_opml", "profile", "interests", "tag", "lang",
+               "exclude_lang", "tone", "watch", "group_by"}
 
 
 def load_config() -> Dict[str, Any]:

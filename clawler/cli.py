@@ -241,6 +241,12 @@ def main(argv=None):
                         help="Minimum estimated reading time in minutes (inclusive)")
     parser.add_argument("--max-read", type=int, default=None, dest="max_read", metavar="MAX",
                         help="Maximum estimated reading time in minutes (inclusive)")
+    parser.add_argument("--lang", type=str, default=None,
+                        help="Filter articles by language (comma-separated ISO 639-1 codes, e.g. 'en,es')")
+    parser.add_argument("--exclude-lang", type=str, default=None, dest="exclude_lang",
+                        help="Exclude articles in these languages (comma-separated, e.g. 'zh,ja')")
+    parser.add_argument("--json-pretty", action="store_true", dest="json_pretty",
+                        help="Pretty-print JSON output with indentation (use with --format json)")
 
     args = parser.parse_args(argv)
 
@@ -813,6 +819,11 @@ def main(argv=None):
         from clawler.readtime import filter_by_read_time
         articles = filter_by_read_time(articles, min_minutes=args.min_read, max_minutes=args.max_read)
 
+    # Language filtering (--lang, --exclude-lang)
+    if args.lang or args.exclude_lang:
+        from clawler.language import filter_by_language
+        articles = filter_by_language(articles, lang=args.lang, exclude_lang=args.exclude_lang)
+
     # Filter by cross-source coverage
     if args.min_sources > 0:
         articles = [a for a in articles if a.source_count >= args.min_sources]
@@ -948,7 +959,7 @@ def main(argv=None):
             "html": HTMLFormatter,
         }
         if args.format == "json":
-            indent = None if args.json_compact else 2
+            indent = None if args.json_compact else (4 if args.json_pretty else 2)
             output = JSONFormatter(indent=indent).format(articles)
         else:
             output = formatters[args.format]().format(articles)

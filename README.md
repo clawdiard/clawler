@@ -58,6 +58,9 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 - 📅 **ISO date support** — `--since 2026-02-14` or `--since 2026-02-14T10:00:00Z` for absolute time filters
 - 🔗 **Smarter URL dedup** — normalizes `www.` prefixes and trailing slashes for better duplicate detection
+- 🌐 **Language detection & filtering** — `--lang en,es` to keep specific languages; `--exclude-lang zh` to exclude; lightweight heuristic detection (12 languages, no dependencies)
+- 🎨 **`--json-pretty`** — pretty-printed JSON output with 4-space indentation
+- ⚙️ **Full config file support** — all 21 source toggles, `lang`, `exclude_lang`, `exclude_domain`, `min_relevance`, `min_quality`, `cache_ttl`, `retries`, `sample` now configurable via `~/.clawler.yaml` or `CLAWLER_*` env vars
 - 🔁 **Source-level retry** — failed sources are retried with exponential backoff (`--source-retries N`, `--no-retry`)
 - 📅 **Named time periods** — `--since yesterday`, `--since last-week`, `--since last-month`, `--since last-year`
 - 📤 **Export health as JSON** — `--export-health FILE` for machine-readable source health data
