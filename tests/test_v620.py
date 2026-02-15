@@ -53,8 +53,7 @@ class TestPinboardSource:
 
     def test_crawl_parses_bookmarks(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response()
+        src.fetch_url = MagicMock(return_value=_mock_response().text)
         articles = src.crawl()
         # Should find 3 valid articles (empty URL and no-link are skipped)
         assert len(articles) == 3
@@ -64,44 +63,38 @@ class TestPinboardSource:
 
     def test_categorize_tech_default(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response()
+        src.fetch_url = MagicMock(return_value=_mock_response().text)
         articles = src.crawl()
         assert articles[0].category == "tech"  # ai/llm/programming → tech
 
     def test_categorize_science(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response()
+        src.fetch_url = MagicMock(return_value=_mock_response().text)
         articles = src.crawl()
         assert articles[1].category == "science"  # science/climate → science
 
     def test_categorize_security(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response()
+        src.fetch_url = MagicMock(return_value=_mock_response().text)
         articles = src.crawl()
         assert articles[2].category == "security"  # security/encryption → security
 
     def test_description_includes_tags_and_count(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response()
+        src.fetch_url = MagicMock(return_value=_mock_response().text)
         articles = src.crawl()
         assert "ai" in articles[0].summary
         assert "142 saves" in articles[0].summary
 
-    def test_crawl_failure_raises(self):
+    def test_crawl_failure_returns_empty(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response(status=503)
-        with pytest.raises(Exception):
-            src.crawl()
+        src.fetch_url = MagicMock(return_value="")
+        result = src.crawl()
+        assert result == []
 
     def test_empty_page_returns_empty(self):
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response(html="<html><body></body></html>")
+        src.fetch_url = MagicMock(return_value=_mock_response(html="<html><body></body></html>").text)
         articles = src.crawl()
         assert articles == []
 
@@ -124,8 +117,7 @@ class TestPinboardSource:
             bookmarks += f'<div class="bookmark"><a class="bookmark_title" href="https://example.com/{i}">Article {i}</a></div>'
         html = f'<html><body><div id="bookmarks">{bookmarks}</div></body></html>'
         src = PinboardSource()
-        src.session = MagicMock()
-        src.session.get.return_value = _mock_response(html=html)
+        src.fetch_url = MagicMock(return_value=_mock_response(html=html).text)
         articles = src.crawl()
         assert len(articles) == 30
 

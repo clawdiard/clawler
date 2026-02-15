@@ -69,6 +69,9 @@ Clawler aggregates news from **98+ individual sources across 18 source types** u
 - 📄 **`--json-lines` alias** — discoverable alias for `-f jsonl`
 - 📚 **freeCodeCamp source** — developer tutorials and articles from freeCodeCamp.org (`--no-freecodecamp` to skip)
 - 📰 **Digest mode** — `--digest` shorthand for `--since 24h --group-by category --sort quality --format markdown`
+- 🎭 **Tone filtering** — `--tone positive/negative/neutral` for sentiment-based filtering
+- 🚫 **No-doom mode** — `--no-doom` to exclude strongly negative/doom articles
+- 🎯 **Profile generator** — `--profile-init` creates a starter interest profile YAML
 
 
 ## Quick Start

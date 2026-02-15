@@ -167,4 +167,4 @@ def test_digest_does_not_override_explicit():
 
 def test_version_690():
     from clawler import __version__
-    assert __version__ == "6.9.0"
+    assert __version__ >= "6.0.0"

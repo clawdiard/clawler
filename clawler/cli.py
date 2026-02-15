@@ -229,6 +229,12 @@ def main(argv=None):
                              "wikipedia,lobsters,devto,arxiv,techmeme,producthunt,bluesky)")
     parser.add_argument("--json-lines", action="store_true", dest="json_lines",
                         help="Alias for -f jsonl (JSON Lines output)")
+    parser.add_argument("--tone", choices=["positive", "negative", "neutral"], default=None,
+                        help="Filter articles by tone (positive, negative, neutral)")
+    parser.add_argument("--no-doom", action="store_true", dest="no_doom",
+                        help="Exclude strongly negative/doom articles")
+    parser.add_argument("--profile-init", action="store_true", dest="profile_init",
+                        help="Generate a starter interest profile YAML and exit")
 
     args = parser.parse_args(argv)
 
@@ -302,6 +308,36 @@ def main(argv=None):
         path = generate_starter_config()
         print(f"✅ Generated starter config at {path}")
         print("   Edit it to customize your default settings.")
+        return
+
+    # Profile init
+    if args.profile_init:
+        from pathlib import Path
+        profile_path = Path.home() / ".clawler-profile.yaml"
+        if profile_path.exists():
+            print(f"⚠️  Profile already exists at {profile_path}")
+            return
+        profile_path.write_text(
+            "# Clawler Interest Profile\n"
+            "# Customize keywords and weights to personalize your news feed.\n"
+            "# Higher weight = stronger boost. Use with: clawler --profile ~/.clawler-profile.yaml\n"
+            "\n"
+            "name: My Profile\n"
+            "interests:\n"
+            "  - keywords: [AI, machine learning, LLM, GPT, neural network]\n"
+            "    weight: 2.0\n"
+            "  - keywords: [python, rust, typescript, javascript]\n"
+            "    weight: 1.5\n"
+            "  - keywords: [open source, linux, containers, kubernetes]\n"
+            "    weight: 1.0\n"
+            "  - keywords: [startup, indie hacker, SaaS]\n"
+            "    weight: 0.8\n"
+            "  - keywords: [security, privacy, encryption]\n"
+            "    weight: 1.0\n",
+            encoding="utf-8",
+        )
+        print(f"✅ Generated starter profile at {profile_path}")
+        print("   Edit it to match your interests, then use: clawler --profile ~/.clawler-profile.yaml")
         return
 
     # Source health report
@@ -760,6 +796,11 @@ def main(argv=None):
     # Filter by quality score
     if args.min_quality > 0:
         articles = [a for a in articles if a.quality_score >= args.min_quality]
+
+    # Tone filtering (--tone, --no-doom)
+    if args.tone or args.no_doom:
+        from clawler.sentiment import filter_by_tone
+        articles = filter_by_tone(articles, tone=args.tone, no_doom=args.no_doom)
 
     # Filter by cross-source coverage
     if args.min_sources > 0:

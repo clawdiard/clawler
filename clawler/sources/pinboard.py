@@ -20,13 +20,10 @@ class PinboardSource(BaseSource):
     def crawl(self) -> List[Article]:
         articles = []
         try:
-            resp = self.session.get(
-                PINBOARD_POPULAR_URL,
-                headers=HEADERS,
-                timeout=self.timeout,
-            )
-            resp.raise_for_status()
-            soup = BeautifulSoup(resp.text, "html.parser")
+            html = self.fetch_url(PINBOARD_POPULAR_URL)
+            if not html:
+                return []
+            soup = BeautifulSoup(html, "html.parser")
 
             # Pinboard popular page has bookmark entries with class "bookmark"
             bookmarks = soup.select(".bookmark")

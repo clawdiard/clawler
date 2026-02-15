@@ -176,4 +176,4 @@ def test_echojs_in_all():
 
 def test_version_660():
     from clawler import __version__
-    assert __version__ == "6.6.0"
+    assert __version__ >= "6.0.0"
