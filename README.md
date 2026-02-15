@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **100+ individual sources across 22 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **130+ individual sources across 26 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **100+ sources across 22 source types** — 54 RSS feeds, Hacker News API, Reddit (5 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog
+- 📡 **130+ sources across 26 source types** — 54 RSS feeds, Hacker News API, Reddit (21 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog, Hacker Noon, YouTube (22 channels), Medium (20 tags + 10 publications)
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage

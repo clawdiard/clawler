@@ -77,6 +77,7 @@ def main(argv=None):
     parser.add_argument("--no-changelog", action="store_true", help="Skip Changelog source")
     parser.add_argument("--no-hackernoon", action="store_true", help="Skip Hacker Noon source")
     parser.add_argument("--no-youtube", action="store_true", help="Skip YouTube source")
+    parser.add_argument("--no-medium", action="store_true", help="Skip Medium source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -271,7 +272,7 @@ def main(argv=None):
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
                          "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky",
                          "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
-                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube"}
+                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube", "medium"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -408,6 +409,7 @@ def main(argv=None):
             ("Indie Hackers", "scrape", "indiehackers"),
             ("Hacker Noon", "rss", "hackernoon"),
             ("YouTube", "rss", "youtube"),
+            ("Medium", "rss", "medium"),
         ]
         rss = RSSSource()
         print("📡 Configured Sources:\n")
@@ -581,6 +583,8 @@ def main(argv=None):
             print("  🦋 Bluesky (trending shared links)")
         if not getattr(args, 'no_youtube', False):
             print("  📺 YouTube (22 curated channels)")
+        if not getattr(args, 'no_medium', False):
+            print("  📝 Medium (20 tags + 10 publications)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -659,7 +663,7 @@ def main(argv=None):
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
-        ChangelogSource, HackerNoonSource, YouTubeSource)
+        ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -686,6 +690,7 @@ def main(argv=None):
         ("changelog", ChangelogSource),
         ("hackernoon", HackerNoonSource),
         ("youtube", YouTubeSource),
+        ("medium", MediumSource),
     ]
 
     sources = []
