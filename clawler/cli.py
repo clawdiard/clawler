@@ -78,6 +78,7 @@ def main(argv=None):
     parser.add_argument("--no-hackernoon", action="store_true", help="Skip Hacker Noon source")
     parser.add_argument("--no-youtube", action="store_true", help="Skip YouTube source")
     parser.add_argument("--no-medium", action="store_true", help="Skip Medium source")
+    parser.add_argument("--no-substack", action="store_true", help="Skip Substack source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -585,6 +586,8 @@ def main(argv=None):
             print("  📺 YouTube (22 curated channels)")
         if not getattr(args, 'no_medium', False):
             print("  📝 Medium (20 tags + 10 publications)")
+        if not getattr(args, 'no_substack', False):
+            print("  📰 Substack (22 curated newsletters)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -663,7 +666,7 @@ def main(argv=None):
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
-        ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource)
+        ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -691,6 +694,7 @@ def main(argv=None):
         ("hackernoon", HackerNoonSource),
         ("youtube", YouTubeSource),
         ("medium", MediumSource),
+        ("substack", SubstackSource),
     ]
 
     sources = []

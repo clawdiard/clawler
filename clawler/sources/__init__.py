@@ -24,5 +24,6 @@ from .changelog import ChangelogSource
 from .hackernoon import HackerNoonSource
 from .youtube import YouTubeSource
 from .medium import MediumSource
+from .substack import SubstackSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource"]
