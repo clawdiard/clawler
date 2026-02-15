@@ -69,6 +69,7 @@ def main(argv=None):
     parser.add_argument("--no-lemmy", action="store_true", help="Skip Lemmy source")
     parser.add_argument("--no-slashdot", action="store_true", help="Skip Slashdot source")
     parser.add_argument("--no-stackoverflow", action="store_true", help="Skip Stack Overflow source")
+    parser.add_argument("--no-pinboard", action="store_true", help="Skip Pinboard Popular source")
     parser.add_argument("--fresh", action="store_true",
                         help="Shorthand for --since 1h (show only articles from the last hour)")
     parser.add_argument("--tag", type=str, default=None,
@@ -560,7 +561,7 @@ def main(argv=None):
         GitHubTrendingSource, MastodonSource, LobstersSource,
         WikipediaCurrentEventsSource, DevToSource, ArXivSource,
         TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
-        LemmySource, SlashdotSource, StackOverflowSource)
+        LemmySource, SlashdotSource, StackOverflowSource, PinboardSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -579,6 +580,7 @@ def main(argv=None):
         ("lemmy", LemmySource),
         ("slashdot", SlashdotSource),
         ("stackoverflow", StackOverflowSource),
+        ("pinboard", PinboardSource),
     ]
 
     sources = []
