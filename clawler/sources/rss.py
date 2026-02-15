@@ -80,6 +80,36 @@ DEFAULT_FEEDS = [
     {"url": "https://www.anandtech.com/rss/", "source": "AnandTech", "category": "tech"},
     {"url": "https://this-week-in-rust.org/atom.xml", "source": "This Week in Rust", "category": "tech"},
     {"url": "https://blog.golang.org/feed.atom", "source": "Go Blog", "category": "tech"},
+    # --- Finance ---
+    {"url": "https://www.marketwatch.com/rss/topstories", "source": "MarketWatch", "category": "finance"},
+    {"url": "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC&region=US&lang=en-US", "source": "Yahoo Finance", "category": "finance"},
+    {"url": "https://www.coindesk.com/arc/outboundfeeds/rss/", "source": "CoinDesk", "category": "finance"},
+    # --- Health ---
+    {"url": "https://www.statnews.com/feed/", "source": "STAT News", "category": "health"},
+    {"url": "https://www.medicalnewstoday.com/newsrss.xml", "source": "Medical News Today", "category": "health"},
+    # --- Sports ---
+    {"url": "https://www.espn.com/espn/rss/news", "source": "ESPN", "category": "sports"},
+    {"url": "https://theathletic.com/rss/news/", "source": "The Athletic", "category": "sports"},
+    # --- Gaming ---
+    {"url": "https://kotaku.com/rss", "source": "Kotaku", "category": "gaming"},
+    {"url": "https://www.polygon.com/rss/index.xml", "source": "Polygon", "category": "gaming"},
+    {"url": "https://www.rockpapershotgun.com/feed", "source": "Rock Paper Shotgun", "category": "gaming"},
+    # --- Design ---
+    {"url": "https://feeds.feedburner.com/SmashingMagazine", "source": "Smashing Magazine", "category": "design"},
+    {"url": "https://alistapart.com/main/feed/", "source": "A List Apart", "category": "design"},
+    # --- Music ---
+    {"url": "https://pitchfork.com/feed/feed-news/rss", "source": "Pitchfork", "category": "music"},
+    {"url": "https://www.stereogum.com/feed/", "source": "Stereogum", "category": "music"},
+    # --- Food ---
+    {"url": "https://www.seriouseats.com/feeds/serious-eats", "source": "Serious Eats", "category": "food"},
+    {"url": "https://www.eater.com/rss/index.xml", "source": "Eater", "category": "food"},
+    # --- Travel ---
+    {"url": "https://www.lonelyplanet.com/news/feed", "source": "Lonely Planet", "category": "travel"},
+    {"url": "https://feeds.feedburner.com/MatadorNetwork", "source": "Matador Network", "category": "travel"},
+    # --- International ---
+    {"url": "https://www.france24.com/en/rss", "source": "France24", "category": "world"},
+    {"url": "https://www3.nhk.or.jp/nhkworld/en/news/feeds/", "source": "NHK World", "category": "world"},
+    {"url": "https://www.scmp.com/rss/91/feed", "source": "South China Morning Post", "category": "world"},
 ]
 
 
