@@ -45,6 +45,7 @@ from clawler.sources import (
     EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
     HackerNoonSource,
     YouTubeSource,
+    MediumSource,
 )
 
 
@@ -87,6 +88,7 @@ def crawl(
     no_changelog: bool = False,
     no_hackernoon: bool = False,
     no_youtube: bool = False,
+    no_medium: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -146,6 +148,7 @@ def crawl(
             "changelog": "no_changelog",
             "hackernoon": "no_hackernoon",
             "youtube": "no_youtube",
+            "medium": "no_medium",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -176,6 +179,7 @@ def crawl(
         no_changelog = _locals.get("no_changelog", no_changelog)
         no_hackernoon = _locals.get("no_hackernoon", no_hackernoon)
         no_youtube = _locals.get("no_youtube", no_youtube)
+        no_medium = _locals.get("no_medium", no_medium)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -202,6 +206,7 @@ def crawl(
         (no_changelog, ChangelogSource),
         (no_hackernoon, HackerNoonSource),
         (no_youtube, YouTubeSource),
+        (no_medium, MediumSource),
     ]
     sources = []
     for disabled, cls in _source_map:
