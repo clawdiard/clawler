@@ -23,9 +23,10 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 12 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
-Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky) are enabled by default.
-Disable any with no_<source>=True.
+All 20 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
+Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode) are enabled
+by default. Disable any with no_<source>=True.
 
 """
 from __future__ import annotations
@@ -39,7 +40,9 @@ from clawler.sources import (
     RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
     MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
     DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
-    BlueskySource, TildesSource,
+    BlueskySource, TildesSource, LemmySource, SlashdotSource,
+    StackOverflowSource, PinboardSource, IndieHackersSource,
+    EchoJSSource, HashnodeSource,
 )
 
 
@@ -71,6 +74,13 @@ def crawl(
     no_producthunt: bool = False,
     no_bluesky: bool = False,
     no_tildes: bool = False,
+    no_lemmy: bool = False,
+    no_slashdot: bool = False,
+    no_stackoverflow: bool = False,
+    no_pinboard: bool = False,
+    no_indiehackers: bool = False,
+    no_echojs: bool = False,
+    no_hashnode: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -119,8 +129,11 @@ def crawl(
             "wikipedia": "no_wikipedia", "lobsters": "no_lobsters",
             "devto": "no_devto", "arxiv": "no_arxiv",
             "techmeme": "no_techmeme", "producthunt": "no_producthunt",
-            "bluesky": "no_bluesky",
-            "tildes": "no_tildes",
+            "bluesky": "no_bluesky", "tildes": "no_tildes",
+            "lemmy": "no_lemmy", "slashdot": "no_slashdot",
+            "stackoverflow": "no_stackoverflow", "pinboard": "no_pinboard",
+            "indiehackers": "no_indiehackers", "echojs": "no_echojs",
+            "hashnode": "no_hashnode",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -140,6 +153,13 @@ def crawl(
         no_producthunt = _locals.get("no_producthunt", no_producthunt)
         no_bluesky = _locals.get("no_bluesky", no_bluesky)
         no_tildes = _locals.get("no_tildes", no_tildes)
+        no_lemmy = _locals.get("no_lemmy", no_lemmy)
+        no_slashdot = _locals.get("no_slashdot", no_slashdot)
+        no_stackoverflow = _locals.get("no_stackoverflow", no_stackoverflow)
+        no_pinboard = _locals.get("no_pinboard", no_pinboard)
+        no_indiehackers = _locals.get("no_indiehackers", no_indiehackers)
+        no_echojs = _locals.get("no_echojs", no_echojs)
+        no_hashnode = _locals.get("no_hashnode", no_hashnode)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -155,6 +175,13 @@ def crawl(
         (no_producthunt, ProductHuntSource),
         (no_bluesky, BlueskySource),
         (no_tildes, TildesSource),
+        (no_lemmy, LemmySource),
+        (no_slashdot, SlashdotSource),
+        (no_stackoverflow, StackOverflowSource),
+        (no_pinboard, PinboardSource),
+        (no_indiehackers, IndieHackersSource),
+        (no_echojs, EchoJSSource),
+        (no_hashnode, HashnodeSource),
     ]
     sources = []
     for disabled, cls in _source_map:

@@ -57,19 +57,23 @@ def test_api_crawl_accepts_min_quality():
 
 
 def test_api_builds_all_sources_by_default():
-    """With no toggles disabled, api should build all 11 sources."""
+    """With no toggles disabled, api should build all 20 sources."""
     from clawler.api import crawl
     from clawler.sources import (
         RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
         MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
         DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
-        BlueskySource, TildesSource,
+        BlueskySource, TildesSource, LemmySource, SlashdotSource,
+        StackOverflowSource, PinboardSource, IndieHackersSource,
+        EchoJSSource, HashnodeSource,
     )
     expected_types = {
         RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
         MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
         DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
-        BlueskySource, TildesSource,
+        BlueskySource, TildesSource, LemmySource, SlashdotSource,
+        StackOverflowSource, PinboardSource, IndieHackersSource,
+        EchoJSSource, HashnodeSource,
     }
     with patch('clawler.api.CrawlEngine') as MockEngine:
         instance = MockEngine.return_value
