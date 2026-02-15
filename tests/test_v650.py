@@ -102,4 +102,4 @@ def test_cache_info_with_files(tmp_path):
 
 def test_version_is_650():
     from clawler import __version__
-    assert __version__ == "6.5.0"
+    assert __version__ == "6.6.0"
