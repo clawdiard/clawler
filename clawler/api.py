@@ -52,6 +52,7 @@ from clawler.sources import (
     AllTopSource,
     ArsTechnicaSource,
     InfoQSource,
+    TheRegisterSource,
 )
 
 
@@ -100,6 +101,7 @@ def crawl(
     no_alltop: bool = False,
     no_arstechnica: bool = False,
     no_infoq: bool = False,
+    no_theregister: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -227,6 +229,7 @@ def crawl(
         (no_alltop, AllTopSource),
         (no_arstechnica, ArsTechnicaSource),
         (no_infoq, InfoQSource),
+        (no_theregister, TheRegisterSource),
     ]
     sources = []
     for disabled, cls in _source_map:
