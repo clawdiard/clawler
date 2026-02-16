@@ -23,11 +23,13 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 26 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 40 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
-Changelog, Hacker Noon, YouTube, Medium, Substack) are enabled by default.
-Disable any with no_<source>=True.
+Changelog, Hacker Noon, YouTube, Medium, Substack, Google News, DZone,
+ScienceDaily, NPR, Ars Technica, AllTop, Wired, The Verge, Reuters,
+Phys.org, Nature, AP News, The Guardian, InfoQ, The Register) are enabled
+by default. Disable any with no_<source>=True.
 
 """
 from __future__ import annotations
@@ -53,6 +55,16 @@ from clawler.sources import (
     ArsTechnicaSource,
     InfoQSource,
     TheRegisterSource,
+    DZoneSource,
+    ScienceDailySource,
+    NPRSource,
+    WiredSource,
+    TheVergeSource,
+    ReutersSource,
+    PhysOrgSource,
+    NatureSource,
+    APNewsSource,
+    GuardianSource,
 )
 
 
@@ -102,6 +114,16 @@ def crawl(
     no_arstechnica: bool = False,
     no_infoq: bool = False,
     no_theregister: bool = False,
+    no_dzone: bool = False,
+    no_sciencedaily: bool = False,
+    no_npr: bool = False,
+    no_wired: bool = False,
+    no_theverge: bool = False,
+    no_reuters: bool = False,
+    no_physorg: bool = False,
+    no_nature: bool = False,
+    no_apnews: bool = False,
+    no_guardian: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -164,6 +186,20 @@ def crawl(
             "medium": "no_medium",
             "substack": "no_substack",
             "googlenews": "no_googlenews",
+            "alltop": "no_alltop",
+            "arstechnica": "no_arstechnica",
+            "infoq": "no_infoq",
+            "theregister": "no_theregister",
+            "dzone": "no_dzone",
+            "sciencedaily": "no_sciencedaily",
+            "npr": "no_npr",
+            "wired": "no_wired",
+            "theverge": "no_theverge",
+            "reuters": "no_reuters",
+            "physorg": "no_physorg",
+            "nature": "no_nature",
+            "apnews": "no_apnews",
+            "guardian": "no_guardian",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -197,6 +233,20 @@ def crawl(
         no_medium = _locals.get("no_medium", no_medium)
         no_substack = _locals.get("no_substack", no_substack)
         no_googlenews = _locals.get("no_googlenews", no_googlenews)
+        no_alltop = _locals.get("no_alltop", no_alltop)
+        no_arstechnica = _locals.get("no_arstechnica", no_arstechnica)
+        no_infoq = _locals.get("no_infoq", no_infoq)
+        no_theregister = _locals.get("no_theregister", no_theregister)
+        no_dzone = _locals.get("no_dzone", no_dzone)
+        no_sciencedaily = _locals.get("no_sciencedaily", no_sciencedaily)
+        no_npr = _locals.get("no_npr", no_npr)
+        no_wired = _locals.get("no_wired", no_wired)
+        no_theverge = _locals.get("no_theverge", no_theverge)
+        no_reuters = _locals.get("no_reuters", no_reuters)
+        no_physorg = _locals.get("no_physorg", no_physorg)
+        no_nature = _locals.get("no_nature", no_nature)
+        no_apnews = _locals.get("no_apnews", no_apnews)
+        no_guardian = _locals.get("no_guardian", no_guardian)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -230,6 +280,16 @@ def crawl(
         (no_arstechnica, ArsTechnicaSource),
         (no_infoq, InfoQSource),
         (no_theregister, TheRegisterSource),
+        (no_dzone, DZoneSource),
+        (no_sciencedaily, ScienceDailySource),
+        (no_npr, NPRSource),
+        (no_wired, WiredSource),
+        (no_theverge, TheVergeSource),
+        (no_reuters, ReutersSource),
+        (no_physorg, PhysOrgSource),
+        (no_nature, NatureSource),
+        (no_apnews, APNewsSource),
+        (no_guardian, GuardianSource),
     ]
     sources = []
     for disabled, cls in _source_map:
