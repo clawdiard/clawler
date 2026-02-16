@@ -168,6 +168,40 @@ DEFAULT_FEEDS = [
     {"url": "https://www.archdaily.com/feed", "source": "ArchDaily", "category": "architecture"},
     # --- History ---
     {"url": "https://www.smithsonianmag.com/rss/history/", "source": "Smithsonian History", "category": "history"},
+    # Expansion 2026-02-16: 20 feeds in underrepresented + new categories
+    # Outdoors & Adventure
+    {"url": "https://www.outsideonline.com/feed/", "source": "Outside Magazine", "category": "outdoors"},
+    {"url": "https://www.adventure-journal.com/feed/", "source": "Adventure Journal", "category": "outdoors"},
+    {"url": "https://gearjunkie.com/feed", "source": "GearJunkie", "category": "outdoors"},
+    # Culture & Society
+    {"url": "https://www.newyorker.com/feed/culture", "source": "The New Yorker Culture", "category": "culture"},
+    {"url": "https://www.theatlantic.com/feed/channel/culture/", "source": "The Atlantic Culture", "category": "culture"},
+    # Parenting & Family
+    {"url": "https://www.fatherly.com/rss", "source": "Fatherly", "category": "family"},
+    # Personal Finance
+    {"url": "https://www.nerdwallet.com/blog/feed/", "source": "NerdWallet", "category": "finance"},
+    {"url": "https://feeds.feedburner.com/MrMoneyMustache", "source": "Mr Money Mustache", "category": "finance"},
+    # Investigative / Longform
+    {"url": "https://theintercept.com/feed/?rss", "source": "The Intercept", "category": "investigative"},
+    {"url": "https://www.propublica.org/feeds/propublica/main", "source": "ProPublica", "category": "investigative"},
+    # Real Estate & Housing
+    {"url": "https://therealdeal.com/feed/", "source": "The Real Deal", "category": "realestate"},
+    # Philosophy & Ideas
+    {"url": "https://aeon.co/feed.rss", "source": "Aeon", "category": "philosophy"},
+    {"url": "https://dailynous.com/feed/", "source": "Daily Nous", "category": "philosophy"},
+    # Fitness & Wellness
+    {"url": "https://www.menshealth.com/rss/all.xml/", "source": "Mens Health", "category": "fitness"},
+    {"url": "https://www.runnersworld.com/rss/all.xml/", "source": "Runners World", "category": "fitness"},
+    # Podcasts & Audio
+    {"url": "https://podnews.net/rss", "source": "Podnews", "category": "media"},
+    # Retail & E-Commerce
+    {"url": "https://www.modernretail.co/feed/", "source": "Modern Retail", "category": "business"},
+    # Aviation & Transport
+    {"url": "https://simpleflying.com/feed/", "source": "Simple Flying", "category": "aviation"},
+    # Comics & Animation
+    {"url": "https://www.cartoonbrew.com/feed", "source": "Cartoon Brew", "category": "animation"},
+    # Skateboarding
+    {"url": "https://www.thrashermagazine.com/rss/", "source": "Thrasher", "category": "sports"},
 ]
 
 
