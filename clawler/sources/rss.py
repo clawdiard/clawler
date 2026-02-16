@@ -367,6 +367,44 @@ DEFAULT_FEEDS = [
     {"url": "https://www.gardeningknowhow.com/feed", "source": "Gardening Know How", "category": "gardening"},
     {"url": "https://savvygardening.com/feed/", "source": "Savvy Gardening", "category": "gardening"},
     {"url": "https://awaytogarden.com/feed/", "source": "A Way to Garden", "category": "gardening"},
+    # Parenting (expanding 3→5)
+    {"url": "https://www.parents.com/syndication/rss/", "source": "Parents", "category": "parenting"},
+    {"url": "https://www.fatherly.com/rss", "source": "Fatherly Parenting", "category": "parenting"},
+    # Gardening (expanding 3→5)
+    {"url": "https://www.finegardening.com/feed", "source": "Fine Gardening", "category": "gardening"},
+    {"url": "https://empressofdirt.net/feed/", "source": "Empress of Dirt", "category": "gardening"},
+    # Investigative (expanding 4→5)
+    {"url": "https://www.revealnews.org/feed/", "source": "Reveal", "category": "investigative"},
+    # Culture (expanding 4→5)
+    {"url": "https://hyperallergic.com/feed/", "source": "Hyperallergic Culture", "category": "culture"},
+    # Music (expanding 4→5)
+    {"url": "https://www.musicradar.com/rss", "source": "MusicRadar", "category": "music"},
+    # Food (expanding 4→5)
+    {"url": "https://www.bonappetit.com/feed/rss", "source": "Bon Appetit Extra", "category": "food"},
+    # Travel (expanding 4→5)
+    {"url": "https://www.cntraveler.com/feed/rss", "source": "Condé Nast Traveler", "category": "travel"},
+    # Education (expanding 4→5)
+    {"url": "https://www.edsurge.com/feeds/articles", "source": "EdSurge Extra", "category": "education"},
+    # Policy (expanding 4→5)
+    {"url": "https://www.brennancenter.org/rss", "source": "Brennan Center", "category": "policy"},
+    # Lifestyle (expanding 4→5)
+    {"url": "https://www.apartmenttherapy.com/main.rss", "source": "Apartment Therapy", "category": "lifestyle"},
+    # Family (expanding 4→5)
+    {"url": "https://www.todaysparent.com/feed/", "source": "Today's Parent Extra", "category": "family"},
+    # Fitness (expanding 4→5)
+    {"url": "https://www.self.com/feed/rss", "source": "Self", "category": "fitness"},
+    # Media (expanding 4→5)
+    {"url": "https://www.cjr.org/feed", "source": "Columbia Journalism Review", "category": "media"},
+    # Linguistics (expanding 4→5)
+    {"url": "https://www.ethnologue.com/feed", "source": "Ethnologue", "category": "linguistics"},
+    # Military & Defense (NEW)
+    {"url": "https://www.defensenews.com/arc/outboundfeeds/rss/", "source": "Defense News", "category": "military"},
+    {"url": "https://www.thedrive.com/the-war-zone/rss", "source": "The War Zone", "category": "military"},
+    {"url": "https://breakingdefense.com/feed/", "source": "Breaking Defense", "category": "military"},
+    # Robotics (NEW)
+    {"url": "https://spectrum.ieee.org/feeds/topic/robotics.rss", "source": "IEEE Robotics", "category": "robotics"},
+    {"url": "https://www.therobotreport.com/feed/", "source": "The Robot Report", "category": "robotics"},
+    {"url": "https://robohub.org/feed/", "source": "Robohub", "category": "robotics"},
 ]
 
 
