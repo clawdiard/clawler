@@ -2,7 +2,7 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **200+ individual sources across 35 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **210+ individual sources across 37 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 

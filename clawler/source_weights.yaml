@@ -187,3 +187,20 @@ sources:
   Reuters (Health): 0.87
   Reuters (Sports): 0.82
   Reuters (Lifestyle): 0.78
+
+  # Phys.org (science/tech news aggregator — solid coverage of research news)
+  Phys.org (breaking): 0.78
+  Phys.org (physics): 0.80
+  Phys.org (nanotech): 0.77
+  Phys.org (technology): 0.76
+  Phys.org (space): 0.79
+  Phys.org (earth): 0.78
+  Phys.org (biology): 0.78
+  Phys.org (chemistry): 0.77
+
+  # Nature (world's most-cited interdisciplinary science journal)
+  Nature (nature): 0.95
+  Nature (biotech): 0.92
+  Nature (machine-intelligence): 0.93
+  Nature (climate): 0.91
+  Nature (nanotech): 0.90

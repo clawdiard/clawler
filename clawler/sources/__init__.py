@@ -34,5 +34,7 @@ from .alltop import AllTopSource
 from .wired import WiredSource
 from .theverge import TheVergeSource
 from .reuters import ReutersSource
+from .physorg import PhysOrgSource
+from .nature import NatureSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource", "ArsTechnicaSource", "AllTopSource", "WiredSource", "TheVergeSource", "ReutersSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource", "ArsTechnicaSource", "AllTopSource", "WiredSource", "TheVergeSource", "ReutersSource", "PhysOrgSource", "NatureSource"]

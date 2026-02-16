@@ -88,6 +88,8 @@ def main(argv=None):
     parser.add_argument("--no-wired", action="store_true", help="Skip Wired source")
     parser.add_argument("--no-theverge", action="store_true", help="Skip The Verge source")
     parser.add_argument("--no-reuters", action="store_true", help="Skip Reuters source")
+    parser.add_argument("--no-physorg", action="store_true", help="Skip Phys.org source")
+    parser.add_argument("--no-nature", action="store_true", help="Skip Nature source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -640,6 +642,10 @@ def main(argv=None):
             print("  📱 The Verge (tech, science, culture)")
         if not getattr(args, 'no_reuters', False):
             print("  🌍 Reuters (8 section feeds — business, tech, politics, environment, health, sports, lifestyle, world)")
+        if not getattr(args, 'no_physorg', False):
+            print("  🔬 Phys.org (8 section feeds — breaking, physics, nanotech, technology, space, earth, biology, chemistry)")
+        if not getattr(args, 'no_nature', False):
+            print("  🧬 Nature (5 journal feeds — nature, biotech, machine-intelligence, climate, nanotech)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -720,7 +726,8 @@ def main(argv=None):
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
         ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
         GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource,
-        AllTopSource, WiredSource, TheVergeSource, ReutersSource)
+        AllTopSource, WiredSource, TheVergeSource, ReutersSource,
+        PhysOrgSource, NatureSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -758,6 +765,8 @@ def main(argv=None):
         ("wired", WiredSource),
         ("theverge", TheVergeSource),
         ("reuters", ReutersSource),
+        ("physorg", PhysOrgSource),
+        ("nature", NatureSource),
     ]
 
     sources = []
