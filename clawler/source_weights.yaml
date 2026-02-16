@@ -204,3 +204,23 @@ sources:
   Nature (machine-intelligence): 0.93
   Nature (climate): 0.91
   Nature (nanotech): 0.90
+  AP News (Top News): 0.95
+  AP News (World): 0.94
+  AP News (US News): 0.93
+  AP News (Politics): 0.92
+  AP News (Business): 0.90
+  AP News (Technology): 0.88
+  AP News (Science): 0.90
+  AP News (Health): 0.89
+  AP News (Sports): 0.85
+  AP News (Entertainment): 0.82
+  The Guardian (World): 0.90
+  The Guardian (UK News): 0.89
+  The Guardian (US News): 0.88
+  The Guardian (Technology): 0.87
+  The Guardian (Science): 0.89
+  The Guardian (Business): 0.87
+  The Guardian (Environment): 0.90
+  The Guardian (Culture): 0.85
+  The Guardian (Opinion): 0.80
+  The Guardian (Sport): 0.82

@@ -2,11 +2,11 @@
 
 **Advanced news crawling service** — no API keys required.
 
-Clawler aggregates news from **210+ individual sources across 37 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
+Clawler aggregates news from **230+ individual sources across 39 source types** using RSS feeds, APIs, and web scraping. It deduplicates stories with quality-aware selection and ranks them by a blend of recency and source quality.
 
 ## Features
 
-- 📡 **200+ sources across 35 source types** — 54 RSS feeds, Hacker News API, Reddit (21 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog, Hacker Noon, YouTube (22 channels), Medium (20 tags + 10 publications), Google News (5 topics + 8 searches), DZone (12 topic feeds), ScienceDaily (7 section feeds), NPR (10 section feeds), Ars Technica (10 section feeds), AllTop (33 topic categories), Wired (6 section feeds), The Verge
+- 📡 **200+ sources across 35 source types** — 54 RSS feeds, Hacker News API, Reddit (21 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog, Hacker Noon, YouTube (22 channels), Medium (20 tags + 10 publications), Google News (5 topics + 8 searches), DZone (12 topic feeds), ScienceDaily (7 section feeds), NPR (10 section feeds), Ars Technica (10 section feeds), AllTop (33 topic categories), Wired (6 section feeds), The Verge, AP News (10 section feeds), The Guardian (10 section feeds)
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -58,6 +58,8 @@ Clawler aggregates news from **210+ individual sources across 37 source types** 
 - ⚡ **Fresh mode** — `--fresh` shorthand for `--since 1h`
 - 📅 **ISO date support** — `--since 2026-02-14` or `--since 2026-02-14T10:00:00Z` for absolute time filters
 - 🔗 **Smarter URL dedup** — normalizes `www.` prefixes and trailing slashes for better duplicate detection
+- 📰 **AP News source** — trusted wire service, 10 section feeds (`--no-apnews` to skip)
+- 🏛️ **The Guardian source** — quality UK/world journalism, 10 section feeds (`--no-guardian` to skip)
 - 📓 **Wired source** — premium tech/science/security journalism from 6 section feeds (`--no-wired` to skip)
 - 📱 **The Verge source** — major tech publication with auto-categorization (`--no-theverge` to skip)
 - 🌐 **Language detection & filtering** — `--lang en,es` to keep specific languages; `--exclude-lang zh` to exclude; lightweight heuristic detection (12 languages, no dependencies)
