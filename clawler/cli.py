@@ -82,6 +82,7 @@ def main(argv=None):
     parser.add_argument("--no-googlenews", action="store_true", help="Skip Google News source")
     parser.add_argument("--no-dzone", action="store_true", help="Skip DZone source")
     parser.add_argument("--no-sciencedaily", action="store_true", help="Skip ScienceDaily source")
+    parser.add_argument("--no-npr", action="store_true", help="Skip NPR source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -597,6 +598,8 @@ def main(argv=None):
             print("  💻 DZone (12 topic feeds)")
         if not getattr(args, 'no_sciencedaily', False):
             print("  🔬 ScienceDaily (7 section feeds)")
+        if not getattr(args, 'no_npr', False):
+            print("  📻 NPR (10 section feeds)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -676,7 +679,7 @@ def main(argv=None):
         LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
         ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
-        GoogleNewsSource, DZoneSource, ScienceDailySource)
+        GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -708,6 +711,7 @@ def main(argv=None):
         ("googlenews", GoogleNewsSource),
         ("dzone", DZoneSource),
         ("sciencedaily", ScienceDailySource),
+        ("npr", NPRSource),
     ]
 
     sources = []
