@@ -92,6 +92,7 @@ def main(argv=None):
     parser.add_argument("--no-nature", action="store_true", help="Skip Nature source")
     parser.add_argument("--no-apnews", action="store_true", help="Skip AP News source")
     parser.add_argument("--no-guardian", action="store_true", help="Skip The Guardian source")
+    parser.add_argument("--no-infoq", action="store_true", help="Skip InfoQ source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -290,7 +291,7 @@ def main(argv=None):
                          "substack", "googlenews", "dzone", "sciencedaily", "npr",
                          "changelog", "hackernoon", "arstechnica", "alltop",
                          "wired", "theverge", "reuters", "physorg", "nature",
-                         "apnews", "guardian"}
+                         "apnews", "guardian", "infoq"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -653,6 +654,8 @@ def main(argv=None):
             print("  📰 AP News (10 section feeds — top news, world, US, politics, business, tech, science, health, sports, entertainment)")
         if not getattr(args, 'no_guardian', False):
             print("  🏛️ The Guardian (10 section feeds — world, UK, US, tech, science, business, environment, culture, opinion, sport)")
+        if not getattr(args, 'no_infoq', False):
+            print("  🏗️ InfoQ (7 topic feeds — enterprise software engineering, AI/ML, architecture, cloud, DevOps)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -734,7 +737,7 @@ def main(argv=None):
         ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
         GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource,
         AllTopSource, WiredSource, TheVergeSource, ReutersSource,
-        PhysOrgSource, NatureSource, APNewsSource, GuardianSource)
+        PhysOrgSource, NatureSource, APNewsSource, GuardianSource, InfoQSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -776,6 +779,7 @@ def main(argv=None):
         ("nature", NatureSource),
         ("apnews", APNewsSource),
         ("guardian", GuardianSource),
+        ("infoq", InfoQSource),
     ]
 
     sources = []
