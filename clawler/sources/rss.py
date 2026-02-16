@@ -310,6 +310,37 @@ DEFAULT_FEEDS = [
     # Podcasting & Audio (NEW)
     {"url": "https://podnews.net/rss", "source": "Podnews", "category": "audio"},
     {"url": "https://www.theverge.com/rss/podcasts/index.xml", "source": "Verge Podcasts", "category": "audio"},
+    # Audio (expand 2→5)
+    {"url": "https://www.audiokinetic.com/feed/", "source": "Audiokinetic", "category": "audio"},
+    {"url": "https://www.soundonsound.com/feed/all", "source": "Sound On Sound", "category": "audio"},
+    {"url": "https://audiophilestyle.com/rss/1-audiophile-style/", "source": "Audiophile Style", "category": "audio"},
+    # Automotive (expand 3→5)
+    {"url": "https://www.motortrend.com/feed/", "source": "MotorTrend", "category": "automotive"},
+    {"url": "https://www.caranddriver.com/rss/all.xml/", "source": "Car and Driver", "category": "automotive"},
+    # Real Estate (expand 3→5)
+    {"url": "https://www.inman.com/feed/", "source": "Inman", "category": "realestate"},
+    {"url": "https://www.housingwire.com/feed/", "source": "HousingWire", "category": "realestate"},
+    # Art (expand 3→5)
+    {"url": "https://www.artsy.net/rss/news", "source": "Artsy", "category": "art"},
+    {"url": "https://www.juxtapoz.com/feed/", "source": "Juxtapoz", "category": "art"},
+    # Architecture (expand 3→5)
+    {"url": "https://www.architecturaldigest.com/feed/rss", "source": "Architectural Digest", "category": "architecture"},
+    {"url": "https://www.curbed.com/rss/architecture/index.xml", "source": "Curbed Architecture", "category": "architecture"},
+    # History (expand 3→5)
+    {"url": "https://www.historyextra.com/feed/", "source": "HistoryExtra", "category": "history"},
+    {"url": "https://www.ancient-origins.net/rss", "source": "Ancient Origins", "category": "history"},
+    # Aviation (expand 3→5)
+    {"url": "https://www.flyingmag.com/feed/", "source": "Flying Magazine", "category": "aviation"},
+    {"url": "https://www.aerotime.aero/feed", "source": "AeroTime Hub", "category": "aviation"},
+    # Animation (expand 3→5)
+    {"url": "https://www.animationworld.net/rss.xml", "source": "Animation World Network", "category": "animation"},
+    {"url": "https://motionographer.com/feed/", "source": "Motionographer", "category": "animation"},
+    # Books (expand 3→5)
+    {"url": "https://www.tor.com/feed/", "source": "Tor.com", "category": "books"},
+    {"url": "https://bookriot.com/feed/", "source": "Book Riot", "category": "books"},
+    # Energy (expand 3→5)
+    {"url": "https://www.energymonitor.ai/feed/", "source": "Energy Monitor", "category": "energy"},
+    {"url": "https://reneweconomy.com.au/feed/", "source": "RenewEconomy", "category": "energy"},
 ]
 
 
