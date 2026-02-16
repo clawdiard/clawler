@@ -67,7 +67,8 @@ def test_api_builds_all_sources_by_default():
         StackOverflowSource, PinboardSource, IndieHackersSource,
         EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
         HackerNoonSource, YouTubeSource, MediumSource,
-        SubstackSource, GoogleNewsSource,
+        SubstackSource, GoogleNewsSource, AllTopSource,
+        ArsTechnicaSource,
     )
     expected_types = {
         RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
@@ -77,7 +78,7 @@ def test_api_builds_all_sources_by_default():
         StackOverflowSource, PinboardSource, IndieHackersSource,
         EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
         HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
-        GoogleNewsSource,
+        GoogleNewsSource, AllTopSource, ArsTechnicaSource,
     }
     with patch('clawler.api.CrawlEngine') as MockEngine:
         instance = MockEngine.return_value

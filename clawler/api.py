@@ -49,6 +49,8 @@ from clawler.sources import (
     MediumSource,
     SubstackSource,
     GoogleNewsSource,
+    AllTopSource,
+    ArsTechnicaSource,
 )
 
 
@@ -94,6 +96,8 @@ def crawl(
     no_medium: bool = False,
     no_substack: bool = False,
     no_googlenews: bool = False,
+    no_alltop: bool = False,
+    no_arstechnica: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -218,6 +222,8 @@ def crawl(
         (no_medium, MediumSource),
         (no_substack, SubstackSource),
         (no_googlenews, GoogleNewsSource),
+        (no_alltop, AllTopSource),
+        (no_arstechnica, ArsTechnicaSource),
     ]
     sources = []
     for disabled, cls in _source_map:
