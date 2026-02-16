@@ -145,3 +145,15 @@ sources:
   NPR (Economy): 0.73
   NPR (Education): 0.72
   NPR (Books): 0.71
+
+  # Ars Technica
+  Ars Technica (main): 0.82
+  Ars Technica (science): 0.80
+  Ars Technica (ai): 0.81
+  Ars Technica (security): 0.79
+  Ars Technica (tech-policy): 0.78
+  Ars Technica (gaming): 0.72
+  Ars Technica (gadgets): 0.73
+  Ars Technica (cars): 0.70
+  Ars Technica (apple): 0.74
+  Ars Technica (staff-blogs): 0.68

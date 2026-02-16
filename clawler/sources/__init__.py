@@ -29,5 +29,6 @@ from .googlenews import GoogleNewsSource
 from .dzone import DZoneSource
 from .sciencedaily import ScienceDailySource
 from .npr import NPRSource
+from .arstechnica import ArsTechnicaSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource"]
+__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource", "ArsTechnicaSource"]
