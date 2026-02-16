@@ -202,6 +202,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.cartoonbrew.com/feed", "source": "Cartoon Brew", "category": "animation"},
     # Skateboarding
     {"url": "https://www.thrashermagazine.com/rss/", "source": "Thrasher", "category": "sports"},
+    # Books & Literature
+    {"url": "https://lithub.com/feed/", "source": "Literary Hub", "category": "books"},
+    {"url": "https://www.theguardian.com/books/rss", "source": "The Guardian Books", "category": "books"},
+    {"url": "https://bookmarks.reviews/feed/", "source": "Bookmarks Reviews", "category": "books"},
+    # History (expanding)
+    {"url": "https://www.historytoday.com/feed/rss.xml", "source": "History Today", "category": "history"},
+    {"url": "https://theconversation.com/us/arts/history/articles.atom", "source": "The Conversation History", "category": "history"},
+    # Art (expanding)
+    {"url": "https://hyperallergic.com/feed/", "source": "Hyperallergic", "category": "art"},
+    {"url": "https://www.artnews.com/feed/", "source": "ARTnews", "category": "art"},
+    # Photography (expanding)
+    {"url": "https://www.dpreview.com/feeds/news.xml", "source": "DPReview", "category": "photography"},
+    {"url": "https://fstoppers.com/rss.xml", "source": "Fstoppers", "category": "photography"},
+    # Energy
+    {"url": "https://www.utilitydive.com/feeds/news/", "source": "Utility Dive", "category": "energy"},
+    {"url": "https://cleantechnica.com/feed/", "source": "CleanTechnica", "category": "energy"},
+    {"url": "https://www.greentechmedia.com/feed", "source": "GreenTech Media", "category": "energy"},
+    # Parenting & Family (expanding)
+    {"url": "https://www.fatherly.com/feed", "source": "Fatherly RSS", "category": "family"},
+    {"url": "https://www.parents.com/feed/", "source": "Parents Magazine", "category": "family"},
+    # Media & Journalism (expanding)
+    {"url": "https://www.niemanlab.org/feed/", "source": "Nieman Lab", "category": "media"},
+    {"url": "https://pressgazette.co.uk/feed/", "source": "Press Gazette", "category": "media"},
+    # Lifestyle (expanding)
+    {"url": "https://www.refinery29.com/en-us/feed.xml", "source": "Refinery29", "category": "lifestyle"},
+    {"url": "https://www.vox.com/rss/index.xml", "source": "Vox", "category": "culture"},
+    # Podcasting & Audio
+    {"url": "https://hotpodnews.com/feed/", "source": "Hot Pod News", "category": "media"},
 ]
 
 
