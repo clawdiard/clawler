@@ -341,6 +341,32 @@ DEFAULT_FEEDS = [
     # Energy (expand 3→5)
     {"url": "https://www.energymonitor.ai/feed/", "source": "Energy Monitor", "category": "energy"},
     {"url": "https://reneweconomy.com.au/feed/", "source": "RenewEconomy", "category": "energy"},
+    # Fashion (expand 3→5)
+    {"url": "https://www.whowhatwear.com/rss", "source": "Who What Wear", "category": "fashion"},
+    {"url": "https://www.refinery29.com/fashion/rss.xml", "source": "Refinery29 Fashion", "category": "fashion"},
+    # Maker (expand 3→5)
+    {"url": "https://blog.adafruit.com/feed/", "source": "Adafruit", "category": "maker"},
+    {"url": "https://makezine.com/feed/", "source": "Make Magazine Blog", "category": "maker"},
+    # Pets (expand 3→5)
+    {"url": "https://www.petmd.com/rss.xml", "source": "PetMD", "category": "pets"},
+    {"url": "https://www.catster.com/feed/", "source": "Catster", "category": "pets"},
+    # Weather (expand 3→5)
+    {"url": "https://www.severe-weather.eu/feed/", "source": "Severe Weather Europe", "category": "weather"},
+    {"url": "https://yaleclimateconnections.org/feed/", "source": "Yale Climate Connections", "category": "weather"},
+    # Math (expand 3→5)
+    {"url": "https://www.mathsisfun.com/news/feed/", "source": "Math Is Fun", "category": "math"},
+    {"url": "https://blogs.ams.org/mathgradblog/feed/", "source": "AMS Grad Blog", "category": "math"},
+    # Workplace (expand 3→5)
+    {"url": "https://www.shrm.org/rss/pages/custom-rss-feeds.aspx", "source": "SHRM", "category": "workplace"},
+    {"url": "https://www.ere.net/feed/", "source": "ERE", "category": "workplace"},
+    # Parenting & Childcare (NEW)
+    {"url": "https://www.scarymommy.com/feed", "source": "Scary Mommy", "category": "parenting"},
+    {"url": "https://raisingchildren.net.au/rss", "source": "Raising Children", "category": "parenting"},
+    {"url": "https://www.mother.ly/feed/", "source": "Motherly", "category": "parenting"},
+    # Gardening (NEW)
+    {"url": "https://www.gardeningknowhow.com/feed", "source": "Gardening Know How", "category": "gardening"},
+    {"url": "https://savvygardening.com/feed/", "source": "Savvy Gardening", "category": "gardening"},
+    {"url": "https://awaytogarden.com/feed/", "source": "A Way to Garden", "category": "gardening"},
 ]
 
 
