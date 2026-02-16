@@ -277,7 +277,9 @@ def main(argv=None):
         _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
                          "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky",
                          "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
-                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube", "medium"}
+                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube", "medium",
+                         "substack", "googlenews", "dzone", "sciencedaily", "npr",
+                         "changelog", "hackernoon"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -600,6 +602,28 @@ def main(argv=None):
             print("  🔬 ScienceDaily (7 section feeds)")
         if not getattr(args, 'no_npr', False):
             print("  📻 NPR (10 section feeds)")
+        if not getattr(args, 'no_tildes', False):
+            print("  💬 Tildes (curated discussion)")
+        if not getattr(args, 'no_lemmy', False):
+            print("  🐀 Lemmy (federated link aggregator)")
+        if not getattr(args, 'no_slashdot', False):
+            print("  📟 Slashdot (news for nerds)")
+        if not getattr(args, 'no_stackoverflow', False):
+            print("  📚 Stack Overflow (hot questions)")
+        if not getattr(args, 'no_pinboard', False):
+            print("  📌 Pinboard (popular bookmarks)")
+        if not getattr(args, 'no_indiehackers', False):
+            print("  🛠️  Indie Hackers (founder stories)")
+        if not getattr(args, 'no_echojs', False):
+            print("  ⚡ EchoJS (JavaScript news)")
+        if not getattr(args, 'no_hashnode', False):
+            print("  📝 Hashnode (developer blogs)")
+        if not getattr(args, 'no_freecodecamp', False):
+            print("  🎓 freeCodeCamp (learning articles)")
+        if not getattr(args, 'no_changelog', False):
+            print("  📻 Changelog (open source news)")
+        if not getattr(args, 'no_hackernoon', False):
+            print("  📰 Hacker Noon (tech stories)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
