@@ -166,3 +166,14 @@ sources:
   AllTop/sports: 0.55
   AllTop/news: 0.60
   AllTop/viral: 0.50
+
+  # Wired (premium long-form tech/science journalism)
+  Wired (main): 0.83
+  Wired (science): 0.82
+  Wired (security): 0.81
+  Wired (business): 0.78
+  Wired (culture): 0.76
+  Wired (gear): 0.74
+
+  # The Verge (major tech publication)
+  The Verge: 0.80

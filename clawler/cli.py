@@ -85,6 +85,8 @@ def main(argv=None):
     parser.add_argument("--no-npr", action="store_true", help="Skip NPR source")
     parser.add_argument("--no-arstechnica", action="store_true", help="Skip Ars Technica source")
     parser.add_argument("--no-alltop", action="store_true", help="Skip AllTop source")
+    parser.add_argument("--no-wired", action="store_true", help="Skip Wired source")
+    parser.add_argument("--no-theverge", action="store_true", help="Skip The Verge source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -281,7 +283,8 @@ def main(argv=None):
                          "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
                          "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube", "medium",
                          "substack", "googlenews", "dzone", "sciencedaily", "npr",
-                         "changelog", "hackernoon", "arstechnica", "alltop"}
+                         "changelog", "hackernoon", "arstechnica", "alltop",
+                         "wired", "theverge"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
@@ -630,6 +633,10 @@ def main(argv=None):
             print("  🔬 Ars Technica (4 section feeds)")
         if not getattr(args, 'no_alltop', False):
             print("  🌐 AllTop (aggregated headlines from 33 topic categories)")
+        if not getattr(args, 'no_wired', False):
+            print("  📓 Wired (3 section feeds — main, science, security)")
+        if not getattr(args, 'no_theverge', False):
+            print("  📱 The Verge (tech, science, culture)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -710,7 +717,7 @@ def main(argv=None):
         IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
         ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
         GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource,
-        AllTopSource)
+        AllTopSource, WiredSource, TheVergeSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -745,6 +752,8 @@ def main(argv=None):
         ("npr", NPRSource),
         ("arstechnica", ArsTechnicaSource),
         ("alltop", AllTopSource),
+        ("wired", WiredSource),
+        ("theverge", TheVergeSource),
     ]
 
     sources = []
