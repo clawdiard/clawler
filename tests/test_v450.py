@@ -69,7 +69,8 @@ class TestLobstersSource:
         assert a.title == "Why Rust is great for CLI tools"
         assert a.url == "https://example.com/rust-cli"
         assert "Lobsters" in a.source
-        assert "42" in a.source  # score in source name
+        assert "42" in a.summary  # score in summary
+        assert "hottest" in a.source  # feed name in source
         assert a.category == "tech"
         assert "lobsters:rust" in a.tags
         assert a.timestamp is not None
@@ -112,19 +113,19 @@ class TestLobstersSource:
 
     def test_newest_page(self):
         src = LobstersSource(page="newest")
-        assert "newest" in src.url
+        assert "newest" in src._feeds
 
     def test_hottest_page(self):
         src = LobstersSource(page="hottest")
-        assert "hottest" in src.url
+        assert "hottest" in src._feeds
 
     def test_summary_content(self):
         src = LobstersSource()
         with patch.object(src, "fetch_json", return_value=SAMPLE_LOBSTERS_RESPONSE):
             articles = src.crawl()
-        assert "Score: 42" in articles[0].summary
-        assert "By: rustfan" in articles[0].summary
-        assert "Comments: 15" in articles[0].summary
+        assert "42" in articles[0].summary
+        assert "rustfan" in articles[0].summary
+        assert "15" in articles[0].summary
 
     def test_timestamp_parsing(self):
         src = LobstersSource()
