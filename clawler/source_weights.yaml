@@ -177,3 +177,13 @@ sources:
 
   # The Verge (major tech publication)
   The Verge: 0.80
+
+  # Reuters (premier global wire service — highest editorial standards)
+  Reuters (World): 0.91
+  Reuters (Business): 0.90
+  Reuters (Technology): 0.88
+  Reuters (Politics): 0.89
+  Reuters (Environment): 0.87
+  Reuters (Health): 0.87
+  Reuters (Sports): 0.82
+  Reuters (Lifestyle): 0.78
