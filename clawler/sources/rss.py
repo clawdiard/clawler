@@ -257,6 +257,59 @@ DEFAULT_FEEDS = [
     # Pets & Animals (new category)
     {"url": "https://www.akc.org/feed/", "source": "AKC", "category": "pets"},
     {"url": "https://www.thedodo.com/rss", "source": "The Dodo", "category": "pets"},
+    {"url": "https://www.catster.com/feed/", "source": "Catster", "category": "pets"},
+    # Animation & VFX (expanding)
+    {"url": "https://www.awn.com/rss.xml", "source": "Animation World Network", "category": "animation"},
+    {"url": "https://animationmagazine.net/feed/", "source": "Animation Magazine", "category": "animation"},
+    # Policy & Governance (expanding)
+    {"url": "https://www.brookings.edu/feed/", "source": "Brookings Institution", "category": "policy"},
+    {"url": "https://www.cfr.org/rss", "source": "Council on Foreign Relations", "category": "policy"},
+    # Real Estate (expanding)
+    {"url": "https://www.bisnow.com/feed", "source": "Bisnow", "category": "realestate"},
+    # Lifestyle (expanding)
+    {"url": "https://www.apartmenttherapy.com/feed.xml", "source": "Apartment Therapy", "category": "lifestyle"},
+    {"url": "https://www.manrepeller.com/feed", "source": "Man Repeller", "category": "lifestyle"},
+    # Philosophy (expanding)
+    {"url": "https://blog.apaonline.org/feed/", "source": "APA Blog", "category": "philosophy"},
+    # Weather & Meteorology (new category)
+    {"url": "https://www.severe-weather.eu/feed/", "source": "Severe Weather Europe", "category": "weather"},
+    {"url": "https://yaleclimateconnections.org/feed/", "source": "Yale Climate Connections", "category": "weather"},
+    {"url": "https://www.washingtonpost.com/blogs/capital-weather-gang/feed/", "source": "Capital Weather Gang", "category": "weather"},
+    # Linguistics & Language (new category)
+    {"url": "https://languagelog.ldc.upenn.edu/nll/?feed=rss2", "source": "Language Log", "category": "linguistics"},
+    {"url": "https://blog.duolingo.com/feed/", "source": "Duolingo Blog", "category": "linguistics"},
+    # Cybersecurity (expanding security)
+    {"url": "https://www.darkreading.com/rss.xml", "source": "Dark Reading", "category": "security"},
+    {"url": "https://feeds.feedburner.com/TheHackersNews", "source": "The Hacker News", "category": "security"},
+    # Gaming (expanding)
+    {"url": "https://www.gamesindustry.biz/feed", "source": "GamesIndustry.biz", "category": "gaming"},
+    {"url": "https://www.pcgamer.com/rss/", "source": "PC Gamer", "category": "gaming"},
+    # Linguistics (expanding 2→4)
+    {"url": "https://languagelog.ldc.upenn.edu/nll/?feed=rss2", "source": "Language Log", "category": "linguistics"},
+    {"url": "https://blog.oup.com/category/languages-linguistics/feed/", "source": "OUP Linguistics", "category": "linguistics"},
+    # Environment (expanding 3→5)
+    {"url": "https://www.treehugger.com/feeds/all", "source": "Treehugger", "category": "environment"},
+    {"url": "https://e360.yale.edu/feed", "source": "Yale E360", "category": "environment"},
+    # Photography (expanding 3→5)
+    {"url": "https://www.thephoblographer.com/feed/", "source": "The Phoblographer", "category": "photography"},
+    {"url": "https://www.imaging-resource.com/news/feed", "source": "Imaging Resource", "category": "photography"},
+    # Outdoors (expanding 3→5)
+    {"url": "https://www.backpacker.com/feed/", "source": "Backpacker", "category": "outdoors"},
+    {"url": "https://www.trailrunnermag.com/feed/", "source": "Trail Runner", "category": "outdoors"},
+    # Philosophy (expanding 3→5)
+    {"url": "https://dailystoic.com/feed/", "source": "Daily Stoic", "category": "philosophy"},
+    {"url": "https://philosophynow.org/rss", "source": "Philosophy Now", "category": "philosophy"},
+    # Math & Statistics (NEW)
+    {"url": "https://www.quantamagazine.org/feed/", "source": "Quanta Magazine", "category": "math"},
+    {"url": "https://mathblog.com/feed/", "source": "Math Blog", "category": "math"},
+    {"url": "https://www.johndcook.com/blog/feed/", "source": "John D. Cook", "category": "math"},
+    # Labor & Workplace (NEW)
+    {"url": "https://www.worklife.news/feed/", "source": "WorkLife", "category": "workplace"},
+    {"url": "https://www.hrdive.com/feeds/news/", "source": "HR Dive", "category": "workplace"},
+    {"url": "https://www.personneltoday.com/feed/", "source": "Personnel Today", "category": "workplace"},
+    # Podcasting & Audio (NEW)
+    {"url": "https://podnews.net/rss", "source": "Podnews", "category": "audio"},
+    {"url": "https://www.theverge.com/rss/podcasts/index.xml", "source": "Verge Podcasts", "category": "audio"},
 ]
 
 
