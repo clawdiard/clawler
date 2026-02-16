@@ -230,6 +230,33 @@ DEFAULT_FEEDS = [
     {"url": "https://www.vox.com/rss/index.xml", "source": "Vox", "category": "culture"},
     # Podcasting & Audio
     {"url": "https://hotpodnews.com/feed/", "source": "Hot Pod News", "category": "media"},
+    # Fashion
+    {"url": "https://www.businessoffashion.com/feed", "source": "Business of Fashion", "category": "fashion"},
+    {"url": "https://fashionista.com/.rss/full/", "source": "Fashionista", "category": "fashion"},
+    {"url": "https://www.highsnobiety.com/feed/", "source": "Highsnobiety", "category": "fashion"},
+    # Parenting & Education (expanding)
+    {"url": "https://www.teachertoolkit.co.uk/feed/", "source": "TeacherToolkit", "category": "education"},
+    {"url": "https://www.insidehighered.com/rss/news", "source": "Inside Higher Ed", "category": "education"},
+    # Travel (expanding)
+    {"url": "https://www.atlasobscura.com/feeds/latest", "source": "Atlas Obscura", "category": "travel"},
+    {"url": "https://www.afar.com/feed", "source": "AFAR", "category": "travel"},
+    # Fitness (expanding)
+    {"url": "https://www.womenshealthmag.com/rss/all.xml/", "source": "Women's Health", "category": "fitness"},
+    {"url": "https://breakingmuscle.com/feed/", "source": "Breaking Muscle", "category": "fitness"},
+    # Aviation (expanding)
+    {"url": "https://thepointsguy.com/feed/", "source": "The Points Guy", "category": "aviation"},
+    {"url": "https://www.avweb.com/feed/", "source": "AVweb", "category": "aviation"},
+    # Automotive (expanding)
+    {"url": "https://www.thedrive.com/feed", "source": "The Drive", "category": "automotive"},
+    # Architecture (expanding)
+    {"url": "https://www.designboom.com/feed/", "source": "Designboom", "category": "architecture"},
+    # DIY & Maker (new category)
+    {"url": "https://makezine.com/feed/", "source": "Make Magazine", "category": "maker"},
+    {"url": "https://hackaday.com/feed/", "source": "Hackaday", "category": "maker"},
+    {"url": "https://www.instructables.com/feed/", "source": "Instructables", "category": "maker"},
+    # Pets & Animals (new category)
+    {"url": "https://www.akc.org/feed/", "source": "AKC", "category": "pets"},
+    {"url": "https://www.thedodo.com/rss", "source": "The Dodo", "category": "pets"},
 ]
 
 
