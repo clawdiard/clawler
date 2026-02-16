@@ -157,3 +157,12 @@ sources:
   Ars Technica (cars): 0.70
   Ars Technica (apple): 0.74
   Ars Technica (staff-blogs): 0.68
+
+  # AllTop (aggregator — slightly lower base quality since it curates from other sources)
+  AllTop/tech: 0.62
+  AllTop/science: 0.63
+  AllTop/business: 0.60
+  AllTop/health: 0.61
+  AllTop/sports: 0.55
+  AllTop/news: 0.60
+  AllTop/viral: 0.50
