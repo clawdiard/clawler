@@ -1,112 +1,325 @@
-"""Dev.to source — uses public API (no API key needed)."""
+"""Dev.to source — uses public API (no API key needed).
+
+Supports multiple feed endpoints (published, top, rising, latest, videos),
+tag filtering, reading time metadata, comment counts, and rich category mapping.
+"""
 import logging
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Dict, List, Optional, Set
+
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 
 logger = logging.getLogger(__name__)
 
-# Map dev.to tags to clawler categories
-TAG_CATEGORY_MAP = {
-    "python": "tech",
-    "javascript": "tech",
-    "webdev": "tech",
-    "programming": "tech",
-    "devops": "tech",
-    "rust": "tech",
-    "go": "tech",
-    "typescript": "tech",
-    "react": "tech",
-    "node": "tech",
-    "ai": "tech",
-    "machinelearning": "tech",
+# Comprehensive tag → category mapping
+TAG_CATEGORY_MAP: Dict[str, str] = {
+    # AI & ML
+    "ai": "ai",
+    "machinelearning": "ai",
+    "deeplearning": "ai",
+    "nlp": "ai",
+    "datascience": "ai",
+    "openai": "ai",
+    "llm": "ai",
+    "gpt": "ai",
+    "chatgpt": "ai",
+    "copilot": "ai",
+    # Security
     "security": "security",
     "cybersecurity": "security",
-    "opensource": "tech",
+    "infosec": "security",
+    "hacking": "security",
+    "privacy": "security",
+    "encryption": "security",
+    # Science
+    "science": "science",
+    "math": "science",
+    "physics": "science",
+    "biology": "science",
+    # Business & Career
     "career": "business",
     "productivity": "business",
+    "management": "business",
+    "startup": "business",
+    "entrepreneur": "business",
+    "business": "business",
+    "hiring": "business",
+    "leadership": "business",
+    "remote": "business",
+    # Design
+    "design": "design",
+    "ux": "design",
+    "ui": "design",
+    "css": "design",
+    "accessibility": "design",
+    "figma": "design",
+    "tailwindcss": "design",
+    # DevOps & Cloud
+    "devops": "tech",
+    "docker": "tech",
+    "kubernetes": "tech",
+    "aws": "tech",
+    "azure": "tech",
+    "gcp": "tech",
+    "cloud": "tech",
+    "linux": "tech",
+    "serverless": "tech",
+    "cicd": "tech",
+    # Web
+    "webdev": "tech",
+    "javascript": "tech",
+    "typescript": "tech",
+    "react": "tech",
+    "vue": "tech",
+    "angular": "tech",
+    "svelte": "tech",
+    "nextjs": "tech",
+    "node": "tech",
+    "deno": "tech",
+    # Programming
+    "programming": "tech",
+    "python": "tech",
+    "rust": "tech",
+    "go": "tech",
+    "java": "tech",
+    "csharp": "tech",
+    "ruby": "tech",
+    "swift": "tech",
+    "kotlin": "tech",
+    "elixir": "tech",
+    "haskell": "tech",
+    "php": "tech",
+    # Mobile
+    "android": "tech",
+    "ios": "tech",
+    "flutter": "tech",
+    "reactnative": "tech",
+    "mobile": "tech",
+    # Blockchain
+    "blockchain": "crypto",
+    "crypto": "crypto",
+    "web3": "crypto",
+    "ethereum": "crypto",
+    "solidity": "crypto",
+    "nft": "crypto",
+    # Culture & Community
+    "discuss": "culture",
+    "watercooler": "culture",
+    "news": "world",
+    "opensource": "tech",
     "beginners": "tech",
     "tutorial": "tech",
-    "discuss": "culture",
-    "news": "world",
-    "science": "science",
+    "showdev": "tech",
+    "codenewbie": "tech",
+    "testing": "tech",
+    "database": "tech",
+    "api": "tech",
+    "git": "tech",
+    "algorithms": "tech",
+    # Gaming
+    "gamedev": "gaming",
+    "gaming": "gaming",
+    "unity": "gaming",
+    "godot": "gaming",
+}
+
+# Dev.to API endpoints
+DEVTO_FEEDS: Dict[str, str] = {
+    "published": "https://dev.to/api/articles",
+    "rising": "https://dev.to/api/articles?state=rising",
+    "latest": "https://dev.to/api/articles/latest",
+    "videos": "https://dev.to/api/videos",
 }
 
 
 class DevToSource(BaseSource):
-    """Fetches top articles from dev.to public API."""
+    """Fetches articles from dev.to public API with multi-feed and filtering."""
 
     name = "dev.to"
 
-    def __init__(self, per_page: int = 30, top: Optional[int] = None):
-        self.per_page = per_page
-        self.top = top  # top N by reaction count (published in last N days)
+    def __init__(
+        self,
+        per_page: int = 30,
+        top: Optional[int] = None,
+        feeds: Optional[List[str]] = None,
+        tag: Optional[str] = None,
+        tags: Optional[List[str]] = None,
+        min_reactions: int = 0,
+        min_reading_time: int = 0,
+        include_reading_time: bool = True,
+        include_comments: bool = True,
+    ):
+        """
+        Args:
+            per_page: Articles per feed request (max 100).
+            top: Fetch top articles from the last N days.
+            feeds: Feed endpoints to crawl. Default: ["published"].
+                   Options: published, rising, latest, videos.
+            tag: Single tag filter (API-level filtering).
+            tags: Multiple tags to fetch separately (one API call per tag).
+            min_reactions: Skip articles below this reaction count.
+            min_reading_time: Skip articles below this reading time (minutes).
+            include_reading_time: Show reading time in summary.
+            include_comments: Show comment count in summary.
+        """
+        self.per_page = min(per_page, 100)
+        self.top = top
+        self.tag = tag
+        self.tags = tags
+        self.min_reactions = min_reactions
+        self.min_reading_time = min_reading_time
+        self.include_reading_time = include_reading_time
+        self.include_comments = include_comments
+
+        if feeds is not None:
+            self._feeds = [f for f in feeds if f in DEVTO_FEEDS]
+        else:
+            self._feeds = ["published"]
 
     def crawl(self) -> List[Article]:
-        url = "https://dev.to/api/articles"
-        params = {"per_page": str(self.per_page)}
-        if self.top:
-            params["top"] = str(self.top)
-
-        try:
-            data = self.fetch_json(f"{url}?{'&'.join(f'{k}={v}' for k, v in params.items())}")
-        except Exception as e:
-            logger.warning(f"[Dev.to] Failed to fetch articles: {e}")
-            return []
-
-        if not data or not isinstance(data, list):
-            logger.warning("[Dev.to] Unexpected response format")
-            return []
-
+        seen_urls: Set[str] = set()
         articles: List[Article] = []
-        for item in data:
-            title = (item.get("title") or "").strip()
-            article_url = item.get("url", "")
-            if not title or not article_url:
-                continue
 
-            description = item.get("description", "") or ""
-            tags_str = item.get("tag_list") or []
-            if isinstance(tags_str, str):
-                tags_str = [t.strip() for t in tags_str.split(",") if t.strip()]
-
-            # Determine category from tags
-            category = "tech"  # default for dev.to
-            for tag in tags_str:
-                tag_lower = tag.lower()
-                if tag_lower in TAG_CATEGORY_MAP:
-                    category = TAG_CATEGORY_MAP[tag_lower]
-                    break
-
-            published = item.get("published_at")
-            timestamp = None
-            if published:
-                try:
-                    timestamp = datetime.fromisoformat(published.replace("Z", "+00:00"))
-                except (ValueError, AttributeError):
-                    pass
-
-            user = item.get("user", {})
-            author = user.get("name") or user.get("username") or ""
-            reactions = item.get("positive_reactions_count", 0)
-
-            summary = description[:300]
-            if author:
-                summary = f"by {author} — {summary}"
-            if reactions:
-                summary = f"♥{reactions} | {summary}"
-
-            articles.append(Article(
-                title=title,
-                url=article_url,
-                source="dev.to",
-                summary=summary[:300],
-                timestamp=timestamp,
-                category=category,
-                tags=tags_str[:5] if tags_str else [],
-                author=author,
-            ))
+        # If multiple tags requested, fetch each tag separately
+        if self.tags:
+            for tag in self.tags:
+                self._fetch_feed("published", seen_urls, articles, tag_filter=tag)
+        else:
+            for feed_name in self._feeds:
+                self._fetch_feed(feed_name, seen_urls, articles, tag_filter=self.tag)
 
         logger.info(f"[Dev.to] Fetched {len(articles)} articles")
         return articles
+
+    def _fetch_feed(
+        self,
+        feed_name: str,
+        seen: Set[str],
+        articles: List[Article],
+        tag_filter: Optional[str] = None,
+    ) -> None:
+        base_url = DEVTO_FEEDS.get(feed_name, DEVTO_FEEDS["published"])
+        sep = "&" if "?" in base_url else "?"
+        params = [f"per_page={self.per_page}"]
+
+        if self.top and feed_name == "published":
+            params.append(f"top={self.top}")
+        if tag_filter:
+            params.append(f"tag={tag_filter}")
+
+        url = base_url + sep + "&".join(params) if params else base_url
+
+        try:
+            data = self.fetch_json(url)
+            if not data or not isinstance(data, list):
+                return
+        except Exception as e:
+            logger.warning(f"[Dev.to] Failed to fetch {feed_name}: {e}")
+            return
+
+        for item in data:
+            try:
+                article = self._parse_item(item, feed_name, seen)
+                if article:
+                    articles.append(article)
+            except Exception as e:
+                logger.debug(f"[Dev.to] Skipping item: {e}")
+
+    def _parse_item(
+        self, item: dict, feed_name: str, seen: Set[str]
+    ) -> Optional[Article]:
+        title = (item.get("title") or "").strip()
+        article_url = item.get("url", "")
+        if not title or not article_url:
+            return None
+
+        # Dedup across feeds/tags
+        if article_url in seen:
+            return None
+        seen.add(article_url)
+
+        # Reactions filter
+        reactions = item.get("positive_reactions_count", 0) or 0
+        if reactions < self.min_reactions:
+            return None
+
+        # Reading time filter
+        reading_time = item.get("reading_time_minutes", 0) or 0
+        if reading_time < self.min_reading_time:
+            return None
+
+        description = item.get("description", "") or ""
+        comments_count = item.get("comments_count", 0) or 0
+
+        # Tags
+        tags_raw = item.get("tag_list") or []
+        if isinstance(tags_raw, str):
+            tags_raw = [t.strip() for t in tags_raw.split(",") if t.strip()]
+
+        # Category — prefer specific categories over generic 'tech'
+        category = _map_category(tags_raw)
+
+        # Timestamp
+        published = item.get("published_at") or item.get("published_timestamp")
+        timestamp = _parse_timestamp(published)
+
+        # Author
+        user = item.get("user", {}) or {}
+        author = user.get("name") or user.get("username") or ""
+
+        # Build rich summary
+        parts = []
+        if reactions:
+            parts.append(f"♥{reactions}")
+        if self.include_comments and comments_count:
+            parts.append(f"💬{comments_count}")
+        if self.include_reading_time and reading_time:
+            parts.append(f"📖{reading_time}min")
+        if author:
+            parts.append(f"by {author}")
+        if description:
+            parts.append(description)
+
+        summary = " | ".join(parts)[:300]
+
+        # Build tag list with feed info
+        article_tags = [f"devto:{t}" for t in tags_raw[:5]]
+        if feed_name != "published":
+            article_tags.append(f"devto-feed:{feed_name}")
+
+        return Article(
+            title=title,
+            url=article_url,
+            source="dev.to" if feed_name == "published" else f"dev.to ({feed_name})",
+            summary=summary,
+            timestamp=timestamp,
+            category=category,
+            tags=article_tags,
+            author=author,
+        )
+
+
+def _parse_timestamp(raw: Optional[str]) -> Optional[datetime]:
+    if not raw:
+        return None
+    try:
+        ts = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        return ts
+    except (ValueError, AttributeError):
+        return None
+
+
+def _map_category(tags: List[str]) -> str:
+    """Map dev.to tags to categories, preferring specific over generic."""
+    best = "tech"  # default for dev.to
+    for tag in tags:
+        tag_lower = tag.lower()
+        mapped = TAG_CATEGORY_MAP.get(tag_lower)
+        if mapped and mapped != "tech":
+            return mapped  # prefer non-tech specific category
+        if mapped == "tech":
+            best = "tech"
+    return best

@@ -90,7 +90,7 @@ def test_devto_tags_populated():
     src = DevToSource()
     with patch.object(src, "fetch_json", return_value=SAMPLE_DEVTO_RESPONSE):
         articles = src.crawl()
-    assert articles[0].tags == ["rust", "cli", "tutorial"]
+    assert articles[0].tags == ["devto:rust", "devto:cli", "devto:tutorial"]
 
 
 def test_devto_timestamp_parsed():
@@ -116,7 +116,7 @@ def test_devto_string_tag_list():
     with patch.object(src, "fetch_json", return_value=data):
         articles = src.crawl()
     assert len(articles) == 1
-    assert articles[0].tags == ["python", "ai", "tutorial"]
+    assert articles[0].tags == ["devto:python", "devto:ai", "devto:tutorial"]
 
 
 def test_devto_top_parameter():
