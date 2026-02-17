@@ -21,15 +21,29 @@ class CrawlEngine:
 
     def __init__(self, sources: Optional[List[BaseSource]] = None, max_workers: int = 6,
                  retries: int = 1, source_timeout: Optional[float] = DEFAULT_SOURCE_TIMEOUT):
-        self.sources = sources or [
-            RSSSource(),
-            HackerNewsSource(),
-            RedditSource(),
-        ]
+        self.sources = sources or self._default_sources()
         self.max_workers = max_workers
         self.retries = retries
         self.source_timeout = source_timeout
         self.health = HealthTracker()
+
+    @staticmethod
+    def _default_sources() -> List[BaseSource]:
+        """Instantiate all available sources when none are explicitly provided."""
+        return [
+            RSSSource(), HackerNewsSource(), RedditSource(), GitHubTrendingSource(),
+            MastodonSource(), WikipediaCurrentEventsSource(), LobstersSource(),
+            DevToSource(), ArXivSource(), TechMemeSource(), ProductHuntSource(),
+            BlueskySource(), TildesSource(), LemmySource(), SlashdotSource(),
+            StackOverflowSource(), PinboardSource(), IndieHackersSource(),
+            EchoJSSource(), HashnodeSource(), FreeCodeCampSource(), ChangelogSource(),
+            HackerNoonSource(), YouTubeSource(), MediumSource(), SubstackSource(),
+            GoogleNewsSource(), DZoneSource(), ScienceDailySource(), NPRSource(),
+            ArsTechnicaSource(), AllTopSource(), WiredSource(), TheVergeSource(),
+            ReutersSource(), PhysOrgSource(), NatureSource(), APNewsSource(),
+            GuardianSource(), InfoQSource(), TheRegisterSource(), BBCNewsSource(),
+            TheHackerNewsSource(),
+        ]
 
     @staticmethod
     def _timed_crawl(src: BaseSource):

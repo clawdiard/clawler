@@ -51,10 +51,13 @@ def test_arxiv_crawl():
 def test_arxiv_category_mapping():
     """Test category mapping for different ArXiv categories."""
     src = ArXivSource()
-    assert src._map_category(["cs.AI", "cs.LG"]) == "tech"
+    assert src._map_category(["cs.AI", "cs.LG"]) == "ai"
+    assert src._map_category(["cs.SE"]) == "tech"
     assert src._map_category(["quant-ph"]) == "science"
     assert src._map_category(["math.AG"]) == "science"
     assert src._map_category(["econ.GN"]) == "science"
+    # Title keyword override
+    assert src._map_category(["physics"], "A new LLM approach") == "ai"
 
 
 def test_arxiv_empty_response():
