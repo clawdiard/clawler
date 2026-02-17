@@ -57,6 +57,11 @@ _GENERIC_TECH = {"technology", "programming", "linux", "python", "rust", "golang
                  "sysadmin", "functionalProgramming", "lisp"}
 
 
+def _map_category(community: str, title: str = "") -> str:
+    """Backward-compatible alias for _detect_category."""
+    return _detect_category(community, title)
+
+
 def _detect_category(community: str, title: str = "") -> str:
     """Two-tier category detection: specific keywords first, then generic tech."""
     c = community.lower()
