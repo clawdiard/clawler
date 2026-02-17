@@ -474,6 +474,30 @@ DEFAULT_FEEDS = [
     {"url": "https://abovethelaw.com/feed/", "source": "Above the Law", "category": "legal"},
     {"url": "https://www.law.com/rss/", "source": "Law.com", "category": "legal"},
     {"url": "https://www.jurist.org/news/feed/", "source": "JURIST", "category": "legal"},
+    # Data Privacy
+    {"url": "https://spreadprivacy.com/rss/", "source": "DuckDuckGo Blog", "category": "data_privacy"},
+    {"url": "https://www.eff.org/rss/updates.xml", "source": "EFF", "category": "data_privacy"},
+    {"url": "https://iapp.org/rss/", "source": "IAPP", "category": "data_privacy"},
+    {"url": "https://www.accessnow.org/feed/", "source": "Access Now", "category": "data_privacy"},
+    {"url": "https://edri.org/feed/", "source": "EDRi", "category": "data_privacy"},
+    # Sustainability
+    {"url": "https://www.greenbiz.com/rss/all", "source": "GreenBiz", "category": "sustainability"},
+    {"url": "https://www.triplepundit.com/feed/", "source": "TriplePundit", "category": "sustainability"},
+    {"url": "https://www.circularonline.co.uk/feed/", "source": "Circular", "category": "sustainability"},
+    {"url": "https://www.edie.net/rss/news/", "source": "edie", "category": "sustainability"},
+    {"url": "https://sustainability-magazine.com/rss/articles", "source": "Sustainability Magazine", "category": "sustainability"},
+    # Accessibility
+    {"url": "https://www.a11yproject.com/feed/feed.xml", "source": "A11Y Project", "category": "accessibility"},
+    {"url": "https://www.deque.com/blog/feed/", "source": "Deque Blog", "category": "accessibility"},
+    {"url": "https://adrianroselli.com/feed", "source": "Adrian Roselli", "category": "accessibility"},
+    {"url": "https://www.scottohara.me/feed.xml", "source": "Scott O'Hara", "category": "accessibility"},
+    {"url": "https://tink.uk/feed.xml", "source": "Tink (Léonie Watson)", "category": "accessibility"},
+    # Transportation
+    {"url": "https://www.thedrive.com/feed", "source": "The Drive", "category": "transportation"},
+    {"url": "https://www.railway-technology.com/feed/", "source": "Railway Technology", "category": "transportation"},
+    {"url": "https://www.smartcitiesdive.com/feeds/news/", "source": "Smart Cities Dive", "category": "transportation"},
+    {"url": "https://www.flightglobal.com/rss", "source": "FlightGlobal", "category": "transportation"},
+    {"url": "https://thelogisticsworld.com/feed/", "source": "The Logistics World", "category": "transportation"},
 ]
 
 
