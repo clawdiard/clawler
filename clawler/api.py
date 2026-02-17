@@ -23,51 +23,24 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 43 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 44 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
 Changelog, Hacker Noon, YouTube, Medium, Substack, Google News, DZone,
 ScienceDaily, NPR, Ars Technica, AllTop, Wired, The Verge, Reuters,
-Phys.org, Nature, AP News, The Guardian, InfoQ, The Register) are enabled
-by default. Disable any with no_<source>=True.
+Phys.org, Nature, AP News, The Guardian, InfoQ, The Register, BBC News,
+The Hacker News, Flipboard) are enabled by default.
+Disable any with disabled={"flipboard", "bbc"} or no_<source>=True.
 
 """
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict, List, Optional, Set, Union
 
 from clawler.engine import CrawlEngine
 from clawler.models import Article
-from clawler.sources import (
-    RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource,
-    MastodonSource, WikipediaCurrentEventsSource, LobstersSource,
-    DevToSource, ArXivSource, TechMemeSource, ProductHuntSource,
-    BlueskySource, TildesSource, LemmySource, SlashdotSource,
-    StackOverflowSource, PinboardSource, IndieHackersSource,
-    EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource,
-    HackerNoonSource,
-    YouTubeSource,
-    MediumSource,
-    SubstackSource,
-    GoogleNewsSource,
-    AllTopSource,
-    ArsTechnicaSource,
-    InfoQSource,
-    TheRegisterSource,
-    DZoneSource,
-    ScienceDailySource,
-    NPRSource,
-    WiredSource,
-    TheVergeSource,
-    ReutersSource,
-    PhysOrgSource,
-    NatureSource,
-    APNewsSource,
-    GuardianSource,
-    TheHackerNewsSource,
-    BBCNewsSource,
-)
+from clawler.registry import build_sources, get_all_keys
 
 
 def _parse_since(value: str) -> datetime:
@@ -85,50 +58,8 @@ def crawl(
     limit: int = 50,
     exclude_source: Optional[str] = None,
     exclude_category: Optional[str] = None,
-    no_rss: bool = False,
-    no_hn: bool = False,
-    no_reddit: bool = False,
-    no_github: bool = False,
-    no_mastodon: bool = False,
-    no_wikipedia: bool = False,
-    no_lobsters: bool = False,
-    no_devto: bool = False,
-    no_arxiv: bool = False,
-    no_techmeme: bool = False,
-    no_producthunt: bool = False,
-    no_bluesky: bool = False,
-    no_tildes: bool = False,
-    no_lemmy: bool = False,
-    no_slashdot: bool = False,
-    no_stackoverflow: bool = False,
-    no_pinboard: bool = False,
-    no_indiehackers: bool = False,
-    no_echojs: bool = False,
-    no_hashnode: bool = False,
-    no_freecodecamp: bool = False,
-    no_changelog: bool = False,
-    no_hackernoon: bool = False,
-    no_youtube: bool = False,
-    no_medium: bool = False,
-    no_substack: bool = False,
-    no_googlenews: bool = False,
-    no_alltop: bool = False,
-    no_arstechnica: bool = False,
-    no_infoq: bool = False,
-    no_theregister: bool = False,
-    no_dzone: bool = False,
-    no_sciencedaily: bool = False,
-    no_npr: bool = False,
-    no_wired: bool = False,
-    no_theverge: bool = False,
-    no_reuters: bool = False,
-    no_physorg: bool = False,
-    no_nature: bool = False,
-    no_apnews: bool = False,
-    no_guardian: bool = False,
-    no_thehackernews: bool = False,
-    no_bbc: bool = False,
     only: Optional[str] = None,
+    disabled: Optional[Set[str]] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
     timeout: int = 15,
@@ -139,6 +70,8 @@ def crawl(
     min_relevance: float = 0.0,
     min_quality: float = 0.0,
     sample: int = 0,
+    # Legacy no_<source> kwargs accepted for backward compatibility
+    **kwargs,
 ) -> List[Article]:
     """One-liner crawl with filtering, dedup, and optional profile scoring.
 
@@ -146,170 +79,45 @@ def crawl(
         category: Comma-separated category filter (e.g. "tech,science").
         source: Source name substring filter (case-insensitive).
         search: Keyword filter on title/summary (case-insensitive).
-        exclude: Exclude articles matching keyword in title/summary (case-insensitive).
+        exclude: Exclude articles matching keyword in title/summary.
         since: Relative time filter (e.g. "2h", "30m", "1d").
         limit: Max articles to return.
         exclude_source: Exclude sources matching this substring.
         exclude_category: Comma-separated categories to exclude.
-        no_rss/no_hn/no_reddit/no_github/no_mastodon/no_wikipedia/no_lobsters/
-        no_devto/no_arxiv/no_techmeme/no_producthunt/no_bluesky/no_tildes/
-        no_lemmy/no_slashdot/no_stackoverflow/no_pinboard/no_indiehackers/
-        no_echojs/no_hashnode/no_freecodecamp/no_changelog: Disable individual sources.
+        only: Comma-separated source keys to enable (disables all others).
+        disabled: Set of source keys to skip (e.g. {"reddit", "hn"}).
         dedupe_threshold: Fuzzy dedup threshold (0.0-1.0).
         dedupe_enabled: Set False to disable deduplication entirely.
         timeout: HTTP timeout in seconds.
         max_workers: Max parallel workers for crawling (default: 6).
-        source_timeout: Per-source crawl timeout in seconds (default: 60, None to disable).
+        source_timeout: Per-source crawl timeout in seconds (default: 60).
         profile: Path to a YAML profile file, or a dict with 'interests' key.
-                 Each interest has keywords and an optional weight.
         interests: Comma-separated interest keywords (e.g. "AI,skateboarding").
-                   Simpler alternative to profile. Ignored if profile is set.
         min_relevance: Minimum relevance score (0.0-1.0) when profile is used.
         min_quality: Minimum source quality score (0.0-1.0).
         sample: Randomly sample N articles from results (0 = disabled).
+        **kwargs: Legacy no_<source>=True flags (e.g. no_hn=True, no_reddit=True).
 
     Returns:
         List of Article objects, sorted by time (or relevance if profile given).
     """
-    # Build sources — all 22 sources, matching CLI parity
-    # --only support: if specified, disable all sources not in the list
+    # Build disabled set from multiple input methods
+    skip: set = set(disabled or set())
+
+    # Legacy no_<key>=True kwargs
+    all_keys = get_all_keys()
+    for key in all_keys:
+        if kwargs.get(f"no_{key}", False):
+            skip.add(key)
+
+    # --only: enable only specified sources
     if only:
-        _name_to_flag = {
-            "rss": "no_rss", "hn": "no_hn", "reddit": "no_reddit",
-            "github": "no_github", "mastodon": "no_mastodon",
-            "wikipedia": "no_wikipedia", "lobsters": "no_lobsters",
-            "devto": "no_devto", "arxiv": "no_arxiv",
-            "techmeme": "no_techmeme", "producthunt": "no_producthunt",
-            "bluesky": "no_bluesky", "tildes": "no_tildes",
-            "lemmy": "no_lemmy", "slashdot": "no_slashdot",
-            "stackoverflow": "no_stackoverflow", "pinboard": "no_pinboard",
-            "indiehackers": "no_indiehackers", "echojs": "no_echojs",
-            "hashnode": "no_hashnode",
-            "freecodecamp": "no_freecodecamp",
-            "changelog": "no_changelog",
-            "hackernoon": "no_hackernoon",
-            "youtube": "no_youtube",
-            "medium": "no_medium",
-            "substack": "no_substack",
-            "googlenews": "no_googlenews",
-            "alltop": "no_alltop",
-            "arstechnica": "no_arstechnica",
-            "infoq": "no_infoq",
-            "theregister": "no_theregister",
-            "dzone": "no_dzone",
-            "sciencedaily": "no_sciencedaily",
-            "npr": "no_npr",
-            "wired": "no_wired",
-            "theverge": "no_theverge",
-            "reuters": "no_reuters",
-            "physorg": "no_physorg",
-            "nature": "no_nature",
-            "apnews": "no_apnews",
-            "guardian": "no_guardian",
-            "thehackernews": "no_thehackernews",
-            "bbc": "no_bbc",
-        }
-        enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
-        _locals = locals()
-        for src_name, flag in _name_to_flag.items():
-            if src_name not in enabled_set:
-                _locals[flag] = True
-        no_rss = _locals.get("no_rss", no_rss)
-        no_hn = _locals.get("no_hn", no_hn)
-        no_reddit = _locals.get("no_reddit", no_reddit)
-        no_github = _locals.get("no_github", no_github)
-        no_mastodon = _locals.get("no_mastodon", no_mastodon)
-        no_wikipedia = _locals.get("no_wikipedia", no_wikipedia)
-        no_lobsters = _locals.get("no_lobsters", no_lobsters)
-        no_devto = _locals.get("no_devto", no_devto)
-        no_arxiv = _locals.get("no_arxiv", no_arxiv)
-        no_techmeme = _locals.get("no_techmeme", no_techmeme)
-        no_producthunt = _locals.get("no_producthunt", no_producthunt)
-        no_bluesky = _locals.get("no_bluesky", no_bluesky)
-        no_tildes = _locals.get("no_tildes", no_tildes)
-        no_lemmy = _locals.get("no_lemmy", no_lemmy)
-        no_slashdot = _locals.get("no_slashdot", no_slashdot)
-        no_stackoverflow = _locals.get("no_stackoverflow", no_stackoverflow)
-        no_pinboard = _locals.get("no_pinboard", no_pinboard)
-        no_indiehackers = _locals.get("no_indiehackers", no_indiehackers)
-        no_echojs = _locals.get("no_echojs", no_echojs)
-        no_hashnode = _locals.get("no_hashnode", no_hashnode)
-        no_freecodecamp = _locals.get("no_freecodecamp", no_freecodecamp)
-        no_changelog = _locals.get("no_changelog", no_changelog)
-        no_hackernoon = _locals.get("no_hackernoon", no_hackernoon)
-        no_youtube = _locals.get("no_youtube", no_youtube)
-        no_medium = _locals.get("no_medium", no_medium)
-        no_substack = _locals.get("no_substack", no_substack)
-        no_googlenews = _locals.get("no_googlenews", no_googlenews)
-        no_alltop = _locals.get("no_alltop", no_alltop)
-        no_arstechnica = _locals.get("no_arstechnica", no_arstechnica)
-        no_infoq = _locals.get("no_infoq", no_infoq)
-        no_theregister = _locals.get("no_theregister", no_theregister)
-        no_dzone = _locals.get("no_dzone", no_dzone)
-        no_sciencedaily = _locals.get("no_sciencedaily", no_sciencedaily)
-        no_npr = _locals.get("no_npr", no_npr)
-        no_wired = _locals.get("no_wired", no_wired)
-        no_theverge = _locals.get("no_theverge", no_theverge)
-        no_reuters = _locals.get("no_reuters", no_reuters)
-        no_physorg = _locals.get("no_physorg", no_physorg)
-        no_nature = _locals.get("no_nature", no_nature)
-        no_apnews = _locals.get("no_apnews", no_apnews)
-        no_guardian = _locals.get("no_guardian", no_guardian)
-        no_thehackernews = _locals.get("no_thehackernews", no_thehackernews)
-        no_bbc = _locals.get("no_bbc", no_bbc)
+        enabled = set(s.strip().lower() for s in only.split(",") if s.strip())
+        for key in all_keys:
+            if key not in enabled:
+                skip.add(key)
 
-    _source_map = [
-        (no_rss, RSSSource),
-        (no_hn, HackerNewsSource),
-        (no_reddit, RedditSource),
-        (no_github, GitHubTrendingSource),
-        (no_mastodon, MastodonSource),
-        (no_wikipedia, WikipediaCurrentEventsSource),
-        (no_lobsters, LobstersSource),
-        (no_devto, DevToSource),
-        (no_arxiv, ArXivSource),
-        (no_techmeme, TechMemeSource),
-        (no_producthunt, ProductHuntSource),
-        (no_bluesky, BlueskySource),
-        (no_tildes, TildesSource),
-        (no_lemmy, LemmySource),
-        (no_slashdot, SlashdotSource),
-        (no_stackoverflow, StackOverflowSource),
-        (no_pinboard, PinboardSource),
-        (no_indiehackers, IndieHackersSource),
-        (no_echojs, EchoJSSource),
-        (no_hashnode, HashnodeSource),
-        (no_freecodecamp, FreeCodeCampSource),
-        (no_changelog, ChangelogSource),
-        (no_hackernoon, HackerNoonSource),
-        (no_youtube, YouTubeSource),
-        (no_medium, MediumSource),
-        (no_substack, SubstackSource),
-        (no_googlenews, GoogleNewsSource),
-        (no_alltop, AllTopSource),
-        (no_arstechnica, ArsTechnicaSource),
-        (no_infoq, InfoQSource),
-        (no_theregister, TheRegisterSource),
-        (no_dzone, DZoneSource),
-        (no_sciencedaily, ScienceDailySource),
-        (no_npr, NPRSource),
-        (no_wired, WiredSource),
-        (no_theverge, TheVergeSource),
-        (no_reuters, ReutersSource),
-        (no_physorg, PhysOrgSource),
-        (no_nature, NatureSource),
-        (no_apnews, APNewsSource),
-        (no_guardian, GuardianSource),
-        (no_thehackernews, TheHackerNewsSource),
-        (no_bbc, BBCNewsSource),
-    ]
-    sources = []
-    for disabled, cls in _source_map:
-        if not disabled:
-            src = cls()
-            src.timeout = timeout
-            sources.append(src)
-
+    sources = build_sources(disabled=skip, timeout=timeout)
     if not sources:
         return []
 
