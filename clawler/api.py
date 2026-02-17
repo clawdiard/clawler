@@ -23,7 +23,7 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 40 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 43 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
 Changelog, Hacker Noon, YouTube, Medium, Substack, Google News, DZone,
@@ -66,6 +66,7 @@ from clawler.sources import (
     APNewsSource,
     GuardianSource,
     TheHackerNewsSource,
+    BBCNewsSource,
 )
 
 
@@ -126,6 +127,7 @@ def crawl(
     no_apnews: bool = False,
     no_guardian: bool = False,
     no_thehackernews: bool = False,
+    no_bbc: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -205,6 +207,7 @@ def crawl(
             "apnews": "no_apnews",
             "guardian": "no_guardian",
             "thehackernews": "no_thehackernews",
+            "bbc": "no_bbc",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -253,6 +256,7 @@ def crawl(
         no_apnews = _locals.get("no_apnews", no_apnews)
         no_guardian = _locals.get("no_guardian", no_guardian)
         no_thehackernews = _locals.get("no_thehackernews", no_thehackernews)
+        no_bbc = _locals.get("no_bbc", no_bbc)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -297,6 +301,7 @@ def crawl(
         (no_apnews, APNewsSource),
         (no_guardian, GuardianSource),
         (no_thehackernews, TheHackerNewsSource),
+        (no_bbc, BBCNewsSource),
     ]
     sources = []
     for disabled, cls in _source_map:

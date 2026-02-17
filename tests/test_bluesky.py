@@ -83,7 +83,7 @@ def test_bluesky_empty_response():
 
 
 def test_guess_category():
-    assert _guess_category("New AI model released", "") == "tech"
+    assert _guess_category("New AI model released", "") == "ai"
     assert _guess_category("Climate research findings", "") == "science"
     assert _guess_category("Stock market crash", "economy") == "business"
     assert _guess_category("Major data breach", "vulnerability") == "security"

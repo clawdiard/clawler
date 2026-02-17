@@ -298,7 +298,7 @@ def main(argv=None):
                          "substack", "googlenews", "dzone", "sciencedaily", "npr",
                          "changelog", "hackernoon", "arstechnica", "alltop",
                          "wired", "theverge", "reuters", "physorg", "nature",
-                         "apnews", "guardian", "infoq", "theregister", "bbc"}
+                         "apnews", "guardian", "infoq", "theregister", "bbc", "thehackernews"}
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
         unknown = enabled - _SOURCE_NAMES
         if unknown:
