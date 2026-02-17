@@ -498,6 +498,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.smartcitiesdive.com/feeds/news/", "source": "Smart Cities Dive", "category": "transportation"},
     {"url": "https://www.flightglobal.com/rss", "source": "FlightGlobal", "category": "transportation"},
     {"url": "https://thelogisticsworld.com/feed/", "source": "The Logistics World", "category": "transportation"},
+    # Veterinary
+    {"url": "https://www.veterinarypracticenews.com/feed/", "source": "Veterinary Practice News", "category": "veterinary"},
+    {"url": "https://www.dvm360.com/rss/", "source": "DVM360", "category": "veterinary"},
+    {"url": "https://todaysveterinarypractice.com/feed/", "source": "Today's Veterinary Practice", "category": "veterinary"},
+    {"url": "https://vetnutrition.tufts.edu/feed/", "source": "Tufts Vet Nutrition", "category": "veterinary"},
+    {"url": "https://www.vin.com/members/cms/rss/default.aspx", "source": "VIN News", "category": "veterinary"},
+    # Disability & Inclusion
+    {"url": "https://www.disability-next.com/feed", "source": "Disability:IN", "category": "disability"},
+    {"url": "https://rootedinrights.org/feed/", "source": "Rooted in Rights", "category": "disability"},
+    {"url": "https://thinkinclusive.us/feed/", "source": "Think Inclusive", "category": "disability"},
+    {"url": "https://ncdj.org/feed/", "source": "NCDJ", "category": "disability"},
+    {"url": "https://www.accessibilitychecked.com/feed/", "source": "Accessibility Checked", "category": "disability"},
+    # Volunteering & Nonprofits
+    {"url": "https://ssir.org/rss", "source": "SSIR", "category": "nonprofit"},
+    {"url": "https://www.thenonprofittimes.com/feed/", "source": "NonProfit Times", "category": "nonprofit"},
+    {"url": "https://nonprofitquarterly.org/feed/", "source": "NonProfit Quarterly", "category": "nonprofit"},
+    {"url": "https://philanthropy.com/blogs/philanthrofiles/feed", "source": "Chronicle of Philanthropy", "category": "nonprofit"},
+    {"url": "https://blog.candid.org/feed/", "source": "Candid Blog", "category": "nonprofit"},
+    # Supply Chain & Logistics
+    {"url": "https://www.supplychaindive.com/feeds/news/", "source": "Supply Chain Dive", "category": "supply_chain"},
+    {"url": "https://www.freightwaves.com/feed", "source": "FreightWaves", "category": "supply_chain"},
+    {"url": "https://www.logisticsmgmt.com/rss/", "source": "Logistics Management", "category": "supply_chain"},
+    {"url": "https://www.dcvelocity.com/rss/", "source": "DC Velocity", "category": "supply_chain"},
+    {"url": "https://supplychainbrain.com/rss", "source": "SupplyChainBrain", "category": "supply_chain"},
 ]
 
 
