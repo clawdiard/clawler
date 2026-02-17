@@ -427,6 +427,29 @@ DEFAULT_FEEDS = [
     {"url": "https://ssir.org/site/rss", "source": "Stanford Social Innovation Review", "category": "social_impact"},
     {"url": "https://www.devex.com/news/rss", "source": "Devex", "category": "social_impact"},
     {"url": "https://philanthropynewsdigest.org/rss", "source": "Philanthropy News Digest", "category": "social_impact"},
+    {"url": "https://nextcity.org/feed", "source": "Next City", "category": "social_impact"},
+    {"url": "https://www.globalcitizen.org/en/feed/", "source": "Global Citizen", "category": "social_impact"},
+
+    # Urban Planning & Transportation
+    {"url": "https://www.strongtowns.org/journal?format=rss", "source": "Strong Towns", "category": "urban_planning"},
+    {"url": "https://citymonitor.ai/feed", "source": "City Monitor", "category": "urban_planning"},
+    {"url": "https://www.planetizen.com/feed", "source": "Planetizen", "category": "urban_planning"},
+    {"url": "https://usa.streetsblog.org/feed/", "source": "Streetsblog USA", "category": "urban_planning"},
+    {"url": "https://www.bloomberg.com/citylab/feed", "source": "Bloomberg CityLab", "category": "urban_planning"},
+
+    # Agriculture & Farming
+    {"url": "https://www.agweb.com/rss.xml", "source": "AgWeb", "category": "agriculture"},
+    {"url": "https://modernfarmer.com/feed/", "source": "Modern Farmer", "category": "agriculture"},
+    {"url": "https://civileats.com/feed/", "source": "Civil Eats", "category": "agriculture"},
+    {"url": "https://www.agriculture.com/rss/all", "source": "Successful Farming", "category": "agriculture"},
+    {"url": "https://thefern.org/feed/", "source": "Food & Environment Reporting Network", "category": "agriculture"},
+
+    # Mental Health & Psychology
+    {"url": "https://psyche.co/feed", "source": "Psyche", "category": "mental_health"},
+    {"url": "https://www.psychologytoday.com/us/blog/feed", "source": "Psychology Today Blog", "category": "mental_health"},
+    {"url": "https://theconversation.com/us/topics/mental-health-702/articles.atom", "source": "The Conversation Mental Health", "category": "mental_health"},
+    {"url": "https://www.verywellmind.com/feed", "source": "Verywell Mind", "category": "mental_health"},
+    {"url": "https://www.mind.org.uk/news/feed/", "source": "Mind UK", "category": "mental_health"},
 ]
 
 
