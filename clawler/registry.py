@@ -87,6 +87,7 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("engadget",      "clawler.sources.engadget.EngadgetSource",                   "Engadget"),
     SourceEntry("cnbc",          "clawler.sources.cnbc.CNBCSource",                           "CNBC"),
     SourceEntry("marketwatch",   "clawler.sources.marketwatch.MarketWatchSource",             "MarketWatch"),
+    SourceEntry("metafilter",    "clawler.sources.metafilter.MetaFilterSource",               "MetaFilter"),
 ]
 
 # Quick lookups
