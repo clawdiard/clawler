@@ -76,6 +76,10 @@ class BaseSource(ABC):
     max_retries: int = 2
     retry_backoff: float = 1.0
     retry_jitter: float = 0.5  # random jitter factor (0-1) added to backoff
+    config: dict  # per-source configuration (populated by caller or defaults to {})
+
+    def __init__(self, **kwargs):
+        self.config = kwargs
 
     @staticmethod
     def _rate_limit(url: str):

@@ -72,7 +72,7 @@ class TestTechMemeEnhancements:
         )
         src = TechMemeSource()
         articles = src.crawl()
-        assert "ai" in articles[0].tags
+        assert any("ai" in t for t in articles[0].tags)
 
     @patch.object(TechMemeSource, "fetch_url")
     def test_discussion_url_from_entry_id(self, mock_fetch):

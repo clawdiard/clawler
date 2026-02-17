@@ -5,7 +5,9 @@ from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 from clawler.models import Article
 from clawler.sources.base import BaseSource
-from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource, WikipediaCurrentEventsSource, LobstersSource, DevToSource, ArXivSource, TechMemeSource, ProductHuntSource, BlueskySource, TildesSource, LemmySource, SlashdotSource, StackOverflowSource, PinboardSource, IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource, GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource, AllTopSource, WiredSource, TheVergeSource, ReutersSource, PhysOrgSource, NatureSource, APNewsSource, GuardianSource, InfoQSource, TheRegisterSource, BBCNewsSource, TheHackerNewsSource
+from clawler.registry import build_sources
+# Re-export all source classes for backward compatibility
+from clawler.sources import *  # noqa: F401,F403
 from clawler.dedup import deduplicate, DedupStats
 from clawler.weights import get_quality_score
 from clawler.health import HealthTracker
@@ -29,21 +31,8 @@ class CrawlEngine:
 
     @staticmethod
     def _default_sources() -> List[BaseSource]:
-        """Instantiate all available sources when none are explicitly provided."""
-        return [
-            RSSSource(), HackerNewsSource(), RedditSource(), GitHubTrendingSource(),
-            MastodonSource(), WikipediaCurrentEventsSource(), LobstersSource(),
-            DevToSource(), ArXivSource(), TechMemeSource(), ProductHuntSource(),
-            BlueskySource(), TildesSource(), LemmySource(), SlashdotSource(),
-            StackOverflowSource(), PinboardSource(), IndieHackersSource(),
-            EchoJSSource(), HashnodeSource(), FreeCodeCampSource(), ChangelogSource(),
-            HackerNoonSource(), YouTubeSource(), MediumSource(), SubstackSource(),
-            GoogleNewsSource(), DZoneSource(), ScienceDailySource(), NPRSource(),
-            ArsTechnicaSource(), AllTopSource(), WiredSource(), TheVergeSource(),
-            ReutersSource(), PhysOrgSource(), NatureSource(), APNewsSource(),
-            GuardianSource(), InfoQSource(), TheRegisterSource(), BBCNewsSource(),
-            TheHackerNewsSource(),
-        ]
+        """Instantiate all registered sources via the central registry."""
+        return build_sources()
 
     @staticmethod
     def _timed_crawl(src: BaseSource):
