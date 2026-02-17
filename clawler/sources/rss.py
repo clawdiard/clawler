@@ -401,10 +401,32 @@ DEFAULT_FEEDS = [
     {"url": "https://www.defensenews.com/arc/outboundfeeds/rss/", "source": "Defense News", "category": "military"},
     {"url": "https://www.thedrive.com/the-war-zone/rss", "source": "The War Zone", "category": "military"},
     {"url": "https://breakingdefense.com/feed/", "source": "Breaking Defense", "category": "military"},
+    # Military (expanding 3→5)
+    {"url": "https://www.military.com/daily-news/headlines/feed", "source": "Military.com", "category": "military"},
+    {"url": "https://www.janes.com/feeds/news", "source": "Janes", "category": "military"},
     # Robotics (NEW)
     {"url": "https://spectrum.ieee.org/feeds/topic/robotics.rss", "source": "IEEE Robotics", "category": "robotics"},
     {"url": "https://www.therobotreport.com/feed/", "source": "The Robot Report", "category": "robotics"},
     {"url": "https://robohub.org/feed/", "source": "Robohub", "category": "robotics"},
+    # Robotics (expanding 3→5)
+    {"url": "https://www.automate.org/rss/blogs", "source": "Automate", "category": "robotics"},
+    {"url": "https://roboticsandautomationnews.com/feed/", "source": "Robotics & Automation News", "category": "robotics"},
+    # Marine & Oceans (NEW)
+    {"url": "https://oceanservice.noaa.gov/rss/news.xml", "source": "NOAA Ocean Service", "category": "marine"},
+    {"url": "https://www.whoi.edu/feed/", "source": "Woods Hole Oceanographic", "category": "marine"},
+    {"url": "https://www.maritime-executive.com/feed", "source": "Maritime Executive", "category": "marine"},
+    {"url": "https://www.oceannews.com/rss", "source": "Ocean News & Technology", "category": "marine"},
+    {"url": "https://www.surfer.com/feed/", "source": "Surfer", "category": "marine"},
+    # Archaeology (NEW)
+    {"url": "https://www.archaeology.org/feed", "source": "Archaeology Magazine", "category": "archaeology"},
+    {"url": "https://www.heritagedaily.com/feed", "source": "HeritageDaily", "category": "archaeology"},
+    {"url": "https://www.livescience.com/feeds/all", "source": "Live Science", "category": "archaeology"},
+    {"url": "https://archaeologynewsnetwork.blogspot.com/feeds/posts/default?alt=rss", "source": "Archaeology News Network", "category": "archaeology"},
+    {"url": "https://populararchaeology.com/feed/", "source": "Popular Archaeology", "category": "archaeology"},
+    # Volunteering & Social Impact (NEW)
+    {"url": "https://ssir.org/site/rss", "source": "Stanford Social Innovation Review", "category": "social_impact"},
+    {"url": "https://www.devex.com/news/rss", "source": "Devex", "category": "social_impact"},
+    {"url": "https://philanthropynewsdigest.org/rss", "source": "Philanthropy News Digest", "category": "social_impact"},
 ]
 
 
