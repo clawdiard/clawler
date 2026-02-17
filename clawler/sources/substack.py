@@ -106,7 +106,7 @@ class SubstackSource(BaseSource):
             if author:
                 summary = f"by {author} — {summary}"
 
-            articles.append(Article(
+            article = Article(
                 title=title,
                 url=link,
                 source=f"Substack ({source_name})",
@@ -114,7 +114,16 @@ class SubstackSource(BaseSource):
                 timestamp=timestamp,
                 category=category,
                 author=author,
-            ))
+            )
+
+            # Apply quality score from source_weights.yaml
+            try:
+                from clawler.weights import get_quality_score
+                article.quality_score = get_quality_score(f"Substack ({source_name})")
+            except Exception:
+                article.quality_score = 0.70  # fallback
+
+            articles.append(article)
 
         return articles
 
