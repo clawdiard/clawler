@@ -16,7 +16,7 @@ def test_youtube_source_name():
 
 def test_youtube_default_channels():
     src = YouTubeSource()
-    assert len(src.channels) == 22
+    assert len(src.channels) == 29
     assert "Fireship" in src.channels.values()
     assert "The Berrics" in src.channels.values()
 
