@@ -72,18 +72,18 @@ class TestMediumSource:
 
     def test_parse_feed(self):
         src = MediumSource()
-        articles = src._parse_feed(SAMPLE_RSS, "artificial-intelligence")
+        articles = src._parse_feed(SAMPLE_RSS, "artificial-intelligence", "tag")
         assert len(articles) == 2
         assert articles[0].title == "Understanding Transformers in 2026"
         assert articles[0].author == "Alice Smith"
         assert "?" not in articles[0].url  # tracking params stripped
         assert articles[0].timestamp is not None
-        assert "machine-learning" in articles[0].tags
+        assert any("machine-learning" in t for t in articles[0].tags)
 
     def test_parse_empty(self):
         src = MediumSource()
-        assert src._parse_feed("", "test") == []
-        assert src._parse_feed("<invalid", "test") == []
+        assert src._parse_feed("", "test", "tag") == []
+        assert src._parse_feed("<invalid", "test", "tag") == []
 
     @patch.object(MediumSource, "fetch_url")
     def test_crawl_deduplicates(self, mock_fetch):

@@ -95,6 +95,7 @@ def main(argv=None):
     parser.add_argument("--no-infoq", action="store_true", help="Skip InfoQ source")
     parser.add_argument("--no-theregister", action="store_true", help="Skip The Register source")
     parser.add_argument("--no-bbc", action="store_true", help="Skip BBC News source")
+    parser.add_argument("--no-thehackernews", action="store_true", help="Skip The Hacker News (cybersecurity) source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -662,6 +663,8 @@ def main(argv=None):
             print("  📰 The Register (7 section feeds — headlines, security, software, networks, data centre, on-prem, offbeat)")
         if not getattr(args, 'no_bbc', False):
             print("  📺 BBC News (10 section feeds — top stories, world, business, tech, science, health, entertainment, politics, education, sport)")
+        if not getattr(args, 'no_thehackernews', False):
+            print("  🔐 The Hacker News (cybersecurity news — vulnerabilities, malware, breaches, research)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -744,7 +747,7 @@ def main(argv=None):
         GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource,
         AllTopSource, WiredSource, TheVergeSource, ReutersSource,
         PhysOrgSource, NatureSource, APNewsSource, GuardianSource, InfoQSource, TheRegisterSource,
-        BBCNewsSource)
+        BBCNewsSource, TheHackerNewsSource)
 
     _SOURCE_REGISTRY = [
         ("rss", RSSSource),
@@ -789,6 +792,7 @@ def main(argv=None):
         ("infoq", InfoQSource),
         ("theregister", TheRegisterSource),
         ("bbc", BBCNewsSource),
+        ("thehackernews", TheHackerNewsSource),
     ]
 
     sources = []

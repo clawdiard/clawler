@@ -19,6 +19,7 @@ dimension_weights:
 sources:
   Reuters: 0.90
   BBC News: 0.85
+  The Hacker News: 0.78
   NY Times: 0.84
   Nature: 0.84
   Bloomberg: 0.83

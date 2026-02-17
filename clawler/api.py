@@ -65,6 +65,7 @@ from clawler.sources import (
     NatureSource,
     APNewsSource,
     GuardianSource,
+    TheHackerNewsSource,
 )
 
 
@@ -124,6 +125,7 @@ def crawl(
     no_nature: bool = False,
     no_apnews: bool = False,
     no_guardian: bool = False,
+    no_thehackernews: bool = False,
     only: Optional[str] = None,
     dedupe_threshold: float = 0.75,
     dedupe_enabled: bool = True,
@@ -200,6 +202,7 @@ def crawl(
             "nature": "no_nature",
             "apnews": "no_apnews",
             "guardian": "no_guardian",
+            "thehackernews": "no_thehackernews",
         }
         enabled_set = set(s.strip().lower() for s in only.split(",") if s.strip())
         _locals = locals()
@@ -247,6 +250,7 @@ def crawl(
         no_nature = _locals.get("no_nature", no_nature)
         no_apnews = _locals.get("no_apnews", no_apnews)
         no_guardian = _locals.get("no_guardian", no_guardian)
+        no_thehackernews = _locals.get("no_thehackernews", no_thehackernews)
 
     _source_map = [
         (no_rss, RSSSource),
@@ -290,6 +294,7 @@ def crawl(
         (no_nature, NatureSource),
         (no_apnews, APNewsSource),
         (no_guardian, GuardianSource),
+        (no_thehackernews, TheHackerNewsSource),
     ]
     sources = []
     for disabled, cls in _source_map:
