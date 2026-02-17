@@ -68,7 +68,7 @@ class TestGoogleNewsSource:
         articles = src._parse_feed("https://example.com/feed", "Test", "tech")
         assert len(articles) == 3
         assert articles[0].title == "Major breakthrough in quantum computing - Reuters"
-        assert articles[0].category == "tech"
+        assert articles[0].category == "science"  # keyword detection: "quantum computing"
         assert articles[0].author == "Reuters"  # extracted from title suffix
         assert articles[0].timestamp is not None
 
@@ -102,8 +102,8 @@ class TestGoogleNewsSource:
         searches = [{"query": "AI", "name": "AI News", "category": "tech"}]
         src = GoogleNewsSource(topics=topics, searches=searches, max_per_feed=10)
         articles = src.crawl()
-        # 3 articles per feed × 2 feeds = 6
-        assert len(articles) == 6
+        # 3 unique articles (second feed deduped by URL)
+        assert len(articles) == 3
         assert mock_fetch.call_count == 2
 
     @patch.object(GoogleNewsSource, "fetch_url", return_value=SAMPLE_RSS)
