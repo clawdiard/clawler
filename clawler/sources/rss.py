@@ -450,6 +450,30 @@ DEFAULT_FEEDS = [
     {"url": "https://theconversation.com/us/topics/mental-health-702/articles.atom", "source": "The Conversation Mental Health", "category": "mental_health"},
     {"url": "https://www.verywellmind.com/feed", "source": "Verywell Mind", "category": "mental_health"},
     {"url": "https://www.mind.org.uk/news/feed/", "source": "Mind UK", "category": "mental_health"},
+    # Cryptocurrency
+    {"url": "https://www.coindesk.com/arc/outboundfeeds/rss/", "source": "CoinDesk", "category": "cryptocurrency"},
+    {"url": "https://cointelegraph.com/rss", "source": "CoinTelegraph", "category": "cryptocurrency"},
+    {"url": "https://decrypt.co/feed", "source": "Decrypt", "category": "cryptocurrency"},
+    {"url": "https://thedefiant.io/feed", "source": "The Defiant", "category": "cryptocurrency"},
+    {"url": "https://bitcoinmagazine.com/.rss/full/", "source": "Bitcoin Magazine", "category": "cryptocurrency"},
+    # Entertainment
+    {"url": "https://deadline.com/feed/", "source": "Deadline", "category": "entertainment"},
+    {"url": "https://variety.com/feed/", "source": "Variety", "category": "entertainment"},
+    {"url": "https://www.hollywoodreporter.com/feed/", "source": "The Hollywood Reporter", "category": "entertainment"},
+    {"url": "https://collider.com/feed/", "source": "Collider", "category": "entertainment"},
+    {"url": "https://screenrant.com/feed/", "source": "Screen Rant", "category": "entertainment"},
+    # Space
+    {"url": "https://www.space.com/feeds/all", "source": "Space.com", "category": "space"},
+    {"url": "https://spacenews.com/feed/", "source": "SpaceNews", "category": "space"},
+    {"url": "https://www.nasaspaceflight.com/feed/", "source": "NASASpaceFlight", "category": "space"},
+    {"url": "https://www.planetary.org/feeds/articles.rss", "source": "The Planetary Society", "category": "space"},
+    {"url": "https://skyandtelescope.org/feed/", "source": "Sky & Telescope", "category": "space"},
+    # Legal
+    {"url": "https://www.lawfaremedia.org/feed", "source": "Lawfare", "category": "legal"},
+    {"url": "https://www.scotusblog.com/feed/", "source": "SCOTUSblog", "category": "legal"},
+    {"url": "https://abovethelaw.com/feed/", "source": "Above the Law", "category": "legal"},
+    {"url": "https://www.law.com/rss/", "source": "Law.com", "category": "legal"},
+    {"url": "https://www.jurist.org/news/feed/", "source": "JURIST", "category": "legal"},
 ]
 
 
