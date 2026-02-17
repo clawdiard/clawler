@@ -1,4 +1,4 @@
-"""Tests for CNBC and MarketWatch sources (v10.22.0)."""
+"""Tests for CNBC and MarketWatch sources (v10.23.0)."""
 from unittest.mock import patch, MagicMock
 from clawler.sources.cnbc import CNBCSource, _quality_boost
 from clawler.sources.marketwatch import MarketWatchSource
@@ -124,6 +124,6 @@ class TestRegistryIncludesNewSources:
         assert entry is not None
         assert entry.display_name == "MarketWatch"
 
-    def test_total_sources_48(self):
+    def test_total_sources_50(self):
         from clawler.registry import SOURCES
-        assert len(SOURCES) == 48
+        assert len(SOURCES) == 50

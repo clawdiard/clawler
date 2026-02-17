@@ -238,3 +238,15 @@ sources:
   MarketWatch (Software): 0.80
   MarketWatch (Personal Finance): 0.78
   MarketWatch (Breaking): 0.84
+
+  # VentureBeat (AI/enterprise tech — strong original reporting)
+  VentureBeat: 0.75
+  VentureBeat (AI): 0.78
+  VentureBeat (Gaming): 0.70
+  VentureBeat (Enterprise): 0.74
+
+  # TechRadar (consumer tech reviews and news)
+  TechRadar: 0.68
+  TechRadar (Computing): 0.70
+  TechRadar (Mobile): 0.69
+  TechRadar (Gaming): 0.67
