@@ -6,6 +6,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from clawler.engine import CrawlEngine
 from clawler.formatters import AtomFormatter, ConsoleFormatter, CSVFormatter, HTMLFormatter, JSONFormatter, JSONFeedFormatter, JSONLFormatter, MarkdownFormatter, RSSFormatter
+from clawler.registry import SOURCES as _REGISTRY_SOURCES, get_all_keys as _get_all_keys
 
 from clawler import __version__
 
@@ -53,49 +54,10 @@ def main(argv=None):
                         help="Sort order (default: time)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
     parser.add_argument("-q", "--quiet", action="store_true", help="Suppress status messages on stderr")
-    parser.add_argument("--no-reddit", action="store_true", help="Skip Reddit source")
-    parser.add_argument("--no-hn", action="store_true", help="Skip Hacker News source")
-    parser.add_argument("--no-rss", action="store_true", help="Skip RSS feeds")
-    parser.add_argument("--no-github", action="store_true", help="Skip GitHub Trending source")
-    parser.add_argument("--no-mastodon", action="store_true", help="Skip Mastodon Trending source")
-    parser.add_argument("--no-wikipedia", action="store_true", help="Skip Wikipedia Current Events source")
-    parser.add_argument("--no-lobsters", action="store_true", help="Skip Lobsters source")
-    parser.add_argument("--no-devto", action="store_true", help="Skip Dev.to source")
-    parser.add_argument("--no-arxiv", action="store_true", help="Skip ArXiv source")
-    parser.add_argument("--no-techmeme", action="store_true", help="Skip TechMeme source")
-    parser.add_argument("--no-producthunt", action="store_true", help="Skip ProductHunt source")
-    parser.add_argument("--no-bluesky", action="store_true", help="Skip Bluesky source")
-    parser.add_argument("--no-tildes", action="store_true", help="Skip Tildes source")
-    parser.add_argument("--no-lemmy", action="store_true", help="Skip Lemmy source")
-    parser.add_argument("--no-slashdot", action="store_true", help="Skip Slashdot source")
-    parser.add_argument("--no-stackoverflow", action="store_true", help="Skip Stack Overflow source")
-    parser.add_argument("--no-pinboard", action="store_true", help="Skip Pinboard Popular source")
-    parser.add_argument("--no-indiehackers", action="store_true", help="Skip Indie Hackers source")
-    parser.add_argument("--no-echojs", action="store_true", help="Skip EchoJS source")
-    parser.add_argument("--no-hashnode", action="store_true", help="Skip Hashnode source")
-    parser.add_argument("--no-freecodecamp", action="store_true", help="Skip freeCodeCamp source")
-    parser.add_argument("--no-changelog", action="store_true", help="Skip Changelog source")
-    parser.add_argument("--no-hackernoon", action="store_true", help="Skip Hacker Noon source")
-    parser.add_argument("--no-youtube", action="store_true", help="Skip YouTube source")
-    parser.add_argument("--no-medium", action="store_true", help="Skip Medium source")
-    parser.add_argument("--no-substack", action="store_true", help="Skip Substack source")
-    parser.add_argument("--no-googlenews", action="store_true", help="Skip Google News source")
-    parser.add_argument("--no-dzone", action="store_true", help="Skip DZone source")
-    parser.add_argument("--no-sciencedaily", action="store_true", help="Skip ScienceDaily source")
-    parser.add_argument("--no-npr", action="store_true", help="Skip NPR source")
-    parser.add_argument("--no-arstechnica", action="store_true", help="Skip Ars Technica source")
-    parser.add_argument("--no-alltop", action="store_true", help="Skip AllTop source")
-    parser.add_argument("--no-wired", action="store_true", help="Skip Wired source")
-    parser.add_argument("--no-theverge", action="store_true", help="Skip The Verge source")
-    parser.add_argument("--no-reuters", action="store_true", help="Skip Reuters source")
-    parser.add_argument("--no-physorg", action="store_true", help="Skip Phys.org source")
-    parser.add_argument("--no-nature", action="store_true", help="Skip Nature source")
-    parser.add_argument("--no-apnews", action="store_true", help="Skip AP News source")
-    parser.add_argument("--no-guardian", action="store_true", help="Skip The Guardian source")
-    parser.add_argument("--no-infoq", action="store_true", help="Skip InfoQ source")
-    parser.add_argument("--no-theregister", action="store_true", help="Skip The Register source")
-    parser.add_argument("--no-bbc", action="store_true", help="Skip BBC News source")
-    parser.add_argument("--no-thehackernews", action="store_true", help="Skip The Hacker News (cybersecurity) source")
+    # Auto-generate --no-<key> flags from the central source registry
+    for _entry in _REGISTRY_SOURCES:
+        parser.add_argument(f"--no-{_entry.key}", action="store_true",
+                            help=f"Skip {_entry.display_name} source")
     parser.add_argument("--category-stats", action="store_true", help="Show article count per category")
     parser.add_argument("--digest", action="store_true",
                         help="Daily digest shorthand: --since 24h --group-by category --sort quality --format markdown")
@@ -291,19 +253,12 @@ def main(argv=None):
 
     # --only sets no_* flags for sources NOT in the list
     if args.only:
-        _SOURCE_NAMES = {"rss", "hn", "reddit", "github", "mastodon", "wikipedia",
-                         "lobsters", "devto", "arxiv", "techmeme", "producthunt", "bluesky",
-                         "tildes", "lemmy", "slashdot", "stackoverflow", "pinboard",
-                         "indiehackers", "echojs", "hashnode", "freecodecamp", "youtube", "medium",
-                         "substack", "googlenews", "dzone", "sciencedaily", "npr",
-                         "changelog", "hackernoon", "arstechnica", "alltop",
-                         "wired", "theverge", "reuters", "physorg", "nature",
-                         "apnews", "guardian", "infoq", "theregister", "bbc", "thehackernews"}
+        _ALL_SOURCE_KEYS = set(_get_all_keys())
         enabled = set(s.strip().lower() for s in args.only.split(",") if s.strip())
-        unknown = enabled - _SOURCE_NAMES
+        unknown = enabled - _ALL_SOURCE_KEYS
         if unknown:
             print(f"Warning: unknown source(s) in --only: {', '.join(unknown)}", file=sys.stderr)
-        for src_name in _SOURCE_NAMES:
+        for src_name in _ALL_SOURCE_KEYS:
             flag = f"no_{src_name}"
             if src_name not in enabled:
                 setattr(args, flag, True)
@@ -582,93 +537,12 @@ def main(argv=None):
     if args.dry_run:
         from clawler.sources.rss import DEFAULT_FEEDS
         print("🧪 Dry run — sources that would be crawled:\n")
-        if not args.no_rss:
-            feeds = custom_feeds if custom_feeds else DEFAULT_FEEDS
-            print(f"  📡 RSS ({len(feeds)} feeds)")
-        if not args.no_hn:
-            print("  🔥 Hacker News (top stories)")
-        if not args.no_reddit:
-            print("  🤖 Reddit (5 subreddits)")
-        if not args.no_github:
-            print("  🐙 GitHub Trending (daily)")
-        if not args.no_mastodon:
-            print("  🐘 Mastodon Trending (4 instances)")
-        if not args.no_wikipedia:
-            print("  📖 Wikipedia Current Events")
-        if not args.no_lobsters:
-            print("  🦞 Lobsters (hottest stories)")
-        if not args.no_devto:
-            print("  📝 Dev.to (latest articles)")
-        if not args.no_arxiv:
-            print("  📄 ArXiv (recent papers)")
-        if not args.no_techmeme:
-            print("  📰 TechMeme (curated tech news)")
-        if not args.no_producthunt:
-            print("  🚀 ProductHunt (trending products)")
-        if not args.no_bluesky:
-            print("  🦋 Bluesky (trending shared links)")
-        if not getattr(args, 'no_youtube', False):
-            print("  📺 YouTube (22 curated channels)")
-        if not getattr(args, 'no_medium', False):
-            print("  📝 Medium (20 tags + 10 publications)")
-        if not getattr(args, 'no_substack', False):
-            print("  📰 Substack (22 curated newsletters)")
-        if not getattr(args, 'no_googlenews', False):
-            print("  📰 Google News (5 topics + 8 searches)")
-        if not getattr(args, 'no_dzone', False):
-            print("  💻 DZone (12 topic feeds)")
-        if not getattr(args, 'no_sciencedaily', False):
-            print("  🔬 ScienceDaily (7 section feeds)")
-        if not getattr(args, 'no_npr', False):
-            print("  📻 NPR (10 section feeds)")
-        if not getattr(args, 'no_tildes', False):
-            print("  💬 Tildes (curated discussion)")
-        if not getattr(args, 'no_lemmy', False):
-            print("  🐀 Lemmy (federated link aggregator)")
-        if not getattr(args, 'no_slashdot', False):
-            print("  📟 Slashdot (news for nerds)")
-        if not getattr(args, 'no_stackoverflow', False):
-            print("  📚 Stack Overflow (hot questions)")
-        if not getattr(args, 'no_pinboard', False):
-            print("  📌 Pinboard (popular bookmarks)")
-        if not getattr(args, 'no_indiehackers', False):
-            print("  🛠️  Indie Hackers (founder stories)")
-        if not getattr(args, 'no_echojs', False):
-            print("  ⚡ EchoJS (JavaScript news)")
-        if not getattr(args, 'no_hashnode', False):
-            print("  📝 Hashnode (developer blogs)")
-        if not getattr(args, 'no_freecodecamp', False):
-            print("  🎓 freeCodeCamp (learning articles)")
-        if not getattr(args, 'no_changelog', False):
-            print("  📻 Changelog (open source news)")
-        if not getattr(args, 'no_hackernoon', False):
-            print("  📰 Hacker Noon (tech stories)")
-        if not getattr(args, 'no_arstechnica', False):
-            print("  🔬 Ars Technica (4 section feeds)")
-        if not getattr(args, 'no_alltop', False):
-            print("  🌐 AllTop (aggregated headlines from 33 topic categories)")
-        if not getattr(args, 'no_wired', False):
-            print("  📓 Wired (3 section feeds — main, science, security)")
-        if not getattr(args, 'no_theverge', False):
-            print("  📱 The Verge (tech, science, culture)")
-        if not getattr(args, 'no_reuters', False):
-            print("  🌍 Reuters (8 section feeds — business, tech, politics, environment, health, sports, lifestyle, world)")
-        if not getattr(args, 'no_physorg', False):
-            print("  🔬 Phys.org (8 section feeds — breaking, physics, nanotech, technology, space, earth, biology, chemistry)")
-        if not getattr(args, 'no_nature', False):
-            print("  🧬 Nature (5 journal feeds — nature, biotech, machine-intelligence, climate, nanotech)")
-        if not getattr(args, 'no_apnews', False):
-            print("  📰 AP News (10 section feeds — top news, world, US, politics, business, tech, science, health, sports, entertainment)")
-        if not getattr(args, 'no_guardian', False):
-            print("  🏛️ The Guardian (10 section feeds — world, UK, US, tech, science, business, environment, culture, opinion, sport)")
-        if not getattr(args, 'no_infoq', False):
-            print("  🏗️ InfoQ (7 topic feeds — enterprise software engineering, AI/ML, architecture, cloud, DevOps)")
-        if not getattr(args, 'no_theregister', False):
-            print("  📰 The Register (7 section feeds — headlines, security, software, networks, data centre, on-prem, offbeat)")
-        if not getattr(args, 'no_bbc', False):
-            print("  📺 BBC News (10 section feeds — top stories, world, business, tech, science, health, entertainment, politics, education, sport)")
-        if not getattr(args, 'no_thehackernews', False):
-            print("  🔐 The Hacker News (cybersecurity news — vulnerabilities, malware, breaches, research)")
+        for _entry in _REGISTRY_SOURCES:
+            if not getattr(args, f"no_{_entry.key}", False):
+                print(f"  📡 {_entry.display_name}")
+        feeds = custom_feeds if custom_feeds else DEFAULT_FEEDS
+        if not getattr(args, 'no_rss', False):
+            print(f"     ({len(feeds)} RSS feeds)")
         print(f"\n  Timeout: {args.timeout}s | Dedup threshold: {args.dedupe_threshold}")
         return
 
@@ -740,70 +614,15 @@ def main(argv=None):
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
 
-    # Build source list — data-driven to reduce repetition
-    from clawler.sources import (RSSSource, HackerNewsSource, RedditSource,
-        GitHubTrendingSource, MastodonSource, LobstersSource,
-        WikipediaCurrentEventsSource, DevToSource, ArXivSource,
-        TechMemeSource, ProductHuntSource, BlueskySource, TildesSource,
-        LemmySource, SlashdotSource, StackOverflowSource, PinboardSource,
-        IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource,
-        ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource,
-        GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource,
-        AllTopSource, WiredSource, TheVergeSource, ReutersSource,
-        PhysOrgSource, NatureSource, APNewsSource, GuardianSource, InfoQSource, TheRegisterSource,
-        BBCNewsSource, TheHackerNewsSource)
-
-    _SOURCE_REGISTRY = [
-        ("rss", RSSSource),
-        ("hn", HackerNewsSource),
-        ("reddit", RedditSource),
-        ("github", GitHubTrendingSource),
-        ("mastodon", MastodonSource),
-        ("wikipedia", WikipediaCurrentEventsSource),
-        ("lobsters", LobstersSource),
-        ("devto", DevToSource),
-        ("arxiv", ArXivSource),
-        ("techmeme", TechMemeSource),
-        ("producthunt", ProductHuntSource),
-        ("bluesky", BlueskySource),
-        ("tildes", TildesSource),
-        ("lemmy", LemmySource),
-        ("slashdot", SlashdotSource),
-        ("stackoverflow", StackOverflowSource),
-        ("pinboard", PinboardSource),
-        ("indiehackers", IndieHackersSource),
-        ("echojs", EchoJSSource),
-        ("hashnode", HashnodeSource),
-        ("freecodecamp", FreeCodeCampSource),
-        ("changelog", ChangelogSource),
-        ("hackernoon", HackerNoonSource),
-        ("youtube", YouTubeSource),
-        ("medium", MediumSource),
-        ("substack", SubstackSource),
-        ("googlenews", GoogleNewsSource),
-        ("dzone", DZoneSource),
-        ("sciencedaily", ScienceDailySource),
-        ("npr", NPRSource),
-        ("arstechnica", ArsTechnicaSource),
-        ("alltop", AllTopSource),
-        ("wired", WiredSource),
-        ("theverge", TheVergeSource),
-        ("reuters", ReutersSource),
-        ("physorg", PhysOrgSource),
-        ("nature", NatureSource),
-        ("apnews", APNewsSource),
-        ("guardian", GuardianSource),
-        ("infoq", InfoQSource),
-        ("theregister", TheRegisterSource),
-        ("bbc", BBCNewsSource),
-        ("thehackernews", TheHackerNewsSource),
-    ]
+    # Build source list from central registry — no manual duplication needed
+    from clawler.registry import SOURCES as _REG_SOURCES
 
     sources = []
-    for flag_name, cls in _SOURCE_REGISTRY:
-        if getattr(args, f"no_{flag_name}", False):
+    for entry in _REG_SOURCES:
+        if getattr(args, f"no_{entry.key}", False):
             continue
-        src = cls(feeds=custom_feeds) if (flag_name == "rss" and custom_feeds) else cls()
+        cls = entry.load_class()
+        src = cls(feeds=custom_feeds) if (entry.key == "rss" and custom_feeds) else cls()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)

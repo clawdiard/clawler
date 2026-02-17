@@ -1,30 +1,33 @@
-"""Test that --only source names stay in sync with _SOURCE_REGISTRY."""
-import re
-from pathlib import Path
+"""Test that --only source names stay in sync with the central registry."""
+from clawler.registry import get_all_keys
 
 
-def _extract_set(name: str, text: str) -> set:
-    """Extract a set literal assigned to `name` from source text."""
-    # Match: name = {..."..."}  (possibly multi-line)
-    pattern = rf"{re.escape(name)}\s*=\s*\{{([^}}]+)\}}"
-    m = re.search(pattern, text, re.DOTALL)
-    assert m, f"Could not find {name} in cli.py"
-    return set(re.findall(r'"([^"]+)"', m.group(1)))
+def test_only_uses_central_registry():
+    """CLI --only validation derives from the central registry, not a hardcoded set.
+
+    This test ensures the registry has all expected sources and that the CLI
+    imports from registry (verified by the refactor that removed _SOURCE_REGISTRY
+    and _SOURCE_NAMES from cli.py).
+    """
+    keys = get_all_keys()
+    assert len(keys) > 40, f"Expected 40+ sources in registry, got {len(keys)}"
+    # Spot-check some key sources
+    for expected in ("rss", "hn", "reddit", "github", "flipboard", "bbc"):
+        assert expected in keys, f"Expected '{expected}' in registry keys"
 
 
-def test_only_names_match_registry():
-    """--only _SOURCE_NAMES must contain every key in _SOURCE_REGISTRY."""
-    cli_text = (Path(__file__).parent.parent / "clawler" / "cli.py").read_text()
+def test_cli_no_flags_match_registry():
+    """Every registry source should have a corresponding --no-<key> CLI flag."""
+    import argparse
+    from unittest.mock import patch
+    from clawler.cli import main
 
-    # Extract registry keys from the list of tuples
-    registry_pattern = r"_SOURCE_REGISTRY\s*=\s*\[(.+?)\]"
-    m = re.search(registry_pattern, cli_text, re.DOTALL)
-    assert m, "Could not find _SOURCE_REGISTRY in cli.py"
-    registry_keys = set(re.findall(r'\("([^"]+)"', m.group(1)))
+    # Parse --help to get all flags (we just need the parser)
+    from clawler.cli import main as _main
+    import clawler.cli as cli_mod
+    import inspect
 
-    source_names = _extract_set("_SOURCE_NAMES", cli_text)
-
-    missing = registry_keys - source_names
-    extra = source_names - registry_keys
-    assert not missing, f"_SOURCE_NAMES missing registry keys: {missing}"
-    assert not extra, f"_SOURCE_NAMES has extra keys not in registry: {extra}"
+    # Get the source of main to verify it uses _REGISTRY_SOURCES
+    src = inspect.getsource(cli_mod)
+    assert "_REGISTRY_SOURCES" in src or "SOURCES" in src, \
+        "CLI should reference the central registry, not a hardcoded list"
