@@ -522,6 +522,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.logisticsmgmt.com/rss/", "source": "Logistics Management", "category": "supply_chain"},
     {"url": "https://www.dcvelocity.com/rss/", "source": "DC Velocity", "category": "supply_chain"},
     {"url": "https://supplychainbrain.com/rss", "source": "SupplyChainBrain", "category": "supply_chain"},
+
+    # Cooking & Baking
+    {"url": "https://www.kingarthurbaking.com/blog/feed", "source": "King Arthur Baking", "category": "cooking"},
+    {"url": "https://smittenkitchen.com/feed/", "source": "Smitten Kitchen", "category": "cooking"},
+    {"url": "https://www.budgetbytes.com/feed/", "source": "Budget Bytes", "category": "cooking"},
+    {"url": "https://sallysbakingaddiction.com/feed/", "source": "Sally's Baking Addiction", "category": "cooking"},
+    {"url": "https://minimalistbaker.com/feed/", "source": "Minimalist Baker", "category": "cooking"},
+
+    # Comics & Graphic Novels
+    {"url": "https://www.cbr.com/feed/", "source": "CBR", "category": "comics"},
+    {"url": "https://bleedingcool.com/feed/", "source": "Bleeding Cool", "category": "comics"},
+    {"url": "https://comicsbeat.com/feed/", "source": "Comics Beat", "category": "comics"},
+    {"url": "https://www.comicsxf.com/feed", "source": "Comics XF", "category": "comics"},
+    {"url": "https://graphicpolicy.com/feed/", "source": "Graphic Policy", "category": "comics"},
+
+    # Sleep & Wellness
+    {"url": "https://thesleepdoctor.com/feed/", "source": "The Sleep Doctor", "category": "sleep_wellness"},
+    {"url": "https://www.mindbodygreen.com/rss", "source": "MindBodyGreen", "category": "sleep_wellness"},
+    {"url": "https://www.wellandgood.com/feed/", "source": "Well+Good", "category": "sleep_wellness"},
+    {"url": "https://greatist.com/feed", "source": "Greatist", "category": "sleep_wellness"},
+    {"url": "https://zenhabits.net/feed/", "source": "Zen Habits", "category": "sleep_wellness"},
+
+    # Indigenous Affairs
+    {"url": "https://indiancountrytoday.com/rss", "source": "Indian Country Today", "category": "indigenous"},
+    {"url": "https://www.culturalsurvival.org/news/feed", "source": "Cultural Survival", "category": "indigenous"},
+    {"url": "https://intercontinentalcry.org/feed/", "source": "Intercontinental Cry", "category": "indigenous"},
+    {"url": "https://www.survival-international.org/rss/news", "source": "Survival International", "category": "indigenous"},
+    {"url": "https://newsmaven.io/indiancountrytoday/feed", "source": "Native News Online", "category": "indigenous"},
 ]
 
 
