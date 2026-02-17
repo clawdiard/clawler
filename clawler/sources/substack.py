@@ -5,7 +5,9 @@ This source tracks popular Substack newsletters across tech, business, science,
 culture, and policy categories.
 """
 import logging
+import re
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import List, Optional
 from xml.etree import ElementTree as ET
 
@@ -85,7 +87,6 @@ class SubstackSource(BaseSource):
 
             description = (item.findtext("description") or "").strip()
             # Strip HTML tags from description
-            import re
             clean_desc = re.sub(r"<[^>]+>", "", description)[:300].strip()
 
             author = (item.findtext("dc:creator", namespaces=ns)
@@ -95,7 +96,6 @@ class SubstackSource(BaseSource):
             timestamp = None
             if pub_date:
                 try:
-                    from email.utils import parsedate_to_datetime
                     timestamp = parsedate_to_datetime(pub_date)
                     if timestamp.tzinfo is None:
                         timestamp = timestamp.replace(tzinfo=timezone.utc)

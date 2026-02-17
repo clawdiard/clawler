@@ -1,5 +1,6 @@
 """Hacker Noon source — tech articles via public RSS feed."""
 import logging
+import re
 from datetime import datetime, timezone
 from typing import List
 from xml.etree import ElementTree as ET
@@ -44,7 +45,6 @@ class HackerNoonSource(BaseSource):
 
                 description = (item.findtext("description") or "").strip()
                 # Strip HTML tags from description for clean summary
-                import re
                 summary = re.sub(r"<[^>]+>", "", description)[:300]
 
                 author = (item.findtext("dc:creator", namespaces=ns) or "").strip()

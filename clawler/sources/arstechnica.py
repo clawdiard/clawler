@@ -4,6 +4,7 @@ Supports multiple section feeds (main, tech policy, science, gaming, etc.)
 with category mapping and rich metadata.
 """
 import logging
+import re
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Set
 from xml.etree import ElementTree
@@ -149,7 +150,6 @@ class ArsTechnicaSource(BaseSource):
         summary = ""
         if desc_el is not None and desc_el.text:
             # Strip HTML tags from description
-            import re
             summary = re.sub(r"<[^>]+>", "", desc_el.text).strip()
             if len(summary) > 300:
                 summary = summary[:297] + "..."

@@ -5,6 +5,7 @@ We use their RSS feeds which are freely available and well-structured.
 Covers: news, politics, science, technology, culture, health, business.
 """
 import logging
+import re
 from datetime import datetime
 from typing import List, Optional
 
@@ -71,7 +72,6 @@ class NPRSource(BaseSource):
             summary = entry.get("summary", "").strip()
             # Clean HTML from summary
             if summary:
-                import re
                 summary = re.sub(r"<[^>]+>", "", summary).strip()
                 if len(summary) > 300:
                     summary = summary[:297] + "..."
