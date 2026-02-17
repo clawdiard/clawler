@@ -3,9 +3,9 @@ import pytest
 from clawler.registry import SOURCES, get_all_keys, get_entry, build_sources
 
 
-def test_registry_has_all_44_sources():
+def test_registry_has_all_46_sources():
     """Registry should contain all 44 sources."""
-    assert len(SOURCES) == 44
+    assert len(SOURCES) == 46
 
 
 def test_keys_are_unique():
@@ -36,12 +36,12 @@ def test_load_class():
 
 def test_build_sources_all():
     sources = build_sources()
-    assert len(sources) == 44
+    assert len(sources) == 46
 
 
 def test_build_sources_disabled():
     sources = build_sources(disabled={"reddit", "hn", "rss"})
-    assert len(sources) == 41
+    assert len(sources) == 43
     names = {type(s).__name__ for s in sources}
     assert "RedditSource" not in names
     assert "HackerNewsSource" not in names

@@ -550,6 +550,34 @@ DEFAULT_FEEDS = [
     {"url": "https://intercontinentalcry.org/feed/", "source": "Intercontinental Cry", "category": "indigenous"},
     {"url": "https://www.survival-international.org/rss/news", "source": "Survival International", "category": "indigenous"},
     {"url": "https://newsmaven.io/indiancountrytoday/feed", "source": "Native News Online", "category": "indigenous"},
+
+    # --- Esports ---
+    {"url": "https://dotesports.com/feed", "source": "Dot Esports", "category": "esports"},
+    {"url": "https://www.dexerto.com/feed/", "source": "Dexerto", "category": "esports"},
+    {"url": "https://esportsinsider.com/feed", "source": "Esports Insider", "category": "esports"},
+    {"url": "https://www.invenglobal.com/feed", "source": "Inven Global", "category": "esports"},
+    {"url": "https://win.gg/feed", "source": "WIN.gg", "category": "esports"},
+
+    # --- E-commerce & Retail ---
+    {"url": "https://www.practicalecommerce.com/feed", "source": "Practical Ecommerce", "category": "ecommerce"},
+    {"url": "https://www.digitalcommerce360.com/feed/", "source": "Digital Commerce 360", "category": "ecommerce"},
+    {"url": "https://retaildive.com/feeds/news/", "source": "Retail Dive", "category": "ecommerce"},
+    {"url": "https://www.retailtouchpoints.com/feed", "source": "Retail TouchPoints", "category": "ecommerce"},
+    {"url": "https://ecommercenews.eu/feed/", "source": "Ecommerce News EU", "category": "ecommerce"},
+
+    # --- Home Improvement ---
+    {"url": "https://www.bobvila.com/feed", "source": "Bob Vila", "category": "home_improvement"},
+    {"url": "https://www.familyhandyman.com/feed/", "source": "Family Handyman", "category": "home_improvement"},
+    {"url": "https://www.thisoldhouse.com/rss.xml", "source": "This Old House", "category": "home_improvement"},
+    {"url": "https://www.apartmenttherapy.com/main.rss", "source": "Apartment Therapy", "category": "home_improvement"},
+    {"url": "https://www.housebeautiful.com/rss/all.xml/", "source": "House Beautiful", "category": "home_improvement"},
+
+    # --- Wine, Beer & Spirits ---
+    {"url": "https://vinepair.com/feed/", "source": "VinePair", "category": "beverages"},
+    {"url": "https://www.winemag.com/feed/", "source": "Wine Enthusiast", "category": "beverages"},
+    {"url": "https://craftbeerclub.com/blog/feed", "source": "Craft Beer Club", "category": "beverages"},
+    {"url": "https://punchdrink.com/feed/", "source": "PUNCH", "category": "beverages"},
+    {"url": "https://daily.sevenfifty.com/feed/", "source": "SevenFifty Daily", "category": "beverages"},
 ]
 
 
