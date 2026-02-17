@@ -27,6 +27,7 @@ Clawler aggregates news from **250+ individual sources across 44 source types** 
 - 🔁 **CI pipeline** — GitHub Actions runs tests on Python 3.9–3.12
 - 🛡️ **Error resilient** — individual source failures don't break the crawl
 - 🚦 **Rate limiting** — per-domain request throttling to be a good citizen
+- ⏱️ **Per-source timeouts** — `--source-timeout 60` kills hanging sources (default: 60s); `--no-source-timeout` to disable
 - 📚 **Bookmarks** — save interesting articles locally for later reading
 - 📊 **Dedup statistics** — see per-tier dedup breakdown with `--dedupe-stats`
 - 🔥 **Trending shorthand** — `--trending` for multi-source stories

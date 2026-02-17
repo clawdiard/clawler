@@ -131,6 +131,7 @@ def crawl(
     dedupe_enabled: bool = True,
     timeout: int = 15,
     max_workers: int = 6,
+    source_timeout: Optional[float] = 60,
     profile: Optional[Union[str, dict]] = None,
     interests: Optional[str] = None,
     min_relevance: float = 0.0,
@@ -156,6 +157,7 @@ def crawl(
         dedupe_enabled: Set False to disable deduplication entirely.
         timeout: HTTP timeout in seconds.
         max_workers: Max parallel workers for crawling (default: 6).
+        source_timeout: Per-source crawl timeout in seconds (default: 60, None to disable).
         profile: Path to a YAML profile file, or a dict with 'interests' key.
                  Each interest has keywords and an optional weight.
         interests: Comma-separated interest keywords (e.g. "AI,skateboarding").
@@ -306,7 +308,7 @@ def crawl(
     if not sources:
         return []
 
-    engine = CrawlEngine(sources=sources, max_workers=max_workers)
+    engine = CrawlEngine(sources=sources, max_workers=max_workers, source_timeout=source_timeout)
     articles, _stats, _dedup_stats = engine.crawl(
         dedupe_threshold=dedupe_threshold,
         dedupe_enabled=dedupe_enabled,
