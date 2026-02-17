@@ -61,7 +61,7 @@ def test_arxiv_parse_feed():
     assert "Attention" in a1.title
     assert a1.url == "http://arxiv.org/abs/2602.12345v1"
     assert a1.source == "ArXiv"
-    assert a1.category == "tech"
+    assert a1.category == "ai"
     assert a1.author == "Alice Smith, Bob Jones"
     assert a1.discussion_url == "http://arxiv.org/pdf/2602.12345v1"
     assert "cs.AI" in a1.tags
@@ -94,11 +94,11 @@ def test_arxiv_crawl_fetch_failure():
 
 
 def test_arxiv_category_mapping():
-    assert ArXivSource._map_category(["cs.AI", "cs.LG"]) == "tech"
+    assert ArXivSource._map_category(["cs.AI", "cs.LG"]) == "ai"
     assert ArXivSource._map_category(["cs.SE"]) == "tech"
     assert ArXivSource._map_category(["quant-ph"]) == "science"
     assert ArXivSource._map_category(["math.CO"]) == "science"
-    assert ArXivSource._map_category(["q-bio.GN"]) == "science"
+    assert ArXivSource._map_category(["q-bio.GN"]) == "health"
     assert ArXivSource._map_category(["econ.GN"]) == "science"  # fallback
 
 
