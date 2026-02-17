@@ -244,6 +244,10 @@ def main(argv=None):
                         help="Number of retries for failed sources (default: 1, 0 to disable)")
     parser.add_argument("--no-retry", action="store_true", dest="no_retry",
                         help="Disable source-level retries (equivalent to --source-retries 0)")
+    parser.add_argument("--source-timeout", type=float, default=60, dest="source_timeout",
+                        help="Per-source crawl timeout in seconds (default: 60, 0 to disable)")
+    parser.add_argument("--no-source-timeout", action="store_true", dest="no_source_timeout",
+                        help="Disable per-source timeout (allow sources to run indefinitely)")
     parser.add_argument("--export-health", type=str, default=None, metavar="FILE",
                         dest="export_health",
                         help="Export source health data as JSON to FILE")
@@ -809,7 +813,8 @@ def main(argv=None):
         sys.exit(1)
 
     retries = 0 if args.no_retry else args.source_retries
-    engine = CrawlEngine(sources=sources, max_workers=args.workers, retries=retries)
+    source_timeout = None if args.no_source_timeout else (None if args.source_timeout == 0 else args.source_timeout)
+    engine = CrawlEngine(sources=sources, max_workers=args.workers, retries=retries, source_timeout=source_timeout)
     if not args.quiet:
         print("🕷️  Crawling news sources...", file=sys.stderr)
 

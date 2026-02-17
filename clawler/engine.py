@@ -2,7 +2,7 @@
 import logging
 import time
 from typing import Dict, List, Optional, Tuple
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 from clawler.sources import RSSSource, HackerNewsSource, RedditSource, GitHubTrendingSource, MastodonSource, WikipediaCurrentEventsSource, LobstersSource, DevToSource, ArXivSource, TechMemeSource, ProductHuntSource, BlueskySource, TildesSource, LemmySource, SlashdotSource, StackOverflowSource, PinboardSource, IndieHackersSource, EchoJSSource, HashnodeSource, FreeCodeCampSource, ChangelogSource, HackerNoonSource, YouTubeSource, MediumSource, SubstackSource, GoogleNewsSource, DZoneSource, ScienceDailySource, NPRSource, ArsTechnicaSource, AllTopSource, WiredSource, TheVergeSource, ReutersSource, PhysOrgSource, NatureSource, APNewsSource, GuardianSource, InfoQSource, TheRegisterSource, BBCNewsSource, TheHackerNewsSource
@@ -12,11 +12,15 @@ from clawler.health import HealthTracker
 
 logger = logging.getLogger(__name__)
 
+# Default per-source crawl timeout in seconds (None = no limit)
+DEFAULT_SOURCE_TIMEOUT = 60
+
 
 class CrawlEngine:
     """Orchestrates crawling across all sources."""
 
-    def __init__(self, sources: Optional[List[BaseSource]] = None, max_workers: int = 6, retries: int = 1):
+    def __init__(self, sources: Optional[List[BaseSource]] = None, max_workers: int = 6,
+                 retries: int = 1, source_timeout: Optional[float] = DEFAULT_SOURCE_TIMEOUT):
         self.sources = sources or [
             RSSSource(),
             HackerNewsSource(),
@@ -24,6 +28,7 @@ class CrawlEngine:
         ]
         self.max_workers = max_workers
         self.retries = retries
+        self.source_timeout = source_timeout
         self.health = HealthTracker()
 
     @staticmethod
@@ -43,17 +48,37 @@ class CrawlEngine:
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
             futures = {pool.submit(self._timed_crawl, src): src for src in self.sources}
             failed_sources = []
-            for future in as_completed(futures):
-                src = futures[future]
-                try:
-                    articles, elapsed_ms = future.result()
-                    logger.info(f"[Engine] {src.name} returned {len(articles)} articles in {elapsed_ms:.0f}ms")
-                    stats[src.name] = len(articles)
-                    self.health.record_success(src.name, len(articles), response_ms=elapsed_ms)
-                    all_articles.extend(articles)
-                except Exception as e:
-                    logger.error(f"[Engine] {src.name} failed: {e}")
-                    failed_sources.append(src)
+            timed_out_futures = set()
+
+            # Use as_completed with an overall timeout if source_timeout is set.
+            # This handles the case where sources hang: after the timeout window,
+            # any futures still pending are marked as timed-out.
+            if self.source_timeout is not None:
+                done_iter = as_completed(futures, timeout=self.source_timeout)
+            else:
+                done_iter = as_completed(futures)
+
+            try:
+                for future in done_iter:
+                    src = futures[future]
+                    try:
+                        articles, elapsed_ms = future.result(timeout=0)
+                        logger.info(f"[Engine] {src.name} returned {len(articles)} articles in {elapsed_ms:.0f}ms")
+                        stats[src.name] = len(articles)
+                        self.health.record_success(src.name, len(articles), response_ms=elapsed_ms)
+                        all_articles.extend(articles)
+                    except Exception as e:
+                        logger.error(f"[Engine] {src.name} failed: {e}")
+                        failed_sources.append(src)
+            except FuturesTimeoutError:
+                # Some futures didn't complete within the timeout window
+                for future, src in futures.items():
+                    if not future.done():
+                        logger.error(f"[Engine] {src.name} timed out after {self.source_timeout}s")
+                        stats[src.name] = -1
+                        self.health.record_failure(src.name)
+                        future.cancel()
+                        timed_out_futures.add(future)
 
             # Retry failed sources (sequential, with backoff)
             for src in failed_sources:
