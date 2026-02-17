@@ -85,6 +85,8 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("flipboard",      "clawler.sources.flipboard.FlipboardSource",                 "Flipboard"),
     SourceEntry("techcrunch",    "clawler.sources.techcrunch.TechCrunchSource",               "TechCrunch"),
     SourceEntry("engadget",      "clawler.sources.engadget.EngadgetSource",                   "Engadget"),
+    SourceEntry("cnbc",          "clawler.sources.cnbc.CNBCSource",                           "CNBC"),
+    SourceEntry("marketwatch",   "clawler.sources.marketwatch.MarketWatchSource",             "MarketWatch"),
 ]
 
 # Quick lookups
