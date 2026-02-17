@@ -578,6 +578,34 @@ DEFAULT_FEEDS = [
     {"url": "https://craftbeerclub.com/blog/feed", "source": "Craft Beer Club", "category": "beverages"},
     {"url": "https://punchdrink.com/feed/", "source": "PUNCH", "category": "beverages"},
     {"url": "https://daily.sevenfifty.com/feed/", "source": "SevenFifty Daily", "category": "beverages"},
+
+    # --- 3D Printing ---
+    {"url": "https://3dprint.com/feed/", "source": "3DPrint.com", "category": "3d_printing"},
+    {"url": "https://all3dp.com/feed/", "source": "All3DP", "category": "3d_printing"},
+    {"url": "https://www.3dprintingmedia.network/feed/", "source": "3D Printing Media Network", "category": "3d_printing"},
+    {"url": "https://3dprintingindustry.com/feed/", "source": "3D Printing Industry", "category": "3d_printing"},
+    {"url": "https://www.fabbaloo.com/feed", "source": "Fabbaloo", "category": "3d_printing"},
+
+    # --- Freelancing & Remote Work ---
+    {"url": "https://blog.remotive.com/feed/", "source": "Remotive", "category": "freelancing"},
+    {"url": "https://weworkremotely.com/remote-jobs.rss", "source": "We Work Remotely", "category": "freelancing"},
+    {"url": "https://freelancersunion.org/blog/feed/", "source": "Freelancers Union", "category": "freelancing"},
+    {"url": "https://www.flexjobs.com/blog/feed/", "source": "FlexJobs", "category": "freelancing"},
+    {"url": "https://runningremote.com/feed/", "source": "Running Remote", "category": "freelancing"},
+
+    # --- Performing Arts ---
+    {"url": "https://www.broadwayworld.com/rss/bbw_article.rss", "source": "BroadwayWorld", "category": "performing_arts"},
+    {"url": "https://www.theatermania.com/rss/", "source": "TheaterMania", "category": "performing_arts"},
+    {"url": "https://www.dancemagazine.com/feed/", "source": "Dance Magazine", "category": "performing_arts"},
+    {"url": "https://operawire.com/feed/", "source": "OperaWire", "category": "performing_arts"},
+    {"url": "https://www.americantheatre.org/feed/", "source": "American Theatre", "category": "performing_arts"},
+
+    # --- Civic Tech & Government ---
+    {"url": "https://sunlightfoundation.com/feed/", "source": "Sunlight Foundation", "category": "civic_tech"},
+    {"url": "https://civictech.guide/feed/", "source": "Civic Tech Guide", "category": "civic_tech"},
+    {"url": "https://www.govtech.com/rss/", "source": "GovTech", "category": "civic_tech"},
+    {"url": "https://www.fedscoop.com/feed/", "source": "FedScoop", "category": "civic_tech"},
+    {"url": "https://www.govexec.com/rss/", "source": "Government Executive", "category": "civic_tech"},
 ]
 
 
