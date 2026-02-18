@@ -253,3 +253,20 @@ sources:
 
   # Quanta Magazine (award-winning science/math/CS journalism)
   Quanta Magazine: 0.85
+
+  # Rest of World (global tech journalism, nonprofit, original reporting)
+  Rest of World (Latest): 0.82
+  Rest of World (Big Tech): 0.82
+  Rest of World (Creators & Culture): 0.78
+  Rest of World (Labor & Commerce): 0.80
+  Rest of World (Policy & Rights): 0.80
+  Rest of World (Gaming): 0.76
+
+  # Semafor (structured news analysis)
+  Semafor (Latest): 0.80
+  Semafor (Tech): 0.80
+  Semafor (Business): 0.79
+  Semafor (Media): 0.78
+  Semafor (Climate): 0.78
+  Semafor (Africa): 0.77
+  Semafor (Net Zero): 0.76
