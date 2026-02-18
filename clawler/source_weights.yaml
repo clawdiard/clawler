@@ -288,3 +288,28 @@ sources:
 # ProPublica (Pulitzer-winning investigative journalism)
   ProPublica (Top Stories): 0.88
   ProPublica (Articles): 0.87
+
+# Forbes (business, tech, entrepreneurship)
+  Forbes (Innovation): 0.70
+  Forbes (Business): 0.68
+  Forbes (Leadership): 0.67
+  Forbes (Money): 0.66
+  Forbes (AI): 0.72
+  Forbes (Cybersecurity): 0.71
+  Forbes (Healthcare): 0.68
+  Forbes (Digital Assets): 0.65
+  Forbes (Lifestyle): 0.60
+  Forbes (World): 0.67
+
+# The Economist (premium global analysis)
+  The Economist (The World This Week): 0.88
+  The Economist (Leaders): 0.90
+  The Economist (Finance & Economics): 0.88
+  The Economist (Science & Technology): 0.86
+  The Economist (Business): 0.87
+  The Economist (International): 0.86
+  The Economist (Briefing): 0.89
+  The Economist (United States): 0.85
+  The Economist (Asia): 0.85
+  The Economist (Europe): 0.85
+  The Economist (Culture): 0.80
