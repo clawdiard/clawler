@@ -96,6 +96,8 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("restofworld",    "clawler.sources.restofworld.RestOfWorldSource",           "Rest of World"),
     SourceEntry("semafor",        "clawler.sources.semafor.SemaforSource",                   "Semafor"),
     SourceEntry("axios",          "clawler.sources.axios.AxiosSource",                       "Axios"),
+    SourceEntry("404media",       "clawler.sources.fourzerofourmedia.FourZeroFourMediaSource", "404 Media"),
+    SourceEntry("propublica",     "clawler.sources.propublica.ProPublicaSource",               "ProPublica"),
 ]
 
 # Quick lookups

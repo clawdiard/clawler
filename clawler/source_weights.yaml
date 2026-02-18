@@ -281,3 +281,10 @@ sources:
   Axios (Energy & Environment): 0.79
   Axios (World): 0.81
   Axios (Media): 0.79
+
+# 404 Media (independent tech/internet investigative journalism)
+  404 Media: 0.85
+
+# ProPublica (Pulitzer-winning investigative journalism)
+  ProPublica (Top Stories): 0.88
+  ProPublica (Articles): 0.87
