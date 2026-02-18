@@ -58,6 +58,11 @@ from .restofworld import RestOfWorldSource
 from .semafor import SemaforSource
 from .fourzerofourmedia import FourZeroFourMediaSource
 from .propublica import ProPublicaSource
+from .forbes import ForbesSource
+from .economist import EconomistSource
+from .nytimes import NYTimesSource
+from .wsj import WSJSource
+from .washingtonpost import WashingtonPostSource
 
 __all__ = [
     "RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource",
@@ -76,4 +81,7 @@ __all__ = [
     "VentureBeatSource", "TechRadarSource", "PoliticoSource", "AlJazeeraSource",
     "QuantaMagazineSource", "RestOfWorldSource", "SemaforSource",
     "FourZeroFourMediaSource", "ProPublicaSource",
+    "ForbesSource", "EconomistSource",
+    "NYTimesSource", "WSJSource", "WashingtonPostSource",
+    "ForbesSource", "EconomistSource",
 ]

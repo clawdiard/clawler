@@ -27,7 +27,7 @@ def test_propublica_in_registry():
 
 
 def test_total_sources_59():
-    assert len(SOURCES) == 59
+    assert len(SOURCES) == 61
 
 
 # ── 404 Media tests ────────────────────────────────────────────────
