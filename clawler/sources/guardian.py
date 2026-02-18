@@ -262,7 +262,7 @@ class GuardianSource(BaseSource):
             articles.append(Article(
                 title=title,
                 url=link,
-                source=f"The Guardian ({section})",
+                source=f"The Guardian ({section.title()})",
                 summary=rich_summary,
                 timestamp=ts,
                 category=category,

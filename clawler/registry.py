@@ -91,6 +91,8 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("techradar",     "clawler.sources.techradar.TechRadarSource",                 "TechRadar"),
     SourceEntry("metafilter",    "clawler.sources.metafilter.MetaFilterSource",               "MetaFilter"),
     SourceEntry("quantamagazine", "clawler.sources.quantamagazine.QuantaMagazineSource",   "Quanta Magazine"),
+    SourceEntry("politico",       "clawler.sources.politico.PoliticoSource",                 "Politico"),
+    SourceEntry("aljazeera",      "clawler.sources.aljazeera.AlJazeeraSource",               "Al Jazeera"),
 ]
 
 # Quick lookups

@@ -32,7 +32,7 @@ class TestGuardianSource:
         assert articles[0].title == "Test Guardian Article"
         assert articles[0].source == "The Guardian (Technology)"
         assert articles[0].category == "tech"
-        assert "guardian:technology" in articles[0].tags
+        assert "guardian:section:technology" in articles[0].tags
 
     def test_empty_feed(self):
         src = GuardianSource()

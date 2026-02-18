@@ -126,4 +126,4 @@ class TestRegistryIncludesNewSources:
 
     def test_total_sources_50(self):
         from clawler.registry import SOURCES
-        assert len(SOURCES) == 52
+        assert len(SOURCES) == 54
