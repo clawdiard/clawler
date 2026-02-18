@@ -654,6 +654,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.10000birds.com/feed", "source": "10,000 Birds", "category": "birding"},
     {"url": "https://www.birdlife.org/feed/", "source": "BirdLife International", "category": "birding"},
     {"url": "https://ebird.org/news/feed", "source": "eBird", "category": "birding"},
+    # --- Watches & Horology (NEW) ---
+    {"url": "https://www.hodinkee.com/blog.rss", "source": "Hodinkee", "category": "watches"},
+    {"url": "https://www.ablogtowatch.com/feed/", "source": "aBlogtoWatch", "category": "watches"},
+    {"url": "https://monochrome-watches.com/feed/", "source": "Monochrome Watches", "category": "watches"},
+    {"url": "https://www.fratellowatches.com/feed/", "source": "Fratello Watches", "category": "watches"},
+    {"url": "https://wornandwound.com/feed/", "source": "Worn & Wound", "category": "watches"},
+    # --- Interior Design (NEW) ---
+    {"url": "https://www.dwell.com/feed", "source": "Dwell", "category": "interior_design"},
+    {"url": "https://design-milk.com/feed/", "source": "Design Milk", "category": "interior_design"},
+    {"url": "https://www.yatzer.com/feed", "source": "Yatzer", "category": "interior_design"},
+    {"url": "https://www.yellowtrace.com.au/feed/", "source": "Yellowtrace", "category": "interior_design"},
+    {"url": "https://www.core77.com/rss", "source": "Core77", "category": "interior_design"},
+    # --- True Crime (NEW) ---
+    {"url": "https://www.oxygen.com/feed", "source": "Oxygen", "category": "true_crime"},
+    {"url": "https://www.investigationdiscovery.com/feed", "source": "Investigation Discovery", "category": "true_crime"},
+    {"url": "https://www.marshallproject.org/rss/all", "source": "The Marshall Project", "category": "true_crime"},
+    {"url": "https://theappeal.org/feed/", "source": "The Appeal", "category": "true_crime"},
+    {"url": "https://innocenceproject.org/feed/", "source": "Innocence Project", "category": "true_crime"},
+    # --- Classical Music (NEW) ---
+    {"url": "https://www.classicfm.com/rss/", "source": "Classic FM", "category": "classical_music"},
+    {"url": "https://slippedisc.com/feed/", "source": "Slipped Disc", "category": "classical_music"},
+    {"url": "https://www.rhinegold.co.uk/classical_music/feed/", "source": "Classical Music Magazine", "category": "classical_music"},
+    {"url": "https://theviolinchannel.com/feed/", "source": "The Violin Channel", "category": "classical_music"},
+    {"url": "https://www.bachtrack.com/rss.xml", "source": "Bachtrack", "category": "classical_music"},
 ]
 
 
