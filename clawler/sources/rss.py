@@ -678,6 +678,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.rhinegold.co.uk/classical_music/feed/", "source": "Classical Music Magazine", "category": "classical_music"},
     {"url": "https://theviolinchannel.com/feed/", "source": "The Violin Channel", "category": "classical_music"},
     {"url": "https://www.bachtrack.com/rss.xml", "source": "Bachtrack", "category": "classical_music"},
+    # --- Motorcycles & Powersports (NEW) ---
+    {"url": "https://www.rideapart.com/rss/articles/", "source": "RideApart", "category": "motorcycles"},
+    {"url": "https://www.cycleworld.com/feed/", "source": "Cycle World", "category": "motorcycles"},
+    {"url": "https://www.revzilla.com/common-tread/feed", "source": "RevZilla Common Tread", "category": "motorcycles"},
+    {"url": "https://www.asphaltandrubber.com/feed/", "source": "Asphalt & Rubber", "category": "motorcycles"},
+    {"url": "https://www.visordown.com/rss.xml", "source": "Visordown", "category": "motorcycles"},
+    # --- Sailing & Boating (NEW) ---
+    {"url": "https://www.sailmagazine.com/feed", "source": "Sail Magazine", "category": "sailing"},
+    {"url": "https://www.cruisingworld.com/feed/", "source": "Cruising World", "category": "sailing"},
+    {"url": "https://www.practical-sailor.com/feed", "source": "Practical Sailor", "category": "sailing"},
+    {"url": "https://www.boatus.com/expert-advice/feed", "source": "BoatUS", "category": "sailing"},
+    {"url": "https://www.yachtingworld.com/feed", "source": "Yachting World", "category": "sailing"},
+    # --- Trains & Rail (NEW) ---
+    {"url": "https://www.railwayage.com/feed/", "source": "Railway Age", "category": "trains"},
+    {"url": "https://www.globalrailwayreview.com/feed/", "source": "Global Railway Review", "category": "trains"},
+    {"url": "https://www.railjournal.com/feed/", "source": "International Railway Journal", "category": "trains"},
+    {"url": "https://www.railwaygazette.com/rss", "source": "Railway Gazette", "category": "trains"},
+    {"url": "https://www.trainorders.com/rss.xml", "source": "Train Orders", "category": "trains"},
+    # --- Aquariums & Fishkeeping (NEW) ---
+    {"url": "https://www.practicalfishkeeping.co.uk/feed/", "source": "Practical Fishkeeping", "category": "aquariums"},
+    {"url": "https://www.tfhmagazine.com/feed/", "source": "Tropical Fish Hobbyist", "category": "aquariums"},
+    {"url": "https://www.reef2reef.com/forums/-/index.rss", "source": "Reef2Reef", "category": "aquariums"},
+    {"url": "https://reefbuilders.com/feed/", "source": "Reef Builders", "category": "aquariums"},
+    {"url": "https://www.aquariumcoop.com/blogs/aquarium.atom", "source": "Aquarium Co-Op", "category": "aquariums"},
 ]
 
 
