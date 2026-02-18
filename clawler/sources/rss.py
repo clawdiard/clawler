@@ -678,6 +678,33 @@ DEFAULT_FEEDS = [
     {"url": "https://www.rhinegold.co.uk/classical_music/feed/", "source": "Classical Music Magazine", "category": "classical_music"},
     {"url": "https://theviolinchannel.com/feed/", "source": "The Violin Channel", "category": "classical_music"},
     {"url": "https://www.bachtrack.com/rss.xml", "source": "Bachtrack", "category": "classical_music"},
+
+    # Numismatics & Coins
+    {"url": "https://www.coinworld.com/rss/news.xml", "source": "CoinWorld", "category": "numismatics"},
+    {"url": "https://www.ngccoin.com/news/feed/", "source": "NGC Coin News", "category": "numismatics"},
+    {"url": "https://www.pcgs.com/news/rss", "source": "PCGS News", "category": "numismatics"},
+    {"url": "https://coinweek.com/feed/", "source": "CoinWeek", "category": "numismatics"},
+    {"url": "https://www.coinnews.net/feed/", "source": "CoinNews", "category": "numismatics"},
+
+    # Beekeeping & Apiculture
+    {"url": "https://www.beeculture.com/feed/", "source": "Bee Culture", "category": "beekeeping"},
+    {"url": "https://americanbeejournal.com/feed/", "source": "American Bee Journal", "category": "beekeeping"},
+    {"url": "https://www.honeybeesuite.com/feed/", "source": "Honey Bee Suite", "category": "beekeeping"},
+    {"url": "https://beeinformed.org/feed/", "source": "Bee Informed Partnership", "category": "beekeeping"},
+    {"url": "https://www.perfectbee.com/feed/", "source": "PerfectBee", "category": "beekeeping"},
+
+    # Cartography & GIS
+    {"url": "https://www.gislounge.com/feed/", "source": "GIS Lounge", "category": "cartography"},
+    {"url": "https://mapbrief.com/feed/", "source": "MapBrief", "category": "cartography"},
+    {"url": "https://www.directionsmag.com/rss", "source": "Directions Magazine", "category": "cartography"},
+    {"url": "https://undark.org/feed/", "source": "Undark", "category": "science_journalism"},
+    {"url": "https://geoawesomeness.com/feed/", "source": "Geoawesomeness", "category": "cartography"},
+
+    # Science Journalism & Long-form
+    {"url": "https://nautil.us/feed/", "source": "Nautilus", "category": "science_journalism"},
+    {"url": "https://www.the-scientist.com/rss", "source": "The Scientist", "category": "science_journalism"},
+    {"url": "https://www.sciencefriday.com/feed/", "source": "Science Friday", "category": "science_journalism"},
+    {"url": "https://knowablemagazine.org/rss", "source": "Knowable Magazine", "category": "science_journalism"},
 ]
 
 
