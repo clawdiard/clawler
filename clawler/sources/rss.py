@@ -630,6 +630,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.moderndailyknitting.com/feed/", "source": "Modern Daily Knitting", "category": "fiber_arts"},
     {"url": "https://weareknitters.com/blog/feed/", "source": "We Are Knitters", "category": "fiber_arts"},
     {"url": "https://www.craftsy.com/blog/feed/", "source": "Craftsy", "category": "fiber_arts"},
+    # Typography & Fonts
+    {"url": "https://ilovetypography.com/feed/", "source": "I Love Typography", "category": "typography"},
+    {"url": "https://www.typewolf.com/feed", "source": "Typewolf", "category": "typography"},
+    {"url": "https://fontsinuse.com/feeds/latest", "source": "Fonts In Use", "category": "typography"},
+    {"url": "https://blog.typekit.com/feed/", "source": "Adobe Fonts Blog", "category": "typography"},
+    {"url": "https://www.creativebloq.com/feeds/typography", "source": "Creative Bloq Typography", "category": "typography"},
+    # Woodworking
+    {"url": "https://www.popularwoodworking.com/feed/", "source": "Popular Woodworking", "category": "woodworking"},
+    {"url": "https://www.finewoodworking.com/feed", "source": "Fine Woodworking", "category": "woodworking"},
+    {"url": "https://www.woodmagazine.com/rss.xml", "source": "WOOD Magazine", "category": "woodworking"},
+    {"url": "https://thewoodwhisperer.com/feed/", "source": "The Wood Whisperer", "category": "woodworking"},
+    {"url": "https://lostartpress.com/blogs/news.atom", "source": "Lost Art Press", "category": "woodworking"},
+    # Amateur Radio & RF
+    {"url": "https://www.arrl.org/news/rss", "source": "ARRL News", "category": "amateur_radio"},
+    {"url": "https://swling.com/blog/feed/", "source": "SWLing Post", "category": "amateur_radio"},
+    {"url": "https://www.rtl-sdr.com/feed/", "source": "RTL-SDR", "category": "amateur_radio"},
+    {"url": "https://www.onallbands.com/feed/", "source": "On All Bands", "category": "amateur_radio"},
+    {"url": "https://www.hamradioschool.com/feed", "source": "Ham Radio School", "category": "amateur_radio"},
+    # Birding & Ornithology
+    {"url": "https://www.audubon.org/rss.xml", "source": "Audubon", "category": "birding"},
+    {"url": "https://www.birdwatchingdaily.com/feed/", "source": "BirdWatching Daily", "category": "birding"},
+    {"url": "https://www.10000birds.com/feed", "source": "10,000 Birds", "category": "birding"},
+    {"url": "https://www.birdlife.org/feed/", "source": "BirdLife International", "category": "birding"},
+    {"url": "https://ebird.org/news/feed", "source": "eBird", "category": "birding"},
 ]
 
 
