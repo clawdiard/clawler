@@ -606,6 +606,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.govtech.com/rss/", "source": "GovTech", "category": "civic_tech"},
     {"url": "https://www.fedscoop.com/feed/", "source": "FedScoop", "category": "civic_tech"},
     {"url": "https://www.govexec.com/rss/", "source": "Government Executive", "category": "civic_tech"},
+    # Genealogy & Family History
+    {"url": "https://www.familysearch.org/en/blog/feed", "source": "FamilySearch Blog", "category": "genealogy"},
+    {"url": "https://lisalouisecooke.com/feed/", "source": "Genealogy Gems", "category": "genealogy"},
+    {"url": "https://www.legalgenealogist.com/feed/", "source": "The Legal Genealogist", "category": "genealogy"},
+    {"url": "https://familytreemagazine.com/feed/", "source": "Family Tree Magazine", "category": "genealogy"},
+    {"url": "https://thegeneticgenealogist.com/feed/", "source": "The Genetic Genealogist", "category": "genealogy"},
+    # Board Games & Tabletop
+    {"url": "https://www.dicetower.com/feed", "source": "The Dice Tower", "category": "tabletop"},
+    {"url": "https://www.dicebreaker.com/feed", "source": "Dicebreaker", "category": "tabletop"},
+    {"url": "https://boardgamegeek.com/rss/hot", "source": "BoardGameGeek Hot", "category": "tabletop"},
+    {"url": "https://www.shutupandsitdown.com/feed/", "source": "Shut Up & Sit Down", "category": "tabletop"},
+    {"url": "https://www.tabletopgaming.co.uk/feed", "source": "Tabletop Gaming", "category": "tabletop"},
+    # Personal Finance & FIRE
+    {"url": "https://www.madfientist.com/feed/", "source": "Mad Fientist", "category": "personal_finance"},
+    {"url": "https://earlyretirementextreme.com/feed", "source": "Early Retirement Extreme", "category": "personal_finance"},
+    {"url": "https://www.choosefi.com/feed/", "source": "ChooseFI", "category": "personal_finance"},
+    {"url": "https://www.getrichslowly.org/feed/", "source": "Get Rich Slowly", "category": "personal_finance"},
+    {"url": "https://www.budgetsaresexy.com/feed/", "source": "Budgets Are Sexy", "category": "personal_finance"},
+    # Fiber Arts & Crafts
+    {"url": "https://knitty.com/feed/", "source": "Knitty", "category": "fiber_arts"},
+    {"url": "https://crochet.craftgossip.com/feed/", "source": "Crochet Craft Gossip", "category": "fiber_arts"},
+    {"url": "https://www.moderndailyknitting.com/feed/", "source": "Modern Daily Knitting", "category": "fiber_arts"},
+    {"url": "https://weareknitters.com/blog/feed/", "source": "We Are Knitters", "category": "fiber_arts"},
+    {"url": "https://www.craftsy.com/blog/feed/", "source": "Craftsy", "category": "fiber_arts"},
 ]
 
 
