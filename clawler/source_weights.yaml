@@ -270,3 +270,14 @@ sources:
   Semafor (Climate): 0.78
   Semafor (Africa): 0.77
   Semafor (Net Zero): 0.76
+
+  # Axios (smart brevity news)
+  Axios (Top Stories): 0.82
+  Axios (Technology): 0.82
+  Axios (Politics): 0.81
+  Axios (Business): 0.81
+  Axios (Science): 0.80
+  Axios (Health): 0.80
+  Axios (Energy & Environment): 0.79
+  Axios (World): 0.81
+  Axios (Media): 0.79
