@@ -45,5 +45,35 @@ from .thehackernews import TheHackerNewsSource
 from .flipboard import FlipboardSource
 from .metafilter import MetaFilterSource
 from .axios import AxiosSource
+from .techcrunch import TechCrunchSource
+from .engadget import EngadgetSource
+from .cnbc import CNBCSource
+from .marketwatch import MarketWatchSource
+from .venturebeat import VentureBeatSource
+from .techradar import TechRadarSource
+from .politico import PoliticoSource
+from .aljazeera import AlJazeeraSource
+from .quantamagazine import QuantaMagazineSource
+from .restofworld import RestOfWorldSource
+from .semafor import SemaforSource
+from .fourzerofourmedia import FourZeroFourMediaSource
+from .propublica import ProPublicaSource
 
-__all__ = ["RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource", "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource", "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource", "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource", "StackOverflowSource", "PinboardSource", "IndieHackersSource", "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource", "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource", "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource", "ArsTechnicaSource", "AllTopSource", "WiredSource", "TheVergeSource", "ReutersSource", "PhysOrgSource", "NatureSource", "APNewsSource", "GuardianSource", "InfoQSource", "TheRegisterSource", "BBCNewsSource", "TheHackerNewsSource", "FlipboardSource", "MetaFilterSource", "AxiosSource"]
+__all__ = [
+    "RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource",
+    "MastodonSource", "WikipediaCurrentEventsSource", "LobstersSource",
+    "DevToSource", "ArXivSource", "TechMemeSource", "ProductHuntSource",
+    "BlueskySource", "TildesSource", "LemmySource", "SlashdotSource",
+    "StackOverflowSource", "PinboardSource", "IndieHackersSource",
+    "EchoJSSource", "HashnodeSource", "FreeCodeCampSource", "ChangelogSource",
+    "HackerNoonSource", "YouTubeSource", "MediumSource", "SubstackSource",
+    "GoogleNewsSource", "DZoneSource", "ScienceDailySource", "NPRSource",
+    "ArsTechnicaSource", "AllTopSource", "WiredSource", "TheVergeSource",
+    "ReutersSource", "PhysOrgSource", "NatureSource", "APNewsSource",
+    "GuardianSource", "InfoQSource", "TheRegisterSource", "BBCNewsSource",
+    "TheHackerNewsSource", "FlipboardSource", "MetaFilterSource", "AxiosSource",
+    "TechCrunchSource", "EngadgetSource", "CNBCSource", "MarketWatchSource",
+    "VentureBeatSource", "TechRadarSource", "PoliticoSource", "AlJazeeraSource",
+    "QuantaMagazineSource", "RestOfWorldSource", "SemaforSource",
+    "FourZeroFourMediaSource", "ProPublicaSource",
+]
