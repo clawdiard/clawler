@@ -240,6 +240,9 @@ def main(argv=None):
                         help="Show most common words in article titles (excludes stop words)")
     parser.add_argument("--source-quality", action="store_true", dest="source_quality",
                         help="Show average quality score per source after output")
+    parser.add_argument("--export-sources", type=str, default=None, metavar="FILE",
+                        dest="export_sources",
+                        help="Export source registry as JSON (name, key, type) and exit")
 
     args = parser.parse_args(argv)
 
@@ -370,6 +373,24 @@ def main(argv=None):
         with open(args.export_health, "w", encoding="utf-8") as f:
             _json.dump(report, f, indent=2)
         print(f"✅ Exported health data for {len(report)} sources to {args.export_health}")
+        return
+
+    # Export source registry as JSON
+    if args.export_sources:
+        import json as _json
+        from clawler.registry import SOURCES as _REG
+        from clawler.weights import get_quality_score
+        entries = []
+        for entry in _REG:
+            entries.append({
+                "key": entry.key,
+                "name": entry.display_name,
+                "module": entry.cls_path,
+                "quality_weight": get_quality_score(entry.display_name),
+            })
+        with open(args.export_sources, "w", encoding="utf-8") as f:
+            _json.dump(entries, f, indent=2)
+        print(f"✅ Exported {len(entries)} source definitions to {args.export_sources}")
         return
 
     # Source list

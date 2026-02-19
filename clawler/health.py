@@ -42,12 +42,14 @@ class HealthTracker:
                 "last_success": None,
             }
 
-    def record_success(self, source: str, article_count: int, response_ms: float = 0):
+    def record_success(self, source: str, article_count: int, response_ms: float = 0, retries_used: int = 0):
         self._ensure(source)
         d = self.data[source]
         d["total_crawls"] += 1
         d["total_articles"] += article_count
         d["last_success"] = datetime.now(tz=timezone.utc).isoformat()
+        if retries_used > 0:
+            d["retries_used"] = d.get("retries_used", 0) + retries_used
         if response_ms > 0:
             timings = d.setdefault("response_times_ms", [])
             timings.append(round(response_ms, 1))
