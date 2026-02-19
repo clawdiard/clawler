@@ -729,6 +729,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.reef2reef.com/forums/-/index.rss", "source": "Reef2Reef", "category": "aquariums"},
     {"url": "https://reefbuilders.com/feed/", "source": "Reef Builders", "category": "aquariums"},
     {"url": "https://www.aquariumcoop.com/blogs/aquarium.atom", "source": "Aquarium Co-Op", "category": "aquariums"},
+    # Mythology & Folklore
+    {"url": "https://www.worldhistory.org/feeds/latest/", "source": "World History Encyclopedia", "category": "mythology"},
+    {"url": "https://folklorethursday.com/feed/", "source": "Folklore Thursday", "category": "mythology"},
+    {"url": "https://www.ancientorigins.net/myths-legends/feed", "source": "Ancient Origins Myths", "category": "mythology"},
+    {"url": "https://sentinelmythology.com/feed/", "source": "Sentinel Mythology", "category": "mythology"},
+    {"url": "https://www.patheos.com/blogs/fromacommonwell/feed/", "source": "From a Common Well", "category": "mythology"},
+    # Amateur Astronomy
+    {"url": "https://skyandtelescope.org/feed/", "source": "Sky & Telescope", "category": "amateur_astronomy"},
+    {"url": "https://www.universetoday.com/feed/", "source": "Universe Today", "category": "amateur_astronomy"},
+    {"url": "https://earthsky.org/feed/", "source": "EarthSky", "category": "amateur_astronomy"},
+    {"url": "https://www.cloudynights.com/rss/forums/86-cnn-reports/", "source": "Cloudy Nights", "category": "amateur_astronomy"},
+    {"url": "https://astronomynow.com/feed/", "source": "Astronomy Now", "category": "amateur_astronomy"},
+    # Fermentation & Homebrew
+    {"url": "https://www.homebrewersassociation.org/feed/", "source": "American Homebrewers Association", "category": "fermentation"},
+    {"url": "https://beerandbrewing.com/rss/", "source": "Craft Beer & Brewing", "category": "fermentation"},
+    {"url": "https://www.fermentmagazine.com/feed/", "source": "Ferment Magazine", "category": "fermentation"},
+    {"url": "https://www.themadfermentationist.com/feeds/posts/default?alt=rss", "source": "The Mad Fermentationist", "category": "fermentation"},
+    {"url": "https://brulosophy.com/feed/", "source": "Brulosophy", "category": "fermentation"},
+    # Vintage & Antiques
+    {"url": "https://www.collectorsweekly.com/articles/feed", "source": "Collectors Weekly", "category": "vintage"},
+    {"url": "https://www.antiquetrader.com/feed", "source": "Antique Trader", "category": "vintage"},
+    {"url": "https://www.1stdibs.com/blogs/the-study/feed/", "source": "1stDibs The Study", "category": "vintage"},
+    {"url": "https://dustyoldthing.com/feed/", "source": "Dusty Old Thing", "category": "vintage"},
+    {"url": "https://www.rubylane.com/blog/feed/", "source": "Ruby Lane Blog", "category": "vintage"},
 ]
 
 
