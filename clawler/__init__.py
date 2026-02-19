@@ -1,2 +1,2 @@
 """Clawler — Advanced news crawling service."""
-__version__ = "10.42.0"
+__version__ = "10.44.0"
