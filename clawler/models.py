@@ -2,18 +2,39 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs, urlencode
 import hashlib
+
+# Query parameters known to be tracking/analytics noise (case-insensitive prefix match)
+_TRACKING_PREFIXES = (
+    "utm_", "fbclid", "gclid", "msclkid", "mc_cid", "mc_eid",
+    "oly_enc_id", "oly_anon_id", "_openstat", "vero_id",
+    "wickedid", "yclid", "pk_campaign", "pk_kwd", "pk_source",
+    "pk_medium", "pk_content", "ref", "referrer", "source",
+    "campaign", "icid", "ncid",
+)
 
 
 def _normalize_url(url: str) -> str:
-    """Normalize a URL for dedup: strip www., trailing slash, query tracking params."""
+    """Normalize a URL for dedup: strip www., trailing slash, fragment, and tracking query params."""
     try:
         parsed = urlparse(url)
+        if not parsed.scheme or not parsed.netloc:
+            return url
         host = parsed.netloc.lower()
         if host.startswith("www."):
             host = host[4:]
         path = parsed.path.rstrip("/") or "/"
+        # Strip tracking query params, keep meaningful ones
+        if parsed.query:
+            params = parse_qs(parsed.query, keep_blank_values=False)
+            clean = {
+                k: v for k, v in params.items()
+                if not any(k.lower().startswith(p) for p in _TRACKING_PREFIXES)
+            }
+            if clean:
+                query = urlencode(clean, doseq=True)
+                return f"{parsed.scheme}://{host}{path}?{query}"
         return f"{parsed.scheme}://{host}{path}"
     except Exception:
         return url
