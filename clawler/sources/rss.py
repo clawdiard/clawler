@@ -568,7 +568,7 @@ DEFAULT_FEEDS = [
 {"url": "https://www.technologyreview.com/topic/climate-change/feed", "source": "MIT Climate", "category": "climate_tech"},
 {"url": "https://climatechangenews.com/feed/", "source": "Climate Home News", "category": "climate_tech"},
 {"url": "https://www.carbonbrief.org/feed", "source": "Carbon Brief", "category": "climate_tech"},
-{"url": "https://cleantechnica.com/feed/", "source": "CleanTechnica", "category": "climate_tech"},
+{"url": "https://www.drawdown.org/feed", "source": "Project Drawdown", "category": "climate_tech"},
 
 # Emergency Management & Disaster Preparedness
 {"url": "https://www.fema.gov/api/open/v1/newsReleases.rss", "source": "FEMA News", "category": "emergency_management"},
@@ -583,6 +583,40 @@ DEFAULT_FEEDS = [
 {"url": "https://www.ans.org/news/rss/", "source": "American Nuclear Society", "category": "nuclear_energy"},
 {"url": "https://www.powermag.com/feed/", "source": "POWER Magazine", "category": "nuclear_energy"},
 {"url": "https://energycentral.com/rss.xml", "source": "Energy Central", "category": "nuclear_energy"},
+
+    # Space (expanding 2→5)
+    {"url": "https://www.esa.int/rssfeed/Our_Activities/Space_Science", "source": "ESA Space Science", "category": "space"},
+    {"url": "https://spaceflightnow.com/feed/", "source": "Spaceflight Now", "category": "space"},
+    {"url": "https://phys.org/rss-feed/space-news/", "source": "Phys.org Space", "category": "space"},
+
+    # Weather (expanding 3→5)
+    {"url": "https://www.weather.gov/rss_page.php?site_name=nws", "source": "NWS", "category": "weather"},
+    {"url": "https://blog.weather.us/feed/", "source": "Weather.us Blog", "category": "weather"},
+
+    # Investigative (expanding 3→5)
+    {"url": "https://www.occrp.org/en/component/oaipmh/?format=feed&type=rss", "source": "OCCRP", "category": "investigative"},
+    {"url": "https://www.icij.org/feed/", "source": "ICIJ", "category": "investigative"},
+
+    # Legal (expanding 3→5)
+    {"url": "https://verdict.justia.com/feed", "source": "Justia Verdict", "category": "legal"},
+    {"url": "https://www.courthousenews.com/feed/", "source": "Courthouse News", "category": "legal"},
+
+    # Forestry & Wildfire (NEW)
+    {"url": "https://wildfiretoday.com/feed/", "source": "Wildfire Today", "category": "forestry_wildfire"},
+    {"url": "https://www.fs.usda.gov/news/rss/newsreleases", "source": "US Forest Service", "category": "forestry_wildfire"},
+    {"url": "https://thetimberjack.com/feed/", "source": "The Timberjack", "category": "forestry_wildfire"},
+    {"url": "https://www.fire.ca.gov/rss", "source": "CAL FIRE", "category": "forestry_wildfire"},
+    {"url": "https://fireadapted.org/feed/", "source": "Fire Adapted Communities", "category": "forestry_wildfire"},
+
+    # Psychedelics & Neuroscience (NEW)
+    {"url": "https://psychedelicreview.com/feed/", "source": "Psychedelic Review", "category": "psychedelics_neuroscience"},
+    {"url": "https://www.neuroscientificallychallenged.com/blog?format=rss", "source": "Neuroscientifically Challenged", "category": "psychedelics_neuroscience"},
+    {"url": "https://neurosciencenews.com/feed/", "source": "Neuroscience News", "category": "psychedelics_neuroscience"},
+    {"url": "https://www.dana.org/feed/", "source": "Dana Foundation", "category": "psychedelics_neuroscience"},
+    {"url": "https://blogs.scientificamerican.com/brainwaves/feed/", "source": "SciAm Brainwaves", "category": "psychedelics_neuroscience"},
+
+    # Investigative (one more)
+    {"url": "https://www.bellingcat.com/feed/", "source": "Bellingcat", "category": "investigative"},
 ]
 
 
