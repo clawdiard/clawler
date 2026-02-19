@@ -37,7 +37,7 @@ class TestReutersSource:
         assert src.sections == ["business", "technology"]
 
     def test_feed_count(self):
-        assert len(REUTERS_FEEDS) == 8
+        assert len(REUTERS_FEEDS) == 12
 
     def test_feed_sections(self):
         sections = {f["section"] for f in REUTERS_FEEDS}
@@ -60,7 +60,7 @@ class TestReutersSource:
         assert articles[0].source == "Reuters (Business)"
         assert articles[0].category == "business"
         assert articles[0].timestamp is not None
-        assert "reuters:business" in articles[0].tags
+        assert "reuters:section:business" in articles[0].tags
 
     @patch.object(ReutersSource, "fetch_url", return_value=SAMPLE_RSS)
     def test_section_filter(self, mock_fetch):

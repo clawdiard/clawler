@@ -63,6 +63,7 @@ from .economist import EconomistSource
 from .nytimes import NYTimesSource
 from .wsj import WSJSource
 from .washingtonpost import WashingtonPostSource
+from .semanticscholar import SemanticScholarSource
 
 __all__ = [
     "RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource",
@@ -83,5 +84,6 @@ __all__ = [
     "FourZeroFourMediaSource", "ProPublicaSource",
     "ForbesSource", "EconomistSource",
     "NYTimesSource", "WSJSource", "WashingtonPostSource",
+    "SemanticScholarSource",
     "ForbesSource", "EconomistSource",
 ]

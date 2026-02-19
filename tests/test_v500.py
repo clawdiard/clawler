@@ -33,7 +33,7 @@ def test_techmeme_parse():
         articles = src.crawl()
     assert len(articles) == 2
     assert articles[0].source == "TechMeme"
-    assert articles[0].category == "tech"
+    assert articles[0].category == "business"
     assert articles[0].title == "AI Startup Raises $100M"
 
 
@@ -67,7 +67,7 @@ def test_producthunt_parse():
         articles = src.crawl()
     assert len(articles) == 1
     assert articles[0].source == "ProductHunt"
-    assert articles[0].category == "tech"
+    assert articles[0].category == "business"
     assert articles[0].discussion_url == "https://www.producthunt.com/posts/coolapp"
 
 

@@ -753,6 +753,62 @@ DEFAULT_FEEDS = [
     {"url": "https://www.1stdibs.com/blogs/the-study/feed/", "source": "1stDibs The Study", "category": "vintage"},
     {"url": "https://dustyoldthing.com/feed/", "source": "Dusty Old Thing", "category": "vintage"},
     {"url": "https://www.rubylane.com/blog/feed/", "source": "Ruby Lane Blog", "category": "vintage"},
+
+# Ceramics & Pottery
+{"url": "https://ceramicartsnetwork.org/feed", "source": "Ceramic Arts Network", "category": "ceramics"},
+{"url": "https://thepotterywheel.com/feed/", "source": "The Pottery Wheel", "category": "ceramics"},
+{"url": "https://www.ceramic-review.com/feed/", "source": "Ceramic Review", "category": "ceramics"},
+{"url": "https://blog.tortus-copenhagen.com/feed", "source": "Tortus Copenhagen", "category": "ceramics"},
+{"url": "https://www.studiopottery.com/feed/", "source": "Studio Pottery", "category": "ceramics"},
+
+# Scuba & Diving
+{"url": "https://www.scubadiving.com/rss.xml", "source": "Scuba Diving Magazine", "category": "scuba"},
+{"url": "https://divemagazine.com/feed", "source": "DIVE Magazine", "category": "scuba"},
+{"url": "https://www.deeperblue.com/feed/", "source": "DeeperBlue", "category": "scuba"},
+{"url": "https://alertdiver.eu/feed/", "source": "Alert Diver", "category": "scuba"},
+{"url": "https://www.divein.com/feed/", "source": "DiveIn", "category": "scuba"},
+
+# Model Building & RC
+{"url": "https://www.rcgroups.com/feed/", "source": "RCGroups", "category": "model_building"},
+{"url": "https://www.flitetest.com/feed", "source": "Flite Test", "category": "model_building"},
+{"url": "https://www.finescale.com/feed", "source": "FineScale Modeler", "category": "model_building"},
+{"url": "https://www.scalemates.com/news/rss.php", "source": "Scalemates", "category": "model_building"},
+{"url": "https://www.modelairplanenews.com/feed/", "source": "Model Airplane News", "category": "model_building"},
+
+# Calligraphy & Lettering
+{"url": "https://www.iampeth.com/blog/feed", "source": "IAMPETH", "category": "calligraphy"},
+{"url": "https://thepostmansknock.com/feed/", "source": "The Postman's Knock", "category": "calligraphy"},
+{"url": "https://www.jetpens.com/blog/feed", "source": "JetPens Blog", "category": "calligraphy"},
+{"url": "https://www.fountainpennetwork.com/forum/forum/152-fpn-blog/rss/", "source": "Fountain Pen Network", "category": "calligraphy"},
+{"url": "https://www.wellappointeddesk.com/feed/", "source": "Well-Appointed Desk", "category": "calligraphy"},
+
+# Quantum Computing
+{"url": "https://quantumcomputingreport.com/feed/", "source": "Quantum Computing Report", "category": "quantum_computing"},
+{"url": "https://thequantuminsider.com/feed/", "source": "The Quantum Insider", "category": "quantum_computing"},
+{"url": "https://www.quantamagazine.org/tag/quantum-computing/feed/", "source": "Quanta Quantum", "category": "quantum_computing"},
+{"url": "https://blog.google/technology/research/rss/", "source": "Google AI Blog", "category": "quantum_computing"},
+{"url": "https://aws.amazon.com/blogs/quantum-computing/feed/", "source": "AWS Quantum", "category": "quantum_computing"},
+
+# Climate Tech
+{"url": "https://www.canarymedia.com/feed", "source": "Canary Media", "category": "climate_tech"},
+{"url": "https://www.technologyreview.com/topic/climate-change/feed", "source": "MIT Climate", "category": "climate_tech"},
+{"url": "https://climatechangenews.com/feed/", "source": "Climate Home News", "category": "climate_tech"},
+{"url": "https://www.carbonbrief.org/feed", "source": "Carbon Brief", "category": "climate_tech"},
+{"url": "https://cleantechnica.com/feed/", "source": "CleanTechnica", "category": "climate_tech"},
+
+# Emergency Management & Disaster Preparedness
+{"url": "https://www.fema.gov/api/open/v1/newsReleases.rss", "source": "FEMA News", "category": "emergency_management"},
+{"url": "https://reliefweb.int/updates/rss.xml", "source": "ReliefWeb", "category": "emergency_management"},
+{"url": "https://www.preventionweb.net/rss/drr-news.xml", "source": "PreventionWeb", "category": "emergency_management"},
+{"url": "https://disasterphilanthropy.org/feed/", "source": "Center for Disaster Philanthropy", "category": "emergency_management"},
+{"url": "https://www.ready.gov/rss.xml", "source": "Ready.gov", "category": "emergency_management"},
+
+# Nuclear & Fusion Energy
+{"url": "https://www.world-nuclear-news.org/feed", "source": "World Nuclear News", "category": "nuclear_energy"},
+{"url": "https://newatlas.com/energy/rss/", "source": "New Atlas Energy", "category": "nuclear_energy"},
+{"url": "https://www.ans.org/news/rss/", "source": "American Nuclear Society", "category": "nuclear_energy"},
+{"url": "https://www.powermag.com/feed/", "source": "POWER Magazine", "category": "nuclear_energy"},
+{"url": "https://energycentral.com/rss.xml", "source": "Energy Central", "category": "nuclear_energy"},
 ]
 
 

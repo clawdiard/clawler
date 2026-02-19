@@ -9,12 +9,12 @@ from clawler.registry import SOURCES
 
 
 def test_version_bump():
-    assert __version__ == "10.42.0"
+    assert __version__ == "10.44.0"
 
 
 def test_registry_count_is_64():
     """Ensure registry count matches the 64 registered sources."""
-    assert len(SOURCES) == 66
+    assert len(SOURCES) == 67
 
 
 def test_health_retry_tracking():
@@ -39,7 +39,7 @@ def test_export_sources_cli():
         main(["--export-sources", path])
         with open(path) as f:
             data = json.load(f)
-        assert len(data) == 66
+        assert len(data) == 67
         assert all("key" in entry and "name" in entry for entry in data)
         assert data[0]["key"] == "rss"
     finally:

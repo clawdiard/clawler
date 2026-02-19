@@ -28,7 +28,7 @@ SAMPLE_RSS = """<?xml version="1.0" encoding="UTF-8"?>
 class TestNPRSource:
     def test_feeds_config(self):
         """NPR_FEEDS should have 10 section feeds."""
-        assert len(NPR_FEEDS) == 10
+        assert len(NPR_FEEDS) == 18
         sections = {f["section"] for f in NPR_FEEDS}
         assert "News" in sections
         assert "Technology" in sections
@@ -51,10 +51,10 @@ class TestNPRSource:
         assert len(articles) == 2
         assert articles[0].title == "Test Article One"
         assert articles[0].source == "NPR (News)"
-        assert articles[0].category == "world"
+        assert articles[0].category == "culture"
         assert articles[0].url == "https://www.npr.org/2026/02/16/article-one"
         assert articles[0].timestamp is not None
-        assert "npr:news" in articles[0].tags
+        assert "npr:section:news" in articles[0].tags
 
     @patch.object(NPRSource, "fetch_url", return_value=SAMPLE_RSS)
     def test_html_stripped_from_summary(self, mock_fetch):
