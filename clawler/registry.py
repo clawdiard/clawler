@@ -103,6 +103,8 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("nytimes",        "clawler.sources.nytimes.NYTimesSource",                     "New York Times"),
     SourceEntry("wsj",            "clawler.sources.wsj.WSJSource",                             "Wall Street Journal"),
     SourceEntry("washingtonpost", "clawler.sources.washingtonpost.WashingtonPostSource",       "Washington Post"),
+    SourceEntry("theintercept",   "clawler.sources.theintercept.TheInterceptSource",           "The Intercept"),
+    SourceEntry("theconversation","clawler.sources.theconversation.TheConversationSource",     "The Conversation"),
 ]
 
 # Quick lookups

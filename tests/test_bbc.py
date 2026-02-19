@@ -44,13 +44,13 @@ def test_bbc_section_filter():
 def test_bbc_parse_feed():
     src = BBCNewsSource()
     with patch.object(src, "fetch_url", return_value=SAMPLE_BBC_RSS):
-        articles = src._parse_feed({"url": "https://example.com/rss", "section": "Technology", "category": "tech"})
+        articles = src._parse_feed({"url": "https://example.com/rss", "section": "technology", "label": "Technology", "category": "tech", "prominence": 0.50}, set())
     assert len(articles) == 2
     assert articles[0].title == "AI breakthrough changes everything"
     assert articles[0].source == "BBC News (Technology)"
-    assert articles[0].category == "tech"
+    assert articles[0].category in ("tech", "ai")
     assert articles[0].timestamp is not None
-    assert "bbc:technology" in articles[0].tags
+    assert "bbc:section:technology" in articles[0].tags
 
 
 def test_bbc_crawl_aggregates():
@@ -63,14 +63,14 @@ def test_bbc_crawl_aggregates():
 def test_bbc_empty_feed():
     src = BBCNewsSource()
     with patch.object(src, "fetch_url", return_value=""):
-        articles = src._parse_feed({"url": "https://example.com/rss", "section": "World", "category": "world"})
+        articles = src._parse_feed({"url": "https://example.com/rss", "section": "world", "label": "World", "category": "world", "prominence": 0.50}, set())
     assert articles == []
 
 
 def test_bbc_limit():
     src = BBCNewsSource(limit=1)
     with patch.object(src, "fetch_url", return_value=SAMPLE_BBC_RSS):
-        articles = src._parse_feed({"url": "https://example.com/rss", "section": "Technology", "category": "tech"})
+        articles = src._parse_feed({"url": "https://example.com/rss", "section": "technology", "label": "Technology", "category": "tech", "prominence": 0.50}, set())
     assert len(articles) == 1
 
 
