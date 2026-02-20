@@ -98,18 +98,26 @@ def cluster_stories(
         List of Story objects, sorted by story_score (most significant first).
     """
     stories: List[Story] = []
-    # Index: (title_lower, title_len, story_index)
+    # Index: (title_lower, title_len, story_index, title_words)
     title_index: List[tuple] = []
+
+    def _significant_words(text: str) -> frozenset:
+        """Extract significant words (len>3) for fast overlap check."""
+        return frozenset(w for w in text.split() if len(w) > 3)
 
     for article in articles:
         title_lower = article.title.lower().strip()
         title_len = len(title_lower)
+        title_words = _significant_words(title_lower)
         matched_idx: Optional[int] = None
 
         # Try to match against existing stories
-        for i, (prev_title, prev_len, story_idx) in enumerate(title_index):
+        for i, (prev_title, prev_len, story_idx, prev_words) in enumerate(title_index):
             # Quick length filter
             if abs(title_len - prev_len) > max(title_len, prev_len) * (1 - similarity_threshold):
+                continue
+            # Quick word-overlap filter: require at least 1 shared significant word
+            if title_words and prev_words and not (title_words & prev_words):
                 continue
             if SequenceMatcher(None, title_lower, prev_title).ratio() > similarity_threshold:
                 matched_idx = story_idx
@@ -122,7 +130,7 @@ def cluster_stories(
             if article.quality_score > story.best_article.quality_score:
                 story.headline = article.title
                 # Update title index entry for better future matching
-                title_index[matched_idx] = (title_lower, title_len, matched_idx)
+                title_index[matched_idx] = (title_lower, title_len, matched_idx, title_words)
         else:
             idx = len(stories)
             story = Story(
@@ -131,7 +139,7 @@ def cluster_stories(
                 category=article.category,
             )
             stories.append(story)
-            title_index.append((title_lower, title_len, idx))
+            title_index.append((title_lower, title_len, idx, title_words))
 
     # Sort by story score (most significant first)
     stories.sort(key=lambda s: s.story_score, reverse=True)

@@ -106,6 +106,7 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("theintercept",   "clawler.sources.theintercept.TheInterceptSource",           "The Intercept"),
     SourceEntry("theconversation","clawler.sources.theconversation.TheConversationSource",     "The Conversation"),
     SourceEntry("semanticscholar","clawler.sources.semanticscholar.SemanticScholarSource",     "Semantic Scholar"),
+    SourceEntry("thehill",        "clawler.sources.thehill.TheHillSource",                     "The Hill"),
 ]
 
 # Quick lookups
