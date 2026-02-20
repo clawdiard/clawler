@@ -66,6 +66,8 @@ from .washingtonpost import WashingtonPostSource
 from .semanticscholar import SemanticScholarSource
 from .thehill import TheHillSource
 from .phoronix import PhoronixSource
+from .theatlantic import TheAtlanticSource
+from .cnet import CNETSource
 
 __all__ = [
     "RSSSource", "HackerNewsSource", "RedditSource", "GitHubTrendingSource",
@@ -89,4 +91,6 @@ __all__ = [
     "SemanticScholarSource",
     "TheHillSource",
     "PhoronixSource",
+    "TheAtlanticSource",
+    "CNETSource",
 ]

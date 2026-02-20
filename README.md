@@ -6,7 +6,7 @@ Clawler aggregates news from **300+ individual sources across 67 source types** 
 
 ## Features
 
-- 📡 **300+ sources across 67 source types** — 54 RSS feeds, Hacker News API, Reddit (21 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog, Hacker Noon, YouTube (22 channels), Medium (20 tags + 10 publications), Google News (5 topics + 8 searches), DZone (12 topic feeds), ScienceDaily (7 section feeds), NPR (10 section feeds), Ars Technica (10 section feeds), AllTop (33 topic categories), Wired (6 section feeds), The Verge, AP News (10 section feeds), The Guardian (10 section feeds), InfoQ (7 topic feeds), The Register (7 section feeds), BBC News (10 section feeds), The Hacker News (cybersecurity), Flipboard (14 topic feeds), The Hill (12 section feeds)
+- 📡 **300+ sources across 69 source types** — 54 RSS feeds, Hacker News API, Reddit (21 subreddits), GitHub Trending, Mastodon (4 instances), Lobsters, Wikipedia Current Events, Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy (3 instances), Slashdot, Stack Overflow, Pinboard Popular, Indie Hackers, EchoJS, Hashnode (6 topic feeds), freeCodeCamp, Changelog, Hacker Noon, YouTube (22 channels), Medium (20 tags + 10 publications), Google News (5 topics + 8 searches), DZone (12 topic feeds), ScienceDaily (7 section feeds), NPR (10 section feeds), Ars Technica (10 section feeds), AllTop (33 topic categories), Wired (6 section feeds), The Verge, AP News (10 section feeds), The Guardian (10 section feeds), InfoQ (7 topic feeds), The Register (7 section feeds), BBC News (10 section feeds), The Hacker News (cybersecurity), Flipboard (14 topic feeds), The Hill (12 section feeds), The Atlantic (12 section feeds), CNET (4 section feeds)
 - 🔑 **No API keys** — works out of the box with public feeds and endpoints
 - 🧹 **Smart deduplication** — 3-tier: exact hash, fingerprint, fuzzy title; keeps higher-quality source
 - ⚖️ **Quality weighting** — sources scored on credibility, uniqueness, signal-to-noise, freshness, reliability, coverage
@@ -310,6 +310,8 @@ clawler -f json | jq '.[] | .title'
 | Nautilus | RSS | science | 0.71 |
 | Lobsters | RSS | tech | 0.70 |
 | Phoronix | RSS | tech | 0.70 |
+| The Atlantic | RSS (12 sections) | general, tech, world, science, culture | 0.86 |
+| CNET | RSS (4 sections) | tech, security, business, culture | 0.68 |
 | The Hacker News | RSS | tech | 0.70 |
 | TechDirt | RSS | tech | 0.69 |
 | ScienceDaily | RSS | science | 0.69 |
