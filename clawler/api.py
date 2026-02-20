@@ -23,13 +23,16 @@ Interest-based filtering (no file needed):
     for a in articles:
         print(f"[{a.relevance:.0%}] {a.title}")
 
-All 48 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
+All 66 sources (RSS, HN, Reddit, GitHub, Mastodon, Wikipedia, Lobsters,
 Dev.to, ArXiv, TechMeme, ProductHunt, Bluesky, Tildes, Lemmy, Slashdot,
 Stack Overflow, Pinboard, Indie Hackers, EchoJS, Hashnode, freeCodeCamp,
 Changelog, Hacker Noon, YouTube, Medium, Substack, Google News, DZone,
 ScienceDaily, NPR, Ars Technica, AllTop, Wired, The Verge, Reuters,
 Phys.org, Nature, AP News, The Guardian, InfoQ, The Register, BBC News,
-The Hacker News, Flipboard, TechCrunch, Engadget, CNBC, MarketWatch)
+The Hacker News, Flipboard, TechCrunch, Engadget, CNBC, MarketWatch,
+VentureBeat, TechRadar, MetaFilter, Quanta Magazine, Politico, Al Jazeera,
+Rest of World, Semafor, Axios, 404 Media, ProPublica, Forbes, The Economist,
+NYT, WSJ, Washington Post, The Intercept, The Conversation, Semantic Scholar)
 are enabled by default.
 Disable any with disabled={"flipboard", "bbc"} or no_<source>=True.
 

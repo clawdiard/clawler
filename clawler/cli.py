@@ -137,6 +137,8 @@ def main(argv=None):
                         help="Show deduplication statistics after crawling")
     parser.add_argument("--trending", action="store_true",
                         help="Shorthand for --min-sources 2 (stories covered by multiple sources)")
+    parser.add_argument("--stories", action="store_true",
+                        help="Cluster articles into stories and display grouped by topic")
     parser.add_argument("--today", action="store_true",
                         help="Shorthand for --since 24h (articles from today)")
     parser.add_argument("--this-week", action="store_true", dest="this_week",
@@ -905,6 +907,11 @@ def main(argv=None):
             lines.append(f"  {a.url}")
         output = "\n".join(lines) if lines else "No articles found."
     # Group-by output (text mode only, overrides formatter)
+    elif args.stories and args.format == "console":
+        from clawler.stories import cluster_stories, format_stories
+        clusters = cluster_stories(articles)
+        header = f"🗞️  Clawler — {len(clusters)} stories from {len(articles)} articles\n"
+        output = header + format_stories(clusters, limit=args.limit)
     elif args.group_by and args.format == "console":
         from collections import defaultdict
         groups = defaultdict(list)
