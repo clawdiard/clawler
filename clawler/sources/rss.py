@@ -694,6 +694,34 @@ DEFAULT_FEEDS = [
     {"url": "https://readynutrition.com/feed/", "source": "Ready Nutrition", "category": "disaster_prep"},
     {"url": "https://www.backdoorsurvival.com/feed/", "source": "Backdoor Survival", "category": "disaster_prep"},
     {"url": "https://modernsurvivalblog.com/feed/", "source": "Modern Survival Blog", "category": "disaster_prep"},
+
+    # Urban Planning & Transit (NEW)
+    {"url": "https://www.streetfilms.org/feed/", "source": "Streetfilms", "category": "urban_planning"},
+    {"url": "https://pedestrianobservations.com/feed/", "source": "Pedestrian Observations", "category": "urban_planning"},
+    {"url": "https://humantransit.org/feed", "source": "Human Transit", "category": "urban_planning"},
+    {"url": "https://www.citylab.com/feeds/posts/", "source": "CityLab", "category": "urban_planning"},
+    {"url": "https://transportgeography.org/feed/", "source": "Transport Geography", "category": "urban_planning"},
+
+    # Philosophy & Ethics (NEW)
+    {"url": "https://aeon.co/feed.rss", "source": "Aeon (Philosophy)", "category": "philosophy"},
+    {"url": "https://blog.apaonline.org/feed/", "source": "APA Blog", "category": "philosophy"},
+    {"url": "https://dailystoic.com/feed/", "source": "Daily Stoic", "category": "philosophy"},
+    {"url": "https://philosophynow.org/rss", "source": "Philosophy Now", "category": "philosophy"},
+    {"url": "https://dailynous.com/feed/", "source": "Daily Nous", "category": "philosophy"},
+
+    # Renewable Energy & Grid (NEW)
+    {"url": "https://www.solarpowerworldonline.com/feed/", "source": "Solar Power World", "category": "renewable_energy"},
+    {"url": "https://www.windpowermonthly.com/feed", "source": "Wind Power Monthly", "category": "renewable_energy"},
+    {"url": "https://www.pv-magazine.com/feed/", "source": "PV Magazine", "category": "renewable_energy"},
+    {"url": "https://www.energy-storage.news/feed/", "source": "Energy Storage News", "category": "renewable_energy"},
+    {"url": "https://www.rechargenews.com/rss", "source": "Recharge News", "category": "renewable_energy"},
+
+    # Food Science & Fermentation (NEW)
+    {"url": "https://www.foodnavigator.com/rss/news", "source": "FoodNavigator", "category": "food_science"},
+    {"url": "https://www.fermentmagazine.com/feed/", "source": "Ferment Magazine", "category": "food_science"},
+    {"url": "https://www.themadfermentationist.com/feeds/posts/default?alt=rss", "source": "The Mad Fermentationist", "category": "food_science"},
+    {"url": "https://www.foodsafetynews.com/feed/", "source": "Food Safety News", "category": "food_science"},
+    {"url": "https://newfoodmagazine.com/feed/", "source": "New Food Magazine", "category": "food_science"},
 ]
 
 
