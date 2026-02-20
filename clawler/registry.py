@@ -108,6 +108,8 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("semanticscholar","clawler.sources.semanticscholar.SemanticScholarSource",     "Semantic Scholar"),
     SourceEntry("thehill",        "clawler.sources.thehill.TheHillSource",                     "The Hill"),
     SourceEntry("phoronix",      "clawler.sources.phoronix.PhoronixSource",                   "Phoronix"),
+    SourceEntry("theatlantic",   "clawler.sources.theatlantic.TheAtlanticSource",             "The Atlantic"),
+    SourceEntry("cnet",          "clawler.sources.cnet.CNETSource",                           "CNET"),
 ]
 
 # Quick lookups

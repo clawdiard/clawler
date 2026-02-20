@@ -313,3 +313,23 @@ sources:
   The Economist (Asia): 0.85
   The Economist (Europe): 0.85
   The Economist (Culture): 0.80
+
+# The Atlantic (prestigious longform journalism since 1857)
+  The Atlantic (Latest): 0.86
+  The Atlantic (Best Of): 0.88
+  The Atlantic (Politics): 0.85
+  The Atlantic (Technology): 0.84
+  The Atlantic (Ideas): 0.87
+  The Atlantic (Science): 0.85
+  The Atlantic (Health): 0.83
+  The Atlantic (Culture): 0.82
+  The Atlantic (Business): 0.82
+  The Atlantic (International): 0.85
+  The Atlantic (Family): 0.78
+  The Atlantic (Education): 0.80
+
+# CNET (major consumer tech publication)
+  CNET (News): 0.68
+  CNET (Reviews): 0.72
+  CNET (How-To): 0.65
+  CNET (Deals): 0.55
