@@ -642,6 +642,30 @@ DEFAULT_FEEDS = [
     {"url": "https://www.nad.org/feed/", "source": "National Assoc. of the Deaf", "category": "deaf_culture"},
     {"url": "https://hearinghealthfoundation.org/blog?format=rss", "source": "Hearing Health Foundation", "category": "deaf_culture"},
     {"url": "https://www.lifeprint.com/asl101/pages-layout/rss.xml", "source": "Lifeprint ASL", "category": "deaf_culture"},
+    # Geology & Earth Science (NEW)
+    {"url": "https://www.usgs.gov/news/all/feed", "source": "USGS News", "category": "geology"},
+    {"url": "https://www.volcanodiscovery.com/rss/news.xml", "source": "Volcano Discovery", "category": "geology"},
+    {"url": "https://www.geosociety.org/feeds/gsaToday.rss", "source": "GSA Today", "category": "geology"},
+    {"url": "https://earthobservatory.nasa.gov/feeds/earth-observatory.rss", "source": "NASA Earth Observatory", "category": "geology"},
+    {"url": "https://www.earth.com/news/feed/", "source": "Earth.com", "category": "geology"},
+    # Permaculture & Homesteading (NEW)
+    {"url": "https://www.permaculture.co.uk/feed", "source": "Permaculture Magazine", "category": "permaculture"},
+    {"url": "https://www.theprairiehomestead.com/feed", "source": "Prairie Homestead", "category": "permaculture"},
+    {"url": "https://morningchores.com/feed/", "source": "Morning Chores", "category": "permaculture"},
+    {"url": "https://www.homesteadandchill.com/blog-feed.xml", "source": "Homestead and Chill", "category": "permaculture"},
+    {"url": "https://richsoil.com/feed", "source": "Rich Soil (Permies)", "category": "permaculture"},
+    # Journalism & Press Freedom (NEW)
+    {"url": "https://cpj.org/feed/", "source": "Committee to Protect Journalists", "category": "press_freedom"},
+    {"url": "https://rsf.org/en/rss.xml", "source": "Reporters Without Borders", "category": "press_freedom"},
+    {"url": "https://www.poynter.org/feed/", "source": "Poynter", "category": "press_freedom"},
+    {"url": "https://gijn.org/feed/", "source": "Global Investigative Journalism Network", "category": "press_freedom"},
+    {"url": "https://freedom.press/news/feed/", "source": "Freedom of the Press Foundation", "category": "press_freedom"},
+    # Libraries & Information Science (NEW)
+    {"url": "https://americanlibrariesmagazine.org/feed/", "source": "American Libraries", "category": "libraries"},
+    {"url": "https://www.libraryjournal.com/feed", "source": "Library Journal", "category": "libraries"},
+    {"url": "https://scholarlykitchen.sspnet.org/feed/", "source": "Scholarly Kitchen", "category": "libraries"},
+    {"url": "https://blogs.loc.gov/loc/feed/", "source": "Library of Congress Blog", "category": "libraries"},
+    {"url": "https://www.openculture.com/feed", "source": "Open Culture", "category": "libraries"},
 ]
 
 
