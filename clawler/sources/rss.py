@@ -666,6 +666,34 @@ DEFAULT_FEEDS = [
     {"url": "https://scholarlykitchen.sspnet.org/feed/", "source": "Scholarly Kitchen", "category": "libraries"},
     {"url": "https://blogs.loc.gov/loc/feed/", "source": "Library of Congress Blog", "category": "libraries"},
     {"url": "https://www.openculture.com/feed", "source": "Open Culture", "category": "libraries"},
+
+    # Data Visualization (NEW)
+    {"url": "https://flowingdata.com/feed", "source": "FlowingData", "category": "data_visualization"},
+    {"url": "https://www.visualisingdata.com/feed/", "source": "Visualising Data", "category": "data_visualization"},
+    {"url": "https://nightingaledvs.com/feed/", "source": "Nightingale", "category": "data_visualization"},
+    {"url": "https://informationisbeautiful.net/feed/", "source": "Information is Beautiful", "category": "data_visualization"},
+    {"url": "https://datajournalism.com/read/feed/rss", "source": "DataJournalism.com", "category": "data_visualization"},
+
+    # Longevity & Anti-Aging (NEW)
+    {"url": "https://www.longevity.technology/feed/", "source": "Longevity Technology", "category": "longevity"},
+    {"url": "https://www.lifespan.io/feed/", "source": "Lifespan.io", "category": "longevity"},
+    {"url": "https://www.fightaging.org/feed/", "source": "Fight Aging", "category": "longevity"},
+    {"url": "https://joshmitteldorf.scienceblog.com/feed/", "source": "Aging Matters", "category": "longevity"},
+    {"url": "https://www.leafscience.org/feed/", "source": "LEAF Science", "category": "longevity"},
+
+    # Street Art & Murals (NEW)
+    {"url": "https://streetartnews.net/feed", "source": "Street Art News", "category": "street_art"},
+    {"url": "https://www.streetartbio.com/feed/", "source": "Street Art Bio", "category": "street_art"},
+    {"url": "https://globalstreetart.com/feed", "source": "Global Street Art", "category": "street_art"},
+    {"url": "https://www.brooklynstreetart.com/feed/", "source": "Brooklyn Street Art", "category": "street_art"},
+    {"url": "https://arrestedmotion.com/feed/", "source": "Arrested Motion", "category": "street_art"},
+
+    # Disaster Preparedness & Survival (NEW)
+    {"url": "https://theprepared.com/feed/", "source": "The Prepared", "category": "disaster_prep"},
+    {"url": "https://www.survivalblog.com/feed", "source": "SurvivalBlog", "category": "disaster_prep"},
+    {"url": "https://readynutrition.com/feed/", "source": "Ready Nutrition", "category": "disaster_prep"},
+    {"url": "https://www.backdoorsurvival.com/feed/", "source": "Backdoor Survival", "category": "disaster_prep"},
+    {"url": "https://modernsurvivalblog.com/feed/", "source": "Modern Survival Blog", "category": "disaster_prep"},
 ]
 
 
