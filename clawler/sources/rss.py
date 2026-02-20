@@ -617,6 +617,31 @@ DEFAULT_FEEDS = [
 
     # Investigative (one more)
     {"url": "https://www.bellingcat.com/feed/", "source": "Bellingcat", "category": "investigative"},
+    # Home Automation & Smart Home (NEW)
+    {"url": "https://www.home-assistant.io/atom.xml", "source": "Home Assistant Blog", "category": "home_automation"},
+    {"url": "https://www.smarthomedb.com/feed", "source": "Smart Home DB", "category": "home_automation"},
+    {"url": "https://homealarmreport.com/feed/", "source": "Home Alarm Report", "category": "home_automation"},
+    {"url": "https://www.theambientman.com/feed", "source": "The Ambient", "category": "home_automation"},
+    {"url": "https://www.automatedhome.co.uk/feed", "source": "Automated Home", "category": "home_automation"},
+    # Martial Arts & Combat Sports (NEW)
+    {"url": "https://www.bloodyelbow.com/rss/current", "source": "Bloody Elbow", "category": "martial_arts"},
+    {"url": "https://www.mmafighting.com/rss/current", "source": "MMA Fighting", "category": "martial_arts"},
+    {"url": "https://www.jiujitsutimes.com/feed/", "source": "Jiu Jitsu Times", "category": "martial_arts"},
+    {"url": "https://www.sherdog.com/rss/news.xml", "source": "Sherdog", "category": "martial_arts"},
+    {"url": "https://www.karate.com/feed/", "source": "Karate.com", "category": "martial_arts"},
+    # Paleontology & Fossils (NEW)
+    {"url": "https://www.palaeontologyonline.com/feed/", "source": "Palaeontology Online", "category": "paleontology"},
+    {"url": "https://www.eartharchives.org/feed/", "source": "Earth Archives", "category": "paleontology"},
+    {"url": "https://blogs.scientificamerican.com/laelaps/feed/", "source": "SciAm Laelaps", "category": "paleontology"},
+    {"url": "https://www.nhm.ac.uk/discover/news.rss", "source": "Natural History Museum", "category": "paleontology"},
+    {"url": "https://fossilnews.org/feed/", "source": "Fossil News", "category": "paleontology"},
+    # Ham Radio & Shortwave (expanding amateur_radio 5→5, new: shortwave_dx)
+    # Sign Language & Deaf Culture (NEW)
+    {"url": "https://www.hearinglikeme.com/feed/", "source": "Hearing Like Me", "category": "deaf_culture"},
+    {"url": "https://www.deafaction.org/feed/", "source": "Deaf Action", "category": "deaf_culture"},
+    {"url": "https://www.nad.org/feed/", "source": "National Assoc. of the Deaf", "category": "deaf_culture"},
+    {"url": "https://hearinghealthfoundation.org/blog?format=rss", "source": "Hearing Health Foundation", "category": "deaf_culture"},
+    {"url": "https://www.lifeprint.com/asl101/pages-layout/rss.xml", "source": "Lifeprint ASL", "category": "deaf_culture"},
 ]
 
 
