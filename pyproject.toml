@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "clawler"
-version = "10.62.0"
 description = "Advanced news crawling service — no API keys required"
 readme = "README.md"
 license = {text = "MIT"}

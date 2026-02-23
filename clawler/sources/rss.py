@@ -703,11 +703,6 @@ DEFAULT_FEEDS = [
     {"url": "https://transportgeography.org/feed/", "source": "Transport Geography", "category": "urban_planning"},
 
     # Philosophy & Ethics (NEW)
-    {"url": "https://aeon.co/feed.rss", "source": "Aeon (Philosophy)", "category": "philosophy"},
-    {"url": "https://blog.apaonline.org/feed/", "source": "APA Blog", "category": "philosophy"},
-    {"url": "https://dailystoic.com/feed/", "source": "Daily Stoic", "category": "philosophy"},
-    {"url": "https://philosophynow.org/rss", "source": "Philosophy Now", "category": "philosophy"},
-    {"url": "https://dailynous.com/feed/", "source": "Daily Nous", "category": "philosophy"},
 
     # Renewable Energy & Grid (NEW)
     {"url": "https://www.solarpowerworldonline.com/feed/", "source": "Solar Power World", "category": "renewable_energy"},
@@ -718,10 +713,35 @@ DEFAULT_FEEDS = [
 
     # Food Science & Fermentation (NEW)
     {"url": "https://www.foodnavigator.com/rss/news", "source": "FoodNavigator", "category": "food_science"},
-    {"url": "https://www.fermentmagazine.com/feed/", "source": "Ferment Magazine", "category": "food_science"},
-    {"url": "https://www.themadfermentationist.com/feeds/posts/default?alt=rss", "source": "The Mad Fermentationist", "category": "food_science"},
     {"url": "https://www.foodsafetynews.com/feed/", "source": "Food Safety News", "category": "food_science"},
     {"url": "https://newfoodmagazine.com/feed/", "source": "New Food Magazine", "category": "food_science"},
+    # Motorsport & Racing (NEW)
+    {"url": "https://www.autosport.com/rss/feed/all", "source": "Autosport", "category": "motorsport"},
+    {"url": "https://racer.com/feed/", "source": "RACER", "category": "motorsport"},
+    {"url": "https://www.motorsport.com/rss/all/news/", "source": "Motorsport.com", "category": "motorsport"},
+    {"url": "https://www.the-race.com/feed/", "source": "The Race", "category": "motorsport"},
+    {"url": "https://beyondtheflag.com/feed/", "source": "Beyond the Flag", "category": "motorsport"},
+
+    # Public Health & Epidemiology (NEW)
+    {"url": "https://www.cidrap.umn.edu/feeds/cidrap-news.xml", "source": "CIDRAP", "category": "public_health"},
+    {"url": "https://globalhealthnow.org/rss.xml", "source": "Global Health Now", "category": "public_health"},
+    {"url": "https://www.publichealth.columbia.edu/news/feed", "source": "Columbia Public Health", "category": "public_health"},
+    {"url": "https://theconversation.com/us/health/articles.atom", "source": "The Conversation Health", "category": "public_health"},
+    {"url": "https://www.healio.com/rss/public-health", "source": "Healio Public Health", "category": "public_health"},
+
+    # Mountaineering & Climbing (NEW)
+    {"url": "https://www.climbing.com/feed/", "source": "Climbing Magazine", "category": "mountaineering"},
+    {"url": "https://gripped.com/feed/", "source": "Gripped", "category": "mountaineering"},
+    {"url": "https://www.ukclimbing.com/articles/rss", "source": "UKClimbing", "category": "mountaineering"},
+    {"url": "https://rockandice.com/feed/", "source": "Rock and Ice", "category": "mountaineering"},
+    {"url": "https://www.alpinist.com/feed/", "source": "Alpinist", "category": "mountaineering"},
+
+    # Leatherworking & Craftsmanship (NEW)
+    {"url": "https://www.instructables.com/tag/type-id/category-workshop/channel-leather/feed.rss", "source": "Instructables Leather", "category": "leatherworking"},
+    {"url": "https://leatherworker.net/forum/forum/38-leather-articles-and-tutorials.xml/", "source": "Leatherworker.net", "category": "leatherworking"},
+    {"url": "https://www.tandyleather.com/blog/feed/", "source": "Tandy Leather Blog", "category": "leatherworking"},
+    {"url": "https://www.craftool.com/blog/feed/", "source": "Craftool Blog", "category": "leatherworking"},
+    {"url": "https://corfreedmanleather.com/feed/", "source": "Cor Freeman Leather", "category": "leatherworking"},
 ]
 
 

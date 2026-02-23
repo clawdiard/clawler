@@ -56,7 +56,7 @@ def test_dockerignore_exists():
 def test_version_bump():
     """Version is 6.4.0."""
     from clawler import __version__
-    assert __version__ >= "6.0.0"
+    assert tuple(int(x) for x in __version__.split(".")) >= (6, 0, 0)
 
 
 def test_top_tags_output():
