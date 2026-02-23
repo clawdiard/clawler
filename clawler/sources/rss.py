@@ -742,6 +742,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.tandyleather.com/blog/feed/", "source": "Tandy Leather Blog", "category": "leatherworking"},
     {"url": "https://www.craftool.com/blog/feed/", "source": "Craftool Blog", "category": "leatherworking"},
     {"url": "https://corfreedmanleather.com/feed/", "source": "Cor Freeman Leather", "category": "leatherworking"},
+
+    # Astrobiology & SETI
+    {"url": "https://astrobiology.nasa.gov/rss/feed.xml", "source": "NASA Astrobiology", "category": "astrobiology"},
+    {"url": "https://www.seti.org/press-releases/feed", "source": "SETI Institute", "category": "astrobiology"},
+    {"url": "https://www.centauri-dreams.org/feed/", "source": "Centauri Dreams", "category": "astrobiology"},
+    {"url": "https://exoplanets.nasa.gov/rss/news/", "source": "NASA Exoplanets", "category": "astrobiology"},
+    {"url": "https://www.universetoday.com/feed", "source": "Universe Today", "category": "astrobiology"},
+
+    # Forensic Science
+    {"url": "https://www.forensicmag.com/rss", "source": "Forensic Magazine", "category": "forensic_science"},
+    {"url": "https://aboutforensics.co.uk/feed/", "source": "About Forensics", "category": "forensic_science"},
+    {"url": "https://www.crime-scene-investigator.net/blog/feed/", "source": "Crime Scene Investigator", "category": "forensic_science"},
+    {"url": "https://forensicresources.org/feed/", "source": "Forensic Resources", "category": "forensic_science"},
+    {"url": "https://www.nist.gov/blogs/taking-measure/rss.xml", "source": "NIST Taking Measure", "category": "forensic_science"},
+
+    # Urban Farming & Hydroponics
+    {"url": "https://www.urbanfarmonline.com/feed/", "source": "Urban Farm", "category": "urban_farming"},
+    {"url": "https://www.maximumyield.com/feed", "source": "Maximum Yield", "category": "urban_farming"},
+    {"url": "https://university.upstartfarmers.com/blog/rss.xml", "source": "Upstart University", "category": "urban_farming"},
+    {"url": "https://www.foodtank.com/feed/", "source": "Food Tank", "category": "urban_farming"},
+    {"url": "https://verticalfarmworld.com/feed/", "source": "Vertical Farm World", "category": "urban_farming"},
+
+    # Toys & Collectibles
+    {"url": "https://news.toyark.com/feed", "source": "The Toyark", "category": "toys_collectibles"},
+    {"url": "https://www.actionfigureinsider.com/feed/", "source": "Action Figure Insider", "category": "toys_collectibles"},
+    {"url": "https://thefwoosh.com/feed/", "source": "The Fwoosh", "category": "toys_collectibles"},
+    {"url": "https://www.figurerealm.com/feed", "source": "Figure Realm", "category": "toys_collectibles"},
+    {"url": "https://www.collectorsweekly.com/articles/feed", "source": "Collectors Weekly", "category": "toys_collectibles"},
 ]
 
 
