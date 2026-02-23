@@ -1,4 +1,11 @@
-"""GitHub Trending source — scrapes trending repos and developers (no API key needed)."""
+"""GitHub Trending source — scrapes trending repos and developers (no API key needed).
+
+Enhanced with:
+- Quality scoring based on star count, growth rate, and description richness
+- Keyword-based category detection from repo descriptions
+- Multi-time-range support with deduplication
+- Developer trending scraping
+"""
 import logging
 import re
 from datetime import datetime, timezone
@@ -35,6 +42,66 @@ LANGUAGE_CATEGORIES = {
     "solidity": "crypto",
     "move": "crypto",
 }
+
+# Keyword-based category detection from descriptions
+_KEYWORD_CATEGORIES = {
+    "ai": re.compile(r"\b(ai|llm|gpt|machine.?learn|neural|deep.?learn|transformer|diffusion|nlp|embeddings?|inference|training|model|pytorch|tensorflow|langchain|rag|agent|chatbot)\b", re.I),
+    "security": re.compile(r"\b(security|vulnerabilit|exploit|pentest|fuzzing|malware|ransomware|ctf|encryption|auth|oauth|firewall)\b", re.I),
+    "devops": re.compile(r"\b(docker|kubernetes|k8s|terraform|ansible|ci.?cd|devops|monitoring|helm|grafana|prometheus)\b", re.I),
+    "web": re.compile(r"\b(react|vue|svelte|nextjs|nuxt|astro|tailwind|frontend|backend|fullstack|api|rest|graphql)\b", re.I),
+    "database": re.compile(r"\b(database|sql|postgres|mysql|redis|mongodb|sqlite|orm|migration|query)\b", re.I),
+    "crypto": re.compile(r"\b(blockchain|crypto|web3|defi|smart.?contract|ethereum|bitcoin|solana)\b", re.I),
+}
+
+
+def _detect_category_from_desc(description: str, language: str) -> str:
+    """Detect category from description keywords, falling back to language."""
+    text = description.lower()
+    best_cat = None
+    best_matches = 0
+    for cat, pattern in _KEYWORD_CATEGORIES.items():
+        matches = len(pattern.findall(text))
+        if matches > best_matches:
+            best_cat = cat
+            best_matches = matches
+    if best_cat:
+        return best_cat
+    return LANGUAGE_CATEGORIES.get(language.lower(), "tech") if language else "tech"
+
+
+def _compute_quality(rank: int, total_stars: int, stars_gained: int, description: str) -> float:
+    """Compute quality score (0.0–1.0) for a trending repo."""
+    score = 0.5
+
+    # Rank boost (top 5 get significant boost)
+    if rank <= 3:
+        score += 0.20
+    elif rank <= 5:
+        score += 0.15
+    elif rank <= 10:
+        score += 0.10
+    elif rank <= 15:
+        score += 0.05
+
+    # Star velocity (gained today)
+    if stars_gained >= 500:
+        score += 0.15
+    elif stars_gained >= 200:
+        score += 0.10
+    elif stars_gained >= 50:
+        score += 0.05
+
+    # Total stars (established projects)
+    if total_stars >= 10000:
+        score += 0.05
+    elif total_stars >= 1000:
+        score += 0.03
+
+    # Description richness
+    if description and len(description) > 50:
+        score += 0.05
+
+    return min(score, 1.0)
 
 
 class GitHubTrendingSource(BaseSource):
@@ -161,15 +228,15 @@ class GitHubTrendingSource(BaseSource):
                     summary_parts.append(description[:200])
                 summary = " | ".join(summary_parts)
 
-                # Determine category from language
-                cat = "tech"
-                if language:
-                    cat = LANGUAGE_CATEGORIES.get(language.lower(), "tech")
+                # Determine category from description + language
+                cat = _detect_category_from_desc(description, language)
 
                 tags = [f"gh-trending:{since}"]
                 if language:
                     tags.append(f"lang:{language.lower()}")
                 tags.append(f"rank:{rank}")
+
+                quality = _compute_quality(rank, total_stars, stars_gained, description)
 
                 articles.append(Article(
                     title=f"🔥 {repo_name}",
@@ -179,6 +246,7 @@ class GitHubTrendingSource(BaseSource):
                     timestamp=datetime.now(timezone.utc),
                     category=cat,
                     tags=tags,
+                    quality_score=quality,
                 ))
             except Exception as e:
                 logger.debug(f"[GitHubTrending] Failed to parse row: {e}")
