@@ -798,6 +798,30 @@ DEFAULT_FEEDS = [
     {"url": "https://arstechnica.com/tag/board-games/feed/", "source": "Ars Technica Board Games", "category": "board_games"},
     {"url": "https://www.shutupandsitdown.com/feed/", "source": "Shut Up & Sit Down", "category": "board_games"},
     {"url": "https://www.polygon.com/rss/tabletop-games/index.xml", "source": "Polygon Tabletop", "category": "board_games"},
+    # ── Sleep Science (new category) ──
+    {"url": "https://www.sleepfoundation.org/feed", "source": "Sleep Foundation", "category": "sleep_science"},
+    {"url": "https://thesleepdoctor.com/feed/", "source": "The Sleep Doctor", "category": "sleep_science"},
+    {"url": "https://www.sleepresearchsociety.org/feed/", "source": "Sleep Research Society", "category": "sleep_science"},
+    {"url": "https://sleepeducation.org/feed/", "source": "AASM Sleep Education", "category": "sleep_science"},
+    {"url": "https://www.mattressclarity.com/feed/", "source": "Mattress Clarity", "category": "sleep_science"},
+    # ── Sound Design (new category) ──
+    {"url": "https://designingsound.org/feed/", "source": "Designing Sound", "category": "sound_design"},
+    {"url": "https://www.asoundeffect.com/feed/", "source": "A Sound Effect", "category": "sound_design"},
+    {"url": "https://reaperblog.net/feed/", "source": "REAPER Blog", "category": "sound_design"},
+    {"url": "https://www.soundonsound.com/feed/all", "source": "Sound On Sound", "category": "sound_design"},
+    {"url": "https://theproaudiofiles.com/feed/", "source": "Pro Audio Files", "category": "sound_design"},
+    # ── Solarpunk (new category) ──
+    {"url": "https://solarpunks.net/feed/", "source": "Solarpunks", "category": "solarpunk"},
+    {"url": "https://www.lowtechmagazine.com/feeds/all.atom.xml", "source": "Low-Tech Magazine", "category": "solarpunk"},
+    {"url": "https://www.resilience.org/feed/", "source": "Resilience.org", "category": "solarpunk"},
+    {"url": "https://www.shareable.net/feed/", "source": "Shareable", "category": "solarpunk"},
+    {"url": "https://www.yesmagazine.org/rss.xml", "source": "YES! Magazine", "category": "solarpunk"},
+    # ── Mycology (new category) ──
+    {"url": "https://fungi.com/blogs/articles.atom", "source": "Fungi Perfecti", "category": "mycology"},
+    {"url": "https://www.mushroomexpert.com/rss.xml", "source": "Mushroom Expert", "category": "mycology"},
+    {"url": "https://blog.growmushrooms.com/feed/", "source": "Grow Mushrooms", "category": "mycology"},
+    {"url": "https://fungimag.com/feed/", "source": "FUNGI Magazine", "category": "mycology"},
+    {"url": "https://northspore.com/blogs/the-black-trumpet/feed.atom", "source": "North Spore", "category": "mycology"},
 ]
 
 
