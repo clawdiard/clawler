@@ -822,6 +822,34 @@ DEFAULT_FEEDS = [
     {"url": "https://blog.growmushrooms.com/feed/", "source": "Grow Mushrooms", "category": "mycology"},
     {"url": "https://fungimag.com/feed/", "source": "FUNGI Magazine", "category": "mycology"},
     {"url": "https://northspore.com/blogs/the-black-trumpet/feed.atom", "source": "North Spore", "category": "mycology"},
+
+    # Foreign Policy & Diplomacy
+    {"url": "https://www.cfr.org/rss.xml", "source": "Council on Foreign Relations", "category": "foreign_policy"},
+    {"url": "https://www.foreignaffairs.com/rss.xml", "source": "Foreign Affairs", "category": "foreign_policy"},
+    {"url": "https://www.brookings.edu/feed/", "source": "Brookings Institution", "category": "foreign_policy"},
+    {"url": "https://carnegieendowment.org/rss/solr.xml", "source": "Carnegie Endowment", "category": "foreign_policy"},
+    {"url": "https://www.chathamhouse.org/rss.xml", "source": "Chatham House", "category": "foreign_policy"},
+
+    # Construction & Civil Engineering
+    {"url": "https://www.constructiondive.com/feeds/news/", "source": "Construction Dive", "category": "construction"},
+    {"url": "https://www.enr.com/rss/all", "source": "Engineering News-Record", "category": "construction"},
+    {"url": "https://theconstructor.org/feed/", "source": "The Constructor", "category": "construction"},
+    {"url": "https://www.constructionexec.com/rss", "source": "Construction Executive", "category": "construction"},
+    {"url": "https://www.bdcnetwork.com/rss.xml", "source": "Building Design+Construction", "category": "construction"},
+
+    # Language Learning
+    {"url": "https://www.fluentin3months.com/feed/", "source": "Fluent in 3 Months", "category": "language_learning"},
+    {"url": "https://blog.duolingo.com/feed/", "source": "Duolingo Blog", "category": "language_learning"},
+    {"url": "https://www.lucalampariello.com/feed/", "source": "Luca Lampariello", "category": "language_learning"},
+    {"url": "https://www.alllanguageresources.com/feed/", "source": "All Language Resources", "category": "language_learning"},
+    {"url": "https://blog.rosettastone.com/feed/", "source": "Rosetta Stone Blog", "category": "language_learning"},
+
+    # Comedy & Humor
+    {"url": "https://thehardtimes.net/feed/", "source": "The Hard Times", "category": "comedy"},
+    {"url": "https://reductress.com/feed/", "source": "Reductress", "category": "comedy"},
+    {"url": "https://www.mcsweeneys.net/feeds/humor", "source": "McSweeney's Internet Tendency", "category": "comedy"},
+    {"url": "https://clickhole.com/feed/", "source": "ClickHole", "category": "comedy"},
+    {"url": "https://babylonbee.com/feed", "source": "Babylon Bee", "category": "comedy"},
 ]
 
 
