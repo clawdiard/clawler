@@ -2,6 +2,11 @@
 
 VentureBeat is a leading tech publication focused on transformative technology,
 particularly AI/ML, gaming, and enterprise innovation.
+
+Enhanced with:
+- Quality scoring based on author prominence, content signals, and category specificity
+- Keyword-based category detection with multi-signal matching
+- Prominent author tracking
 """
 import logging
 import re
@@ -25,6 +30,13 @@ _GAMING_KEYWORDS = {"game", "gaming", "esports", "xbox", "playstation", "nintend
                     "unity", "unreal"}
 _ENTERPRISE_KEYWORDS = {"enterprise", "saas", "cloud", "startup", "funding", "vc",
                         "acquisition", "ipo", "series a", "series b"}
+
+# Prominent VentureBeat authors
+_PROMINENT_AUTHORS = {
+    "dean takahashi", "jeff grubb", "emil protalinski", "carl franzen",
+    "michael nuñez", "sharon goldman", "taryn plumb", "sean michael kerner",
+    "khari johnson", "kyle wiggers",
+}
 
 
 class VentureBeatSource(BaseSource):
@@ -110,6 +122,7 @@ class VentureBeatSource(BaseSource):
                 tags.append(f"vb:{cat_el.text.strip().lower()}")
 
         category = _detect_category(title, summary, tags)
+        quality = _compute_quality(title, summary, author, category)
 
         return Article(
             title=title,
@@ -120,6 +133,7 @@ class VentureBeatSource(BaseSource):
             category=category,
             tags=tags,
             author=author,
+            quality_score=quality,
         )
 
 
@@ -135,6 +149,38 @@ def _detect_category(title: str, summary: str, tags: List[str]) -> str:
     if any(kw in text for kw in _ENTERPRISE_KEYWORDS):
         return "business"
     return "tech"
+
+
+def _compute_quality(title: str, summary: str, author: str, category: str) -> float:
+    """Compute quality score (0.0–1.0) based on content signals."""
+    score = 0.5
+
+    # Prominent author boost
+    if author.lower() in _PROMINENT_AUTHORS:
+        score += 0.15
+
+    # Specific category (non-generic) boost
+    if category != "tech":
+        score += 0.05
+
+    # Title quality
+    title_words = len(title.split())
+    if title_words >= 6:
+        score += 0.05
+    if title_words >= 10:
+        score += 0.05
+
+    # Summary richness
+    if len(summary) > 100:
+        score += 0.05
+    if len(summary) > 200:
+        score += 0.05
+
+    # AI content bonus (VB's forte)
+    if category == "ai":
+        score += 0.05
+
+    return min(score, 1.0)
 
 
 def _parse_date(raw: Optional[str]) -> Optional[datetime]:

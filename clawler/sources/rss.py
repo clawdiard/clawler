@@ -770,6 +770,34 @@ DEFAULT_FEEDS = [
     {"url": "https://thefwoosh.com/feed/", "source": "The Fwoosh", "category": "toys_collectibles"},
     {"url": "https://www.figurerealm.com/feed", "source": "Figure Realm", "category": "toys_collectibles"},
     {"url": "https://www.collectorsweekly.com/articles/feed", "source": "Collectors Weekly", "category": "toys_collectibles"},
+
+    # ── Ethical Hacking & Bug Bounty ──
+    {"url": "https://portswigger.net/daily-swig/rss", "source": "PortSwigger Daily Swig", "category": "ethical_hacking"},
+    {"url": "https://www.hackerone.com/blog.rss", "source": "HackerOne Blog", "category": "ethical_hacking"},
+    {"url": "https://blog.intigriti.com/feed/", "source": "Intigriti Blog", "category": "ethical_hacking"},
+    {"url": "https://pentestlab.blog/feed/", "source": "Pentest Lab", "category": "ethical_hacking"},
+    {"url": "https://www.offensive-security.com/blog/feed/", "source": "Offensive Security", "category": "ethical_hacking"},
+
+    # ── Vintage Computing ──
+    {"url": "https://www.vintagecomputing.com/index.php/feed", "source": "Vintage Computing", "category": "vintage_computing"},
+    {"url": "https://retrocomputingforum.com/latest.rss", "source": "Retro Computing Forum", "category": "vintage_computing"},
+    {"url": "https://www.goto10.fr/feed/", "source": "GOTO 10", "category": "vintage_computing"},
+    {"url": "https://bytecellar.com/feed/", "source": "The Byte Cellar", "category": "vintage_computing"},
+    {"url": "https://www.righto.com/feeds/posts/default?alt=rss", "source": "Ken Shirriff's Blog", "category": "vintage_computing"},
+
+    # ── Marine Biology ──
+    {"url": "https://ocean.si.edu/rss.xml", "source": "Smithsonian Ocean", "category": "marine_biology"},
+    {"url": "https://www.marinebiology.org/feed/", "source": "Marine Biology News", "category": "marine_biology"},
+    {"url": "https://schmidtocean.org/feed/", "source": "Schmidt Ocean", "category": "marine_biology"},
+    {"url": "https://oceanconservancy.org/blog/feed/", "source": "Ocean Conservancy", "category": "marine_biology"},
+    {"url": "https://www.whoi.edu/feed/", "source": "Woods Hole Oceanographic", "category": "marine_biology"},
+
+    # ── Board Games & Tabletop ──
+    {"url": "https://www.boardgamegeek.com/rss/boardgamenews", "source": "BoardGameGeek News", "category": "board_games"},
+    {"url": "https://www.dicebreaker.com/feed", "source": "Dicebreaker", "category": "board_games"},
+    {"url": "https://arstechnica.com/tag/board-games/feed/", "source": "Ars Technica Board Games", "category": "board_games"},
+    {"url": "https://www.shutupandsitdown.com/feed/", "source": "Shut Up & Sit Down", "category": "board_games"},
+    {"url": "https://www.polygon.com/rss/tabletop-games/index.xml", "source": "Polygon Tabletop", "category": "board_games"},
 ]
 
 
