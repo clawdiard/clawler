@@ -158,8 +158,16 @@ class TheAtlanticSource(BaseSource):
         # Category detection
         category = _detect_category(title, summary, section)
 
-        # Quality scoring: boost prominent authors
-        quality_bonus = 0.05 if author.lower() in PROMINENT_AUTHORS else 0.0
+        # Quality scoring: section-based base + prominent author boost
+        section_quality = {
+            "latest": 0.82, "best-of": 0.90, "politics": 0.85,
+            "technology": 0.84, "ideas": 0.86, "science": 0.85,
+            "health": 0.82, "culture": 0.83, "business": 0.82,
+            "international": 0.85, "family": 0.78, "education": 0.80,
+        }
+        quality = section_quality.get(section, 0.80)
+        if author.lower() in PROMINENT_AUTHORS:
+            quality = min(1.0, quality + 0.05)
 
         article = Article(
             title=title,
@@ -168,6 +176,7 @@ class TheAtlanticSource(BaseSource):
             summary=summary,
             timestamp=ts,
             category=category,
+            quality_score=quality,
             tags=tags,
             author=author,
         )

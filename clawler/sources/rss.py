@@ -850,6 +850,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.mcsweeneys.net/feeds/humor", "source": "McSweeney's Internet Tendency", "category": "comedy"},
     {"url": "https://clickhole.com/feed/", "source": "ClickHole", "category": "comedy"},
     {"url": "https://babylonbee.com/feed", "source": "Babylon Bee", "category": "comedy"},
+
+    # ── Nuclear Energy (new category) ──
+    {"url": "https://www.world-nuclear-news.org/feed", "source": "World Nuclear News", "category": "nuclear_energy"},
+    {"url": "https://www.ans.org/news/rss/", "source": "American Nuclear Society", "category": "nuclear_energy"},
+    {"url": "https://neutronbytes.com/feed/", "source": "Neutron Bytes", "category": "nuclear_energy"},
+    {"url": "https://www.neimagazine.com/feed/", "source": "Nuclear Engineering International", "category": "nuclear_energy"},
+    {"url": "https://www.powermag.com/feed/", "source": "POWER Magazine", "category": "nuclear_energy"},
+
+    # ── Cartography & GIS (new category) ──
+    {"url": "https://www.gislounge.com/feed/", "source": "GIS Lounge", "category": "cartography"},
+    {"url": "https://mapbrief.com/feed/", "source": "Map Brief", "category": "cartography"},
+    {"url": "https://www.directionsmag.com/rss", "source": "Directions Magazine", "category": "cartography"},
+    {"url": "https://www.geoawesomeness.com/feed/", "source": "Geoawesomeness", "category": "cartography"},
+    {"url": "https://blog.mapbox.com/feed", "source": "Mapbox Blog", "category": "cartography"},
+
+    # ── Supply Chain & Logistics (new category) ──
+    {"url": "https://www.supplychaindive.com/feeds/news/", "source": "Supply Chain Dive", "category": "supply_chain"},
+    {"url": "https://www.freightwaves.com/feed", "source": "FreightWaves", "category": "supply_chain"},
+    {"url": "https://www.logisticsmgmt.com/rss", "source": "Logistics Management", "category": "supply_chain"},
+    {"url": "https://www.dcvelocity.com/rss/", "source": "DC Velocity", "category": "supply_chain"},
+    {"url": "https://www.supplychainbrain.com/rss", "source": "SupplyChainBrain", "category": "supply_chain"},
+
+    # ── Digital Nomad & Remote Work (new category) ──
+    {"url": "https://nomadlist.com/blog.rss", "source": "Nomad List Blog", "category": "remote_work"},
+    {"url": "https://weworkremotely.com/remote-jobs.rss", "source": "We Work Remotely", "category": "remote_work"},
+    {"url": "https://blog.remotive.com/feed/", "source": "Remotive Blog", "category": "remote_work"},
+    {"url": "https://www.yourremotecoach.com/feed/", "source": "Your Remote Coach", "category": "remote_work"},
+    {"url": "https://runningremote.com/feed/", "source": "Running Remote", "category": "remote_work"},
 ]
 
 
