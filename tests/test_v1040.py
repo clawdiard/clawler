@@ -9,7 +9,7 @@ from clawler.registry import SOURCES
 
 
 def test_version_bump():
-    assert __version__ == "10.75.0"
+    assert __version__ == "10.77.0"
 
 
 def test_registry_count_is_64():

@@ -223,6 +223,7 @@ class HackerNewsSource(BaseSource):
                 summary=f"Score: {score} | By: {author} | Comments: {comments} | Quality: {quality:.2f} | HN discussion: {discussion}",
                 timestamp=datetime.fromtimestamp(ts, tz=timezone.utc) if ts else None,
                 category=category,
+                quality_score=quality,
                 tags=tags,
                 author=author,
                 discussion_url=discussion,
@@ -264,7 +265,7 @@ class HackerNewsSource(BaseSource):
                     articles.append(result)
 
         # Sort by quality descending
-        articles.sort(key=lambda a: float(a.tags[-1].split(":")[-1]) if a.tags else 0, reverse=True)
+        articles.sort(key=lambda a: a.quality_score, reverse=True)
 
         logger.info(f"[HN] Fetched {len(articles)} stories from {len(self.feeds)} feed(s)")
         return articles

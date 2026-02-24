@@ -248,6 +248,7 @@ class ProductHuntSource(BaseSource):
                     summary=" | ".join(parts) if parts else "",
                     timestamp=timestamp,
                     category=category,
+                    quality_score=quality,
                     discussion_url=link,
                     author=author,
                     tags=tags,
