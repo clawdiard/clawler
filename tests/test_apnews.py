@@ -32,7 +32,7 @@ class TestAPNewsSource:
         assert articles[0].title == "Test AP Article"
         assert articles[0].source == "AP News (Top News)"
         assert articles[0].category == "world"
-        assert "apnews:top news" in articles[0].tags
+        assert "apnews:section:top-news" in articles[0].tags
 
     def test_section_filter(self):
         src = APNewsSource(sections=["politics"])
