@@ -1,9 +1,16 @@
-"""DZone source — developer articles and tutorials from dzone.com (no key needed)."""
+"""DZone source — developer articles and tutorials from dzone.com (no key needed).
+
+Enhanced features:
+- Quality scoring (0–1) based on topic prominence, keyword categories, title signals
+- Keyword-based category detection from title/summary
+- Filters: min_quality, category_filter
+"""
 import logging
+import math
 import re
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-from typing import List
+from typing import Dict, List, Optional, Set
 
 from clawler.models import Article
 from clawler.sources.base import BaseSource
@@ -24,7 +31,77 @@ DZONE_FEEDS = [
     {"url": "https://feeds.dzone.com/database", "topic": "database"},
     {"url": "https://feeds.dzone.com/iot", "topic": "iot"},
     {"url": "https://feeds.dzone.com/performance", "topic": "performance"},
+    {"url": "https://feeds.dzone.com/agile", "topic": "agile"},
+    {"url": "https://feeds.dzone.com/integration", "topic": "integration"},
+    {"url": "https://feeds.dzone.com/big-data", "topic": "big-data"},
 ]
+
+# Topic prominence — specialty feeds score higher than general
+TOPIC_PROMINENCE: Dict[str, float] = {
+    "ai": 0.25,
+    "security": 0.22,
+    "cloud": 0.20,
+    "devops": 0.20,
+    "performance": 0.18,
+    "big-data": 0.18,
+    "microservices": 0.15,
+    "database": 0.15,
+    "python": 0.15,
+    "java": 0.15,
+    "webdev": 0.15,
+    "iot": 0.15,
+    "agile": 0.12,
+    "integration": 0.12,
+    "general": 0.10,
+}
+
+# Keyword categories detected from title/summary text
+KEYWORD_CATEGORIES: Dict[str, List[str]] = {
+    "ai": ["machine learning", "deep learning", "neural", "llm", "gpt", "transformer",
+           "artificial intelligence", "nlp", "generative ai", "chatbot"],
+    "security": ["vulnerability", "exploit", "authentication", "encryption", "zero-day",
+                 "malware", "ransomware", "firewall", "penetration", "oauth", "ssl", "tls"],
+    "tech": ["kubernetes", "docker", "microservice", "api", "rest", "graphql", "grpc",
+             "serverless", "terraform", "ci/cd", "pipeline", "container", "observability"],
+    "science": ["quantum", "algorithm", "research", "computation"],
+}
+
+# Title signals that indicate high-quality content
+_QUALITY_TITLE_SIGNALS = [
+    "guide", "tutorial", "best practices", "deep dive", "architecture",
+    "benchmark", "comparison", "how to", "step-by-step", "production",
+    "scalable", "performance", "optimization", "patterns",
+]
+
+
+def _compute_quality(topic: str, title: str, summary: str, categories: List[str]) -> float:
+    """Compute quality score (0–1) for a DZone article."""
+    q = 0.0
+    text_lower = f"{title} {summary}".lower()
+
+    # Topic prominence (0–0.25)
+    q += TOPIC_PROMINENCE.get(topic, 0.10)
+
+    # Title quality signals (0–0.25)
+    signal_hits = sum(1 for s in _QUALITY_TITLE_SIGNALS if s in text_lower)
+    q += min(0.25, signal_hits * 0.08)
+
+    # Category richness — more categories = more detailed (0–0.15)
+    q += min(0.15, len(categories) * 0.03)
+
+    # Keyword category match bonus (0–0.20)
+    kw_hits = 0
+    for cat_keywords in KEYWORD_CATEGORIES.values():
+        kw_hits += sum(1 for kw in cat_keywords if kw in text_lower)
+    q += min(0.20, kw_hits * 0.05)
+
+    # Title length penalty — very short titles are often low quality
+    if len(title) < 20:
+        q -= 0.05
+    elif len(title) > 50:
+        q += 0.05
+
+    return min(1.0, max(0.0, round(q, 3)))
 
 # Simple tag extraction from XML without requiring feedparser
 _ITEM_RE = re.compile(r"<item>(.*?)</item>", re.DOTALL)
@@ -100,16 +177,30 @@ class DZoneSource(BaseSource):
                     tag = cat.lower().replace(" ", "-")
                     tags.append(f"dzone:{tag}")
 
-                # Map topic to category
+                # Map topic to category (enhanced)
                 cat_map = {
-                    "ai": "tech",
+                    "ai": "ai",
                     "security": "security",
                     "cloud": "tech",
                     "devops": "tech",
                     "webdev": "tech",
                     "iot": "tech",
+                    "big-data": "tech",
+                    "agile": "business",
+                    "integration": "tech",
+                    "performance": "tech",
                 }
                 category = cat_map.get(topic, "tech")
+
+                # Override category from keyword detection only if topic mapped to generic "tech"
+                if category == "tech":
+                    text_lower = f"{title} {summary}".lower()
+                    for kw_cat, keywords in KEYWORD_CATEGORIES.items():
+                        if any(kw in text_lower for kw in keywords):
+                            category = kw_cat
+                            break
+
+                quality = _compute_quality(topic, title, summary, categories)
 
                 articles.append(
                     Article(
@@ -121,6 +212,7 @@ class DZoneSource(BaseSource):
                         category=category,
                         tags=tags,
                         author=author,
+                        quality_score=quality,
                     )
                 )
             except Exception as e:

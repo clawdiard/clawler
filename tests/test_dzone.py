@@ -34,7 +34,7 @@ class TestDZoneSource:
         src = DZoneSource()
         assert src.name == "dzone"
         assert src.feeds == DZONE_FEEDS
-        assert len(src.feeds) == 12
+        assert len(src.feeds) == 15
 
     def test_init_custom_feeds(self):
         custom = [{"url": "https://example.com/rss", "topic": "test"}]
@@ -52,7 +52,7 @@ class TestDZoneSource:
         assert a.url == "https://dzone.com/articles/building-llm-agents"
         assert a.author == "Jane Developer"
         assert a.source == "DZone (ai)"
-        assert a.category == "tech"
+        assert a.category == "ai"  # keyword detection overrides
         assert "dzone:ai" in a.tags
         assert "dzone:ai" in a.tags
         assert "dzone:llm" in a.tags

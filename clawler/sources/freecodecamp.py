@@ -1,7 +1,13 @@
-"""freeCodeCamp source — fetches articles from freeCodeCamp's public RSS/API (no key needed)."""
+"""freeCodeCamp source — fetches articles from freeCodeCamp's public RSS/API (no key needed).
+
+Enhanced features:
+- Quality scoring (0–1) based on tag richness, title signals, author
+- Keyword-based category detection
+"""
 import logging
+import math
 from datetime import datetime, timezone
-from typing import List
+from typing import Dict, List
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 
@@ -22,8 +28,8 @@ TAG_CATEGORY_MAP = {
     "react": "tech",
     "nodejs": "tech",
     "typescript": "tech",
-    "machine-learning": "tech",
-    "artificial-intelligence": "tech",
+    "machine-learning": "ai",
+    "artificial-intelligence": "ai",
     "data-science": "science",
     "career": "business",
     "tutorial": "tech",
@@ -31,7 +37,47 @@ TAG_CATEGORY_MAP = {
     "devops": "tech",
     "cloud": "tech",
     "database": "tech",
+    "deep-learning": "ai",
+    "neural-network": "ai",
+    "rust": "tech",
+    "go": "tech",
+    "docker": "tech",
+    "kubernetes": "tech",
+    "algorithms": "tech",
+    "data-structures": "tech",
 }
+
+# Title signals for quality
+_QUALITY_TITLE_SIGNALS = [
+    "handbook", "guide", "tutorial", "how to", "step-by-step", "complete",
+    "best practices", "deep dive", "explained", "from scratch", "full course",
+    "for beginners", "advanced",
+]
+
+
+def _compute_quality(title: str, tags: list, author: str) -> float:
+    """Compute quality score (0–1) for a freeCodeCamp article."""
+    q = 0.15  # baseline — freeCodeCamp has editorial standards
+    title_lower = title.lower()
+
+    # Title signals (0–0.30)
+    signal_hits = sum(1 for s in _QUALITY_TITLE_SIGNALS if s in title_lower)
+    q += min(0.30, signal_hits * 0.10)
+
+    # Tag richness (0–0.20)
+    q += min(0.20, len(tags) * 0.04)
+
+    # Title length — detailed titles correlate with quality
+    if len(title) > 60:
+        q += 0.10
+    elif len(title) > 40:
+        q += 0.05
+
+    # Has author (0.05)
+    if author:
+        q += 0.05
+
+    return min(1.0, max(0.0, round(q, 3)))
 
 
 class FreeCodeCampSource(BaseSource):
@@ -104,6 +150,8 @@ class FreeCodeCampSource(BaseSource):
             if author:
                 summary = f"by {author} — {summary}"
 
+            quality = _compute_quality(title, tags, author)
+
             articles.append(
                 Article(
                     title=title,
@@ -114,6 +162,7 @@ class FreeCodeCampSource(BaseSource):
                     category=category,
                     tags=tags[:5],
                     author=author,
+                    quality_score=quality,
                 )
             )
 

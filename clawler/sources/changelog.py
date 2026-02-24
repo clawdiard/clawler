@@ -1,15 +1,20 @@
-"""Changelog source — fetches articles from changelog.com (developer news/podcasts, no key needed)."""
+"""Changelog source — fetches articles from changelog.com (developer news/podcasts, no key needed).
+
+Enhanced features:
+- Quality scoring (0–1) based on feed prominence, tag richness, title signals
+- Keyword-based category detection
+"""
 import logging
 from datetime import datetime, timezone
-from typing import List
+from typing import Dict, List
 from clawler.models import Article
 from clawler.sources.base import BaseSource
 
 logger = logging.getLogger(__name__)
 
 CHANGELOG_FEEDS = [
-    ("https://changelog.com/feed", "Changelog"),
-    ("https://changelog.com/news/feed", "Changelog News"),
+    ("https://changelog.com/feed", "Changelog", 0.20),
+    ("https://changelog.com/news/feed", "Changelog News", 0.25),
 ]
 
 TAG_CATEGORY_MAP = {
@@ -40,6 +45,28 @@ TAG_CATEGORY_MAP = {
 }
 
 
+_QUALITY_TITLE_SIGNALS = [
+    "open source", "release", "new in", "major", "announcement",
+    "deep dive", "interview", "why", "how", "future of",
+]
+
+
+def _compute_quality(title: str, tags: list, author: str, feed_prominence: float) -> float:
+    """Compute quality score (0–1) for a Changelog article."""
+    q = feed_prominence
+    title_lower = title.lower()
+
+    signal_hits = sum(1 for s in _QUALITY_TITLE_SIGNALS if s in title_lower)
+    q += min(0.25, signal_hits * 0.08)
+    q += min(0.20, len(tags) * 0.04)
+    if author:
+        q += 0.05
+    if len(title) > 50:
+        q += 0.05
+
+    return min(1.0, max(0.0, round(q, 3)))
+
+
 class ChangelogSource(BaseSource):
     """Fetches recent articles from changelog.com via RSS feeds."""
 
@@ -55,7 +82,7 @@ class ChangelogSource(BaseSource):
         articles: List[Article] = []
         seen_urls: set = set()
 
-        for feed_url, feed_label in CHANGELOG_FEEDS:
+        for feed_url, feed_label, feed_prominence in CHANGELOG_FEEDS:
             text = self.fetch_url(feed_url)
             if not text:
                 logger.warning(f"[Changelog] Failed to fetch {feed_label} feed")
@@ -113,6 +140,8 @@ class ChangelogSource(BaseSource):
                 if author:
                     summary = f"by {author} — {summary}"
 
+                quality = _compute_quality(title, tags, author, feed_prominence)
+
                 articles.append(
                     Article(
                         title=title,
@@ -123,6 +152,7 @@ class ChangelogSource(BaseSource):
                         category=category,
                         tags=tags[:5],
                         author=author,
+                        quality_score=quality,
                     )
                 )
 

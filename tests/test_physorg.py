@@ -25,7 +25,7 @@ SAMPLE_RSS = """<?xml version="1.0" encoding="UTF-8"?>
 
 class TestPhysOrgSource:
     def test_feed_config(self):
-        assert len(PHYSORG_FEEDS) == 8
+        assert len(PHYSORG_FEEDS) == 11
         sections = {f["section"] for f in PHYSORG_FEEDS}
         assert "breaking" in sections
         assert "physics" in sections
