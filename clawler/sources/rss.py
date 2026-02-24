@@ -858,6 +858,9 @@ DEFAULT_FEEDS = [
     # ── Digital Nomad & Remote Work (new category) ──
     {"url": "https://nomadlist.com/blog.rss", "source": "Nomad List Blog", "category": "remote_work"},
     {"url": "https://www.yourremotecoach.com/feed/", "source": "Your Remote Coach", "category": "remote_work"},
+    {"url": "https://blog.remote.com/feed/", "source": "Remote.com Blog", "category": "remote_work"},
+    {"url": "https://www.workplaceless.com/feed", "source": "Workplaceless", "category": "remote_work"},
+    {"url": "https://distributed.blog/feed/", "source": "Distributed (Automattic)", "category": "remote_work"},
 
     # Podcasting & Audio
     {"url": "https://blog.pacific-content.com/feed", "source": "Pacific Content", "category": "podcasting"},
@@ -935,6 +938,90 @@ DEFAULT_FEEDS = [
     {"url": "https://blog.athearn.com/feed/", "source": "Athearn Trains Blog", "category": "model_trains"},
     {"url": "https://www.trainworld.com/blog/feed/", "source": "Train World Blog", "category": "model_trains"},
     {"url": "https://www.modelrailwaynews.com/feed/", "source": "Model Railway News", "category": "model_trains"},
+
+    # Bonsai & Japanese Gardens
+    {"url": "https://www.bonsaiempire.com/blog/feed", "source": "Bonsai Empire", "category": "bonsai"},
+    {"url": "https://bonsaitonight.com/feed/", "source": "Bonsai Tonight", "category": "bonsai"},
+    {"url": "https://www.bonsaibark.com/feed/", "source": "Bonsai Bark", "category": "bonsai"},
+    {"url": "https://www.bonsainut.com/forums/-/index.rss", "source": "Bonsai Nut", "category": "bonsai"},
+    {"url": "https://www.japanesegardening.org/feed", "source": "Japanese Gardening", "category": "bonsai"},
+
+    # Model Rocketry & Amateur Space
+    {"url": "https://www.nar.org/feed/", "source": "National Association of Rocketry", "category": "model_rocketry"},
+    {"url": "https://www.rocketryforum.com/forums/-/index.rss", "source": "The Rocketry Forum", "category": "model_rocketry"},
+    {"url": "https://blog.esteseducator.com/feed/", "source": "Estes Educator Blog", "category": "model_rocketry"},
+    {"url": "https://everydayastronaut.com/feed/", "source": "Everyday Astronaut", "category": "model_rocketry"},
+    {"url": "https://www.americanrocketry.com/feed", "source": "American Rocketry", "category": "model_rocketry"},
+
+    # Philately & Stamp Collecting
+    {"url": "https://www.linns.com/rss/", "source": "Linn's Stamp News", "category": "philately"},
+    {"url": "https://virtualstampclub.com/feed/", "source": "Virtual Stamp Club", "category": "philately"},
+    {"url": "https://www.mysticstamp.com/info/stamp-fun/feed/", "source": "Mystic Stamp Blog", "category": "philately"},
+    {"url": "https://colnect.com/en/blog/feed", "source": "Colnect Stamps", "category": "philately"},
+    {"url": "https://blog.stampworld.com/feed/", "source": "StampWorld Blog", "category": "philately"},
+
+    # Pinball & Arcade Gaming
+    {"url": "https://www.thisweekinpinball.com/feed/", "source": "This Week in Pinball", "category": "pinball_arcade"},
+    {"url": "https://www.pinballnews.com/site/feed/", "source": "Pinball News", "category": "pinball_arcade"},
+    {"url": "https://arcadeblogger.com/feed/", "source": "Arcade Blogger", "category": "pinball_arcade"},
+    {"url": "https://www.retrogamer.net/feed/", "source": "Retro Gamer", "category": "pinball_arcade"},
+    {"url": "https://pinside.com/pinball/community/rss", "source": "Pinside", "category": "pinball_arcade"},
+
+    # Escape Rooms & Immersive Entertainment
+    {"url": "https://roomescapeartist.com/feed/", "source": "Room Escape Artist", "category": "escape_rooms"},
+    {"url": "https://theescaperoomer.com/feed/", "source": "The Escape Roomer", "category": "escape_rooms"},
+    {"url": "https://www.interestedminds.com/feed/", "source": "Escape Room Tips", "category": "escape_rooms"},
+    {"url": "https://nowescape.com/blog/feed/", "source": "Nowescape", "category": "escape_rooms"},
+    {"url": "https://escaperoomers.com/feed/", "source": "Escape Roomers", "category": "escape_rooms"},
+
+    # Kite Sports & Wind Sports
+    {"url": "https://www.thekitemag.com/feed/", "source": "The Kite Mag", "category": "kite_sports"},
+    {"url": "https://www.ikitesurf.com/feed/", "source": "iKitesurf", "category": "kite_sports"},
+    {"url": "https://www.kiteworldmag.com/feed/", "source": "Kiteworld", "category": "kite_sports"},
+    {"url": "https://www.kitesurfing.org/feed/", "source": "Kitesurfing.org", "category": "kite_sports"},
+    {"url": "https://www.awindofchange.com/feed/", "source": "A Wind of Change", "category": "kite_sports"},
+
+    # Puppetry & Puppet Arts
+    {"url": "https://www.puppeteers.org/feed/", "source": "Puppeteers of America", "category": "puppetry"},
+    {"url": "https://www.unima.org/en/feed/", "source": "UNIMA", "category": "puppetry"},
+    {"url": "https://puppetryjournal.com/feed/", "source": "Puppetry Journal", "category": "puppetry"},
+    {"url": "https://www.thepuppethub.com/feed/", "source": "The Puppet Hub", "category": "puppetry"},
+    {"url": "https://handspringpuppet.co.za/feed/", "source": "Handspring Puppet", "category": "puppetry"},
+
+    # Model Railroading
+    {"url": "https://www.modelrailroader.com/feed/", "source": "Model Railroader", "category": "model_railroading"},
+    {"url": "https://www.trains.com/mrr/feed/", "source": "Trains MRR", "category": "model_railroading"},
+    {"url": "https://blog.bachmanntrains.com/feed/", "source": "Bachmann Trains Blog", "category": "model_railroading"},
+    {"url": "https://www.railwaymodeller.com/feed/", "source": "Railway Modeller", "category": "model_railroading"},
+    {"url": "https://www.nmra.org/feed", "source": "NMRA", "category": "model_railroading"},
+
+    # Penmanship & Stationery
+    {"url": "https://www.penaddict.com/blog?format=rss", "source": "The Pen Addict", "category": "penmanship_stationery"},
+    {"url": "https://www.fountainpennetwork.com/forum/discover/3.xml", "source": "Fountain Pen Network", "category": "penmanship_stationery"},
+    {"url": "https://unsharpen.com/feed/", "source": "Unsharpen", "category": "penmanship_stationery"},
+    {"url": "https://www.gouletpens.com/blogs/goulet-pens-blog.atom", "source": "Goulet Pens Blog", "category": "penmanship_stationery"},
+    {"url": "https://blog.andersonpens.com/feed/", "source": "Anderson Pens Blog", "category": "penmanship_stationery"},
+
+    # Cheesemaking & Dairy
+    {"url": "https://culturecheesemag.com/feed/", "source": "Culture Cheese Magazine", "category": "cheesemaking_dairy"},
+    {"url": "https://cheesegrotto.com/blogs/journal.atom", "source": "Cheese Grotto", "category": "cheesemaking_dairy"},
+    {"url": "https://www.dairyfoods.com/rss", "source": "Dairy Foods", "category": "cheesemaking_dairy"},
+    {"url": "https://cheesemaking.com/blogs/learn.atom", "source": "Cheesemaking.com", "category": "cheesemaking_dairy"},
+    {"url": "https://www.cheeseprofessor.com/feed/", "source": "The Cheese Professor", "category": "cheesemaking_dairy"},
+
+    # Gem & Mineral Collecting
+    {"url": "https://www.gemsociety.org/feed/", "source": "International Gem Society", "category": "gems_minerals"},
+    {"url": "https://www.mindat.org/rss.php", "source": "Mindat", "category": "gems_minerals"},
+    {"url": "https://www.geologyin.com/feeds/posts/default?alt=rss", "source": "Geology In", "category": "gems_minerals"},
+    {"url": "https://www.gia.edu/gia-news-research/rss", "source": "GIA News", "category": "gems_minerals"},
+    {"url": "https://rocktumbler.com/blog/feed/", "source": "Rock Tumbler", "category": "gems_minerals"},
+
+    # Vintage Audio & Hi-Fi
+    {"url": "https://www.stereophile.com/feed", "source": "Stereophile", "category": "vintage_audio"},
+    {"url": "https://www.analogplanet.com/feed", "source": "AnalogPlanet", "category": "vintage_audio"},
+    {"url": "https://www.whathifi.com/feeds/all", "source": "What Hi-Fi?", "category": "vintage_audio"},
+    {"url": "https://darko.audio/feed/", "source": "Darko Audio", "category": "vintage_audio"},
+    {"url": "https://www.head-fi.org/index.rss", "source": "Head-Fi", "category": "vintage_audio"},
 ]
 
 
