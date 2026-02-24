@@ -769,7 +769,6 @@ DEFAULT_FEEDS = [
     {"url": "https://www.actionfigureinsider.com/feed/", "source": "Action Figure Insider", "category": "toys_collectibles"},
     {"url": "https://thefwoosh.com/feed/", "source": "The Fwoosh", "category": "toys_collectibles"},
     {"url": "https://www.figurerealm.com/feed", "source": "Figure Realm", "category": "toys_collectibles"},
-    {"url": "https://www.collectorsweekly.com/articles/feed", "source": "Collectors Weekly", "category": "toys_collectibles"},
 
     # ── Ethical Hacking & Bug Bounty ──
     {"url": "https://portswigger.net/daily-swig/rss", "source": "PortSwigger Daily Swig", "category": "ethical_hacking"},
@@ -790,17 +789,13 @@ DEFAULT_FEEDS = [
     {"url": "https://www.marinebiology.org/feed/", "source": "Marine Biology News", "category": "marine_biology"},
     {"url": "https://schmidtocean.org/feed/", "source": "Schmidt Ocean", "category": "marine_biology"},
     {"url": "https://oceanconservancy.org/blog/feed/", "source": "Ocean Conservancy", "category": "marine_biology"},
-    {"url": "https://www.whoi.edu/feed/", "source": "Woods Hole Oceanographic", "category": "marine_biology"},
 
     # ── Board Games & Tabletop ──
     {"url": "https://www.boardgamegeek.com/rss/boardgamenews", "source": "BoardGameGeek News", "category": "board_games"},
-    {"url": "https://www.dicebreaker.com/feed", "source": "Dicebreaker", "category": "board_games"},
     {"url": "https://arstechnica.com/tag/board-games/feed/", "source": "Ars Technica Board Games", "category": "board_games"},
-    {"url": "https://www.shutupandsitdown.com/feed/", "source": "Shut Up & Sit Down", "category": "board_games"},
     {"url": "https://www.polygon.com/rss/tabletop-games/index.xml", "source": "Polygon Tabletop", "category": "board_games"},
     # ── Sleep Science (new category) ──
     {"url": "https://www.sleepfoundation.org/feed", "source": "Sleep Foundation", "category": "sleep_science"},
-    {"url": "https://thesleepdoctor.com/feed/", "source": "The Sleep Doctor", "category": "sleep_science"},
     {"url": "https://www.sleepresearchsociety.org/feed/", "source": "Sleep Research Society", "category": "sleep_science"},
     {"url": "https://sleepeducation.org/feed/", "source": "AASM Sleep Education", "category": "sleep_science"},
     {"url": "https://www.mattressclarity.com/feed/", "source": "Mattress Clarity", "category": "sleep_science"},
@@ -808,7 +803,6 @@ DEFAULT_FEEDS = [
     {"url": "https://designingsound.org/feed/", "source": "Designing Sound", "category": "sound_design"},
     {"url": "https://www.asoundeffect.com/feed/", "source": "A Sound Effect", "category": "sound_design"},
     {"url": "https://reaperblog.net/feed/", "source": "REAPER Blog", "category": "sound_design"},
-    {"url": "https://www.soundonsound.com/feed/all", "source": "Sound On Sound", "category": "sound_design"},
     {"url": "https://theproaudiofiles.com/feed/", "source": "Pro Audio Files", "category": "sound_design"},
     # ── Solarpunk (new category) ──
     {"url": "https://solarpunks.net/feed/", "source": "Solarpunks", "category": "solarpunk"},
@@ -826,7 +820,6 @@ DEFAULT_FEEDS = [
     # Foreign Policy & Diplomacy
     {"url": "https://www.cfr.org/rss.xml", "source": "Council on Foreign Relations", "category": "foreign_policy"},
     {"url": "https://www.foreignaffairs.com/rss.xml", "source": "Foreign Affairs", "category": "foreign_policy"},
-    {"url": "https://www.brookings.edu/feed/", "source": "Brookings Institution", "category": "foreign_policy"},
     {"url": "https://carnegieendowment.org/rss/solr.xml", "source": "Carnegie Endowment", "category": "foreign_policy"},
     {"url": "https://www.chathamhouse.org/rss.xml", "source": "Chatham House", "category": "foreign_policy"},
 
@@ -839,7 +832,6 @@ DEFAULT_FEEDS = [
 
     # Language Learning
     {"url": "https://www.fluentin3months.com/feed/", "source": "Fluent in 3 Months", "category": "language_learning"},
-    {"url": "https://blog.duolingo.com/feed/", "source": "Duolingo Blog", "category": "language_learning"},
     {"url": "https://www.lucalampariello.com/feed/", "source": "Luca Lampariello", "category": "language_learning"},
     {"url": "https://www.alllanguageresources.com/feed/", "source": "All Language Resources", "category": "language_learning"},
     {"url": "https://blog.rosettastone.com/feed/", "source": "Rosetta Stone Blog", "category": "language_learning"},
@@ -852,39 +844,25 @@ DEFAULT_FEEDS = [
     {"url": "https://babylonbee.com/feed", "source": "Babylon Bee", "category": "comedy"},
 
     # ── Nuclear Energy (new category) ──
-    {"url": "https://www.world-nuclear-news.org/feed", "source": "World Nuclear News", "category": "nuclear_energy"},
-    {"url": "https://www.ans.org/news/rss/", "source": "American Nuclear Society", "category": "nuclear_energy"},
     {"url": "https://neutronbytes.com/feed/", "source": "Neutron Bytes", "category": "nuclear_energy"},
     {"url": "https://www.neimagazine.com/feed/", "source": "Nuclear Engineering International", "category": "nuclear_energy"},
-    {"url": "https://www.powermag.com/feed/", "source": "POWER Magazine", "category": "nuclear_energy"},
 
     # ── Cartography & GIS (new category) ──
-    {"url": "https://www.gislounge.com/feed/", "source": "GIS Lounge", "category": "cartography"},
-    {"url": "https://mapbrief.com/feed/", "source": "Map Brief", "category": "cartography"},
-    {"url": "https://www.directionsmag.com/rss", "source": "Directions Magazine", "category": "cartography"},
     {"url": "https://www.geoawesomeness.com/feed/", "source": "Geoawesomeness", "category": "cartography"},
     {"url": "https://blog.mapbox.com/feed", "source": "Mapbox Blog", "category": "cartography"},
 
     # ── Supply Chain & Logistics (new category) ──
-    {"url": "https://www.supplychaindive.com/feeds/news/", "source": "Supply Chain Dive", "category": "supply_chain"},
-    {"url": "https://www.freightwaves.com/feed", "source": "FreightWaves", "category": "supply_chain"},
     {"url": "https://www.logisticsmgmt.com/rss", "source": "Logistics Management", "category": "supply_chain"},
-    {"url": "https://www.dcvelocity.com/rss/", "source": "DC Velocity", "category": "supply_chain"},
     {"url": "https://www.supplychainbrain.com/rss", "source": "SupplyChainBrain", "category": "supply_chain"},
 
     # ── Digital Nomad & Remote Work (new category) ──
     {"url": "https://nomadlist.com/blog.rss", "source": "Nomad List Blog", "category": "remote_work"},
-    {"url": "https://weworkremotely.com/remote-jobs.rss", "source": "We Work Remotely", "category": "remote_work"},
-    {"url": "https://blog.remotive.com/feed/", "source": "Remotive Blog", "category": "remote_work"},
     {"url": "https://www.yourremotecoach.com/feed/", "source": "Your Remote Coach", "category": "remote_work"},
-    {"url": "https://runningremote.com/feed/", "source": "Running Remote", "category": "remote_work"},
 
     # Podcasting & Audio
-    {"url": "https://podnews.net/rss", "source": "Podnews", "category": "podcasting"},
     {"url": "https://blog.pacific-content.com/feed", "source": "Pacific Content", "category": "podcasting"},
     {"url": "https://www.thepodcasthost.com/feed/", "source": "The Podcast Host", "category": "podcasting"},
     {"url": "https://transom.org/feed/", "source": "Transom", "category": "podcasting"},
-    {"url": "https://hotpodnews.com/feed/", "source": "Hot Pod News", "category": "podcasting"},
 
     # Tiny Houses & Minimalism
     {"url": "https://www.theminimalists.com/feed/", "source": "The Minimalists", "category": "minimalism"},
@@ -895,8 +873,6 @@ DEFAULT_FEEDS = [
 
     # Calligraphy & Lettering
     {"url": "https://www.iampeth.com/blog?format=rss", "source": "IAMPETH", "category": "calligraphy"},
-    {"url": "https://thepostmansknock.com/feed/", "source": "The Postman's Knock", "category": "calligraphy"},
-    {"url": "https://www.jetpens.com/blog/feed", "source": "JetPens Blog", "category": "calligraphy"},
     {"url": "https://seanwes.com/feed/", "source": "seanwes", "category": "calligraphy"},
     {"url": "https://www.johnstonlettercutting.co.uk/feed/", "source": "Johnston Letter Cutting", "category": "calligraphy"},
 
@@ -908,11 +884,8 @@ DEFAULT_FEEDS = [
     {"url": "https://blog.trailofbits.com/feed/", "source": "Trail of Bits", "category": "competitive_programming"},
 
     # Animation & VFX
-    {"url": "https://www.cartoonbrew.com/feed", "source": "Cartoon Brew", "category": "animation_vfx"},
     {"url": "https://beforesandafters.com/feed/", "source": "befores & afters", "category": "animation_vfx"},
-    {"url": "https://www.awn.com/rss.xml", "source": "Animation World Network", "category": "animation_vfx"},
     {"url": "https://www.fxguide.com/feed/", "source": "fxguide", "category": "animation_vfx"},
-    {"url": "https://motionographer.com/feed/", "source": "Motionographer", "category": "animation_vfx"},
 
     # Dentistry & Oral Health
     {"url": "https://www.dentistrytoday.com/feed/", "source": "Dentistry Today", "category": "dentistry"},

@@ -89,8 +89,8 @@ class TestWashingtonPostSource:
 
     def test_feed_config(self):
         assert len(WAPO_FEEDS) >= 5
-        for f in WAPO_FEEDS:
-            assert "url" in f and "section" in f and "category" in f
+        for key, f in WAPO_FEEDS.items():
+            assert "url" in f and "label" in f and "fallback_cat" in f
 
     @patch.object(WashingtonPostSource, "fetch_url", return_value=SAMPLE_RSS)
     def test_crawl_parses_articles(self, mock_fetch):

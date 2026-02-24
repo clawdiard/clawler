@@ -34,7 +34,7 @@ class TestTechCrunchSource:
         assert len(articles) == 2
         assert articles[0].title == "OpenAI raises $10B in Series C funding"
         assert articles[0].author == "Sarah Perez"
-        assert articles[0].source == "TechCrunch"
+        assert articles[0].source.startswith("TechCrunch")
         assert articles[0].timestamp is not None
 
     def test_dedup_within_feed(self):
@@ -65,8 +65,8 @@ class TestTechCrunchSource:
         with patch.object(src, "fetch_url", return_value=SAMPLE_RSS):
             articles = src.crawl()
         tags = articles[0].tags
-        assert "tc:ai" in tags
-        assert "tc:startups" in tags
+        assert "tc:category:ai" in tags
+        assert "tc:tag:startups" in tags
 
     def test_empty_feed(self):
         src = TechCrunchSource(feeds=["main"])

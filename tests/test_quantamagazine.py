@@ -79,7 +79,7 @@ class TestRegistryIncludesQuanta(unittest.TestCase):
         self.assertIn("quantamagazine", keys)
 
     def test_total_sources_52(self):
-        self.assertEqual(len(SOURCES), 67)
+        self.assertEqual(len(SOURCES), 73)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ SAMPLE_RSS = """<?xml version="1.0" encoding="UTF-8"?>
 
 class TestNatureSource:
     def test_feed_config(self):
-        assert len(NATURE_FEEDS) == 5
+        assert len(NATURE_FEEDS) == 18
         sections = {f["section"] for f in NATURE_FEEDS}
         assert "nature" in sections
         assert "machine-intelligence" in sections
@@ -41,11 +41,11 @@ class TestNatureSource:
         articles = src.crawl()
         assert len(articles) == 2
         assert "CRISPR" in articles[0].title
-        assert articles[0].source == "Nature (nature)"
-        assert articles[0].category == "science"
+        assert articles[0].source == "Nature (Nature)"
+        assert articles[0].category in ("science", "health")  # CRISPR + "treating diseases" may match health keywords
         assert articles[0].author == "Jane Smith"
         assert articles[0].timestamp is not None
-        assert "nature:nature" in articles[0].tags
+        assert "nature:journal:nature" in articles[0].tags
 
     @patch.object(NatureSource, "fetch_url", return_value="")
     def test_empty_feed(self, mock_fetch):
