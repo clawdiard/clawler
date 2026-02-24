@@ -2,8 +2,14 @@
 
 Supports multiple feed endpoints (published, top, rising, latest, videos),
 tag filtering, reading time metadata, comment counts, and rich category mapping.
+
+Enhanced features:
+- Quality scoring (0–1) based on reactions, comments, reading time, feed prominence
+- Filters: min_quality, category_filter
+- Quality-sorted output
 """
 import logging
+import math
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Set
 
@@ -124,6 +130,61 @@ TAG_CATEGORY_MAP: Dict[str, str] = {
     "godot": "gaming",
 }
 
+# Feed prominence — editorial signal value
+FEED_PROMINENCE: Dict[str, float] = {
+    "published": 0.15,
+    "rising": 0.25,
+    "latest": 0.10,
+    "videos": 0.12,
+}
+
+# Prominent Dev.to authors (well-known tech writers)
+PROMINENT_AUTHORS: Dict[str, float] = {
+    "ben": 0.10,          # Ben Halpern (founder)
+    "jess": 0.08,         # Jess Lee (co-founder)
+    "lydiahallie": 0.08,  # Lydia Hallie
+    "aspittel": 0.08,     # Ali Spittel
+    "cassidoo": 0.06,     # Cassidy Williams
+    "swyx": 0.06,         # Shawn Wang
+    "dabit3": 0.06,       # Nader Dabit
+    "nickytonline": 0.06, # Nick Taylor
+    "devteam": 0.05,      # Dev.to team
+    "coffeecraftcode": 0.05,
+    "therealdanvega": 0.05,
+}
+
+
+def _compute_quality(reactions: int, comments: int, reading_time: int,
+                     feed_name: str, author: str) -> float:
+    """Compute quality score (0–1) for a Dev.to article."""
+    q = 0.0
+
+    # Feed prominence (0–0.25)
+    q += FEED_PROMINENCE.get(feed_name, 0.15)
+
+    # Reaction score (0–0.35) — log-scaled
+    if reactions > 0:
+        q += min(0.35, 0.10 * math.log10(reactions + 1))
+
+    # Comment engagement (0–0.15)
+    if comments > 0:
+        q += min(0.15, 0.05 * math.log10(comments + 1))
+
+    # Reading time bonus — longer = more substantial (0–0.10)
+    if reading_time >= 8:
+        q += 0.10
+    elif reading_time >= 4:
+        q += 0.06
+    elif reading_time >= 2:
+        q += 0.03
+
+    # Author prominence (0–0.10)
+    author_lower = author.lower() if author else ""
+    q += PROMINENT_AUTHORS.get(author_lower, 0.0)
+
+    return min(1.0, round(q, 3))
+
+
 # Dev.to API endpoints
 DEVTO_FEEDS: Dict[str, str] = {
     "published": "https://dev.to/api/articles",
@@ -147,6 +208,8 @@ class DevToSource(BaseSource):
         tags: Optional[List[str]] = None,
         min_reactions: int = 0,
         min_reading_time: int = 0,
+        min_quality: float = 0.0,
+        category_filter: Optional[List[str]] = None,
         include_reading_time: bool = True,
         include_comments: bool = True,
     ):
@@ -169,6 +232,8 @@ class DevToSource(BaseSource):
         self.tags = tags
         self.min_reactions = min_reactions
         self.min_reading_time = min_reading_time
+        self.min_quality = min_quality
+        self.category_filter = category_filter
         self.include_reading_time = include_reading_time
         self.include_comments = include_comments
 
@@ -190,6 +255,8 @@ class DevToSource(BaseSource):
                 self._fetch_feed(feed_name, seen_urls, articles, tag_filter=self.tag)
 
         logger.info(f"[Dev.to] Fetched {len(articles)} articles")
+        # Sort by quality descending
+        articles.sort(key=lambda a: a.quality_score or 0, reverse=True)
         return articles
 
     def _fetch_feed(
@@ -288,6 +355,15 @@ class DevToSource(BaseSource):
         if feed_name != "published":
             article_tags.append(f"devto-feed:{feed_name}")
 
+        # Quality scoring
+        quality = _compute_quality(reactions, comments_count, reading_time,
+                                   feed_name, author)
+        if self.min_quality and quality < self.min_quality:
+            return None
+        if self.category_filter and category not in self.category_filter:
+            return None
+        article_tags.append(f"devto:quality:{quality:.2f}")
+
         return Article(
             title=title,
             url=article_url,
@@ -297,6 +373,7 @@ class DevToSource(BaseSource):
             category=category,
             tags=article_tags,
             author=author,
+            quality_score=quality,
         )
 
 
