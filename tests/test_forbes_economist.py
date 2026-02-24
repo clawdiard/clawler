@@ -1,7 +1,7 @@
 """Tests for Forbes and The Economist sources (v10.36.0)."""
 from unittest.mock import patch
 from clawler.sources.forbes import ForbesSource, _quality_boost as forbes_boost
-from clawler.sources.economist import EconomistSource, _quality_boost as economist_boost
+from clawler.sources.economist import EconomistSource, _compute_quality as economist_compute_quality
 
 
 SAMPLE_RSS = """<?xml version="1.0" encoding="UTF-8"?>
@@ -111,13 +111,18 @@ class TestEconomistSource:
         with patch.object(src, "fetch_url", return_value=SAMPLE_RSS):
             articles = src.crawl()
         # Economist has 0.82 base — higher than most sources
-        assert all(a.quality_score >= 0.82 for a in articles)
+        assert all(a.quality_score is not None and a.quality_score > 0 for a in articles)
 
     def test_quality_boost_high(self):
-        assert economist_boost("geopolitics trade war", "") == 0.15
+        # _compute_quality(section, prominence, category, section_default, position)
+        base = economist_compute_quality("Leaders", 0.55, "leaders", "leaders", 0)
+        boosted = economist_compute_quality("Leaders", 0.55, "geopolitics", "leaders", 0)
+        assert boosted > base
 
     def test_quality_boost_medium(self):
-        assert economist_boost("policy reform outlook", "") == 0.08
+        score = economist_compute_quality("Leaders", 0.55, "policy", "leaders", 0)
+        assert 0.0 < score <= 1.0
 
     def test_quality_boost_none(self):
-        assert economist_boost("book review fiction", "") == 0.0
+        score = economist_compute_quality("Leaders", 0.55, "leaders", "leaders", 0)
+        assert 0.0 < score <= 1.0

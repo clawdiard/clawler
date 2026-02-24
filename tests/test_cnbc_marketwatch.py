@@ -1,6 +1,6 @@
 """Tests for CNBC and MarketWatch sources (v10.23.0)."""
 from unittest.mock import patch, MagicMock
-from clawler.sources.cnbc import CNBCSource, _quality_boost
+from clawler.sources.cnbc import CNBCSource, _compute_quality
 from clawler.sources.marketwatch import MarketWatchSource
 
 
@@ -41,7 +41,7 @@ class TestCNBCSource:
         assert articles[0].author == "Jane Doe"
 
     def test_crawl_filters_sections(self):
-        src = CNBCSource(sections=["Technology"])
+        src = CNBCSource(feeds=["Technology"])
         with patch.object(src, "fetch_url", return_value=SAMPLE_RSS):
             articles = src.crawl()
         # Only the Technology feed should be queried
@@ -100,15 +100,20 @@ class TestMarketWatchSource:
         assert MarketWatchSource().name == "marketwatch"
 
 
-class TestQualityBoost:
-    def test_high_keyword(self):
-        assert _quality_boost("Fed raises rates", "") == 0.15
+class TestComputeQuality:
+    def test_returns_float_in_range(self):
+        score = _compute_quality("Technology", "tech", "tech", 0, "")
+        assert 0.0 <= score <= 1.0
 
-    def test_medium_keyword(self):
-        assert _quality_boost("Dow Jones closes flat", "") == 0.08
+    def test_position_decay(self):
+        first = _compute_quality("Technology", "tech", "tech", 0, "")
+        tenth = _compute_quality("Technology", "tech", "tech", 9, "")
+        assert first > tenth
 
-    def test_no_keyword(self):
-        assert _quality_boost("Weather forecast", "") == 0.0
+    def test_boosted_category_bonus(self):
+        base = _compute_quality("Technology", "tech", "tech", 0, "")
+        boosted = _compute_quality("Technology", "ai", "tech", 0, "")
+        assert boosted > base
 
 
 class TestRegistryIncludesNewSources:
@@ -126,4 +131,4 @@ class TestRegistryIncludesNewSources:
 
     def test_total_sources_50(self):
         from clawler.registry import SOURCES
-        assert len(SOURCES) == 67
+        assert len(SOURCES) == 73

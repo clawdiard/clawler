@@ -44,8 +44,8 @@ def test_arstechnica_crawl():
     assert articles[0].title == "AI models can now reason about code"
     assert articles[0].source == "Ars Technica (main)"
     assert articles[0].author == "Benj Edwards"
-    assert "ars:ai" in articles[0].tags
-    assert "ars-section:main" in articles[0].tags
+    assert "ars:tag:ai" in articles[0].tags
+    assert "ars:section:main" in articles[0].tags
     assert articles[0].timestamp is not None
 
 
