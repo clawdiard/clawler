@@ -907,6 +907,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.instructables.com/tag/type-id/category-craft/channel-paper/feed.rss", "source": "Instructables Paper", "category": "origami_papercraft"},
     {"url": "https://www.thesprucecrafts.com/feed", "source": "The Spruce Crafts", "category": "origami_papercraft"},
     {"url": "https://www.craftpassion.com/feed/", "source": "Craft Passion", "category": "origami_papercraft"},
+
+    # Drones & UAV
+    {"url": "https://dronedj.com/feed/", "source": "DroneDJ", "category": "drones_uav"},
+    {"url": "https://www.suasnews.com/feed/", "source": "sUAS News", "category": "drones_uav"},
+    {"url": "https://dronelife.com/feed/", "source": "DroneLife", "category": "drones_uav"},
+    {"url": "https://www.commercialuavnews.com/feed", "source": "Commercial UAV News", "category": "drones_uav"},
+    {"url": "https://store.dji.com/blog.rss", "source": "DJI Blog", "category": "drones_uav"},
+
+    # Vintage Computing & Retro Tech
+    {"url": "https://www.osnews.com/feed/", "source": "OS News", "category": "vintage_computing"},
+    {"url": "https://retrocomputing.stackexchange.com/feeds", "source": "Retrocomputing SE", "category": "vintage_computing"},
+    {"url": "https://www.goto10.se/feed/", "source": "goto10", "category": "vintage_computing"},
+    {"url": "https://blog.adafruit.com/category/vintage-computing/feed/", "source": "Adafruit Vintage", "category": "vintage_computing"},
+    {"url": "https://www.theregister.com/on_prem/systems/headlines.atom", "source": "Register Systems", "category": "vintage_computing"},
+
+    # Tattoo & Body Art
+    {"url": "https://www.tattoodo.com/feed", "source": "Tattoodo", "category": "tattoo_bodyart"},
+    {"url": "https://scene360.com/feed/", "source": "Scene360", "category": "tattoo_bodyart"},
+    {"url": "https://www.inkedmag.com/feed", "source": "Inked Magazine", "category": "tattoo_bodyart"},
+    {"url": "https://www.tattoolife.com/feed/", "source": "Tattoo Life", "category": "tattoo_bodyart"},
+    {"url": "https://www.needlesandsins.com/atom.xml", "source": "Needles and Sins", "category": "tattoo_bodyart"},
+
+    # Model Trains & Miniatures
+    {"url": "https://www.modelrailroader.com/rss/", "source": "Model Railroader", "category": "model_trains"},
+    {"url": "https://www.bfrmagazine.com/feed/", "source": "British Railway Modelling", "category": "model_trains"},
+    {"url": "https://blog.athearn.com/feed/", "source": "Athearn Trains Blog", "category": "model_trains"},
+    {"url": "https://www.trainworld.com/blog/feed/", "source": "Train World Blog", "category": "model_trains"},
+    {"url": "https://www.modelrailwaynews.com/feed/", "source": "Model Railway News", "category": "model_trains"},
 ]
 
 
