@@ -31,7 +31,7 @@ class TestEngadgetSource:
         with patch.object(src, "fetch_url", return_value=SAMPLE_RSS):
             articles = src.crawl()
         assert len(articles) == 2
-        assert articles[0].source == "Engadget"
+        assert articles[0].source == "Engadget (Main)"
         assert articles[0].author == "Kris Holt"
         assert articles[0].timestamp is not None
 

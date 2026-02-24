@@ -127,8 +127,8 @@ class ScienceDailySource(BaseSource):
     def _parse_feed(self, feed_info: dict, seen_urls: Set[str]) -> List[Article]:
         feed_url = feed_info["url"]
         section = feed_info["section"]
-        default_cat = feed_info["default_category"]
-        base_prominence = feed_info["prominence"]
+        default_cat = feed_info.get("default_category", "science")
+        base_prominence = feed_info.get("prominence", 0.45)
 
         xml = self.fetch_url(feed_url)
         if not xml:

@@ -28,7 +28,7 @@ class TestScienceDailySource:
         src = ScienceDailySource()
         assert src.name == "sciencedaily"
         assert src.feeds == SCIENCEDAILY_FEEDS
-        assert len(src.feeds) == 7
+        assert len(src.feeds) == 10
 
     @patch.object(ScienceDailySource, "fetch_url", return_value=SAMPLE_RSS)
     def test_crawl_parses_articles(self, mock_fetch):
@@ -39,8 +39,8 @@ class TestScienceDailySource:
         a = articles[0]
         assert "Quantum" in a.title
         assert a.source == "ScienceDaily (top)"
-        assert a.category == "science"
-        assert "sciencedaily:top" in a.tags
+        assert a.category == "physics"  # keyword detection: "quantum"
+        assert "sciencedaily:section:top" in a.tags
         assert a.timestamp is not None
 
         b = articles[1]
@@ -60,7 +60,7 @@ class TestScienceDailySource:
         src = ScienceDailySource(feeds=[{"url": "https://test.com/rss", "section": "computers"}])
         with patch.object(src, "fetch_url", return_value=SAMPLE_RSS):
             articles = src.crawl()
-            assert articles[0].category == "tech"
+            assert articles[0].category == "physics"  # keyword detection overrides section default
 
     def test_limit(self):
         src = ScienceDailySource(limit=1, feeds=[{"url": "https://test.com/rss", "section": "top"}])

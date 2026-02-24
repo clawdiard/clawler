@@ -44,6 +44,7 @@ _CATEGORY_RULES = [
     ("automotive", re.compile(r"\b(ev|electric.?vehicle|tesla|rivian|self.?driving|autonomous|lidar|charging.?station)\b", re.I)),
     ("entertainment", re.compile(r"\b(stream|netflix|disney|movie|film|tv|show|music|spotify|apple.?tv|hbo|youtube)\b", re.I)),
     ("audio", re.compile(r"\b(headphone|earbuds?|speaker|soundbar|audio|podcast|bluetooth.?audio|noise.?cancel)\b", re.I)),
+    ("tech", re.compile(r"\b(laptops?|computers?|pc|chips?|processors?|intel|amd|nvidia|software|apps?|robots?|drones?|gadgets?|reviews?|displays?|monitors?|keyboards?|mouse|routers?|wi.?fi|usb|tech)\b", re.I)),
 ]
 
 # Prominent Engadget writers with beat expertise
