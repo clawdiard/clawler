@@ -1022,6 +1022,34 @@ DEFAULT_FEEDS = [
     {"url": "https://www.whathifi.com/feeds/all", "source": "What Hi-Fi?", "category": "vintage_audio"},
     {"url": "https://darko.audio/feed/", "source": "Darko Audio", "category": "vintage_audio"},
     {"url": "https://www.head-fi.org/index.rss", "source": "Head-Fi", "category": "vintage_audio"},
+
+    # Cycling & Bikepacking
+    {"url": "https://www.cyclingnews.com/rss", "source": "Cycling News", "category": "cycling"},
+    {"url": "https://road.cc/rss.xml", "source": "road.cc", "category": "cycling"},
+    {"url": "https://bikepackingcom.wpcomstaging.com/feed/", "source": "Bikepacking.com", "category": "cycling"},
+    {"url": "https://www.bicycling.com/rss/all.xml/", "source": "Bicycling Magazine", "category": "cycling"},
+    {"url": "https://www.bikeradar.com/rss", "source": "BikeRadar", "category": "cycling"},
+
+    # Film Production & Screenwriting
+    {"url": "https://nofilmschool.com/rss.xml", "source": "No Film School", "category": "film_production"},
+    {"url": "https://www.indiewire.com/feed/", "source": "IndieWire", "category": "film_production"},
+    {"url": "https://johnaugust.com/feed", "source": "John August (Screenwriting)", "category": "film_production"},
+    {"url": "https://www.premiumbeat.com/blog/feed/", "source": "PremiumBeat Blog", "category": "film_production"},
+    {"url": "https://filmmakermagazine.com/feed/", "source": "Filmmaker Magazine", "category": "film_production"},
+
+    # Cocktails & Mixology
+    {"url": "https://www.liquor.com/feeds/all", "source": "Liquor.com", "category": "cocktails"},
+    {"url": "https://www.jeffreymorgenthaler.com/feed/", "source": "Jeffrey Morgenthaler", "category": "cocktails"},
+    {"url": "https://imbibemagazine.com/feed/", "source": "Imbibe Magazine", "category": "cocktails"},
+    {"url": "https://www.diffordsguide.com/rss", "source": "Difford's Guide", "category": "cocktails"},
+    {"url": "https://talesofthecocktail.org/feed/", "source": "Tales of the Cocktail", "category": "cocktails"},
+
+    # Knitting & Crochet
+    {"url": "https://www.ravelry.com/blog.atom", "source": "Ravelry Blog", "category": "knitting_crochet"},
+    {"url": "https://www.loveknitting.com/blog/feed/", "source": "LoveKnitting", "category": "knitting_crochet"},
+    {"url": "https://www.interweave.com/knitting/feed/", "source": "Interweave Knits", "category": "knitting_crochet"},
+    {"url": "https://www.gathered.how/knitting/feed/", "source": "Gathered (Knitting)", "category": "knitting_crochet"},
+    {"url": "https://www.yarnspirations.com/blog/feed/", "source": "Yarnspirations", "category": "knitting_crochet"},
 ]
 
 
