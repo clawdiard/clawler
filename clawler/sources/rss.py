@@ -906,6 +906,34 @@ DEFAULT_FEEDS = [
     {"url": "https://ctftime.org/event/list/upcoming/rss/", "source": "CTFtime Events", "category": "competitive_programming"},
     {"url": "https://www.roppers.org/feed", "source": "Roppers Academy", "category": "competitive_programming"},
     {"url": "https://blog.trailofbits.com/feed/", "source": "Trail of Bits", "category": "competitive_programming"},
+
+    # Animation & VFX
+    {"url": "https://www.cartoonbrew.com/feed", "source": "Cartoon Brew", "category": "animation_vfx"},
+    {"url": "https://beforesandafters.com/feed/", "source": "befores & afters", "category": "animation_vfx"},
+    {"url": "https://www.awn.com/rss.xml", "source": "Animation World Network", "category": "animation_vfx"},
+    {"url": "https://www.fxguide.com/feed/", "source": "fxguide", "category": "animation_vfx"},
+    {"url": "https://motionographer.com/feed/", "source": "Motionographer", "category": "animation_vfx"},
+
+    # Dentistry & Oral Health
+    {"url": "https://www.dentistrytoday.com/feed/", "source": "Dentistry Today", "category": "dentistry"},
+    {"url": "https://www.dentaleconomics.com/rss/", "source": "Dental Economics", "category": "dentistry"},
+    {"url": "https://www.rdhmag.com/rss/", "source": "RDH Magazine", "category": "dentistry"},
+    {"url": "https://blog.theada.org/feed/", "source": "ADA Blog", "category": "dentistry"},
+    {"url": "https://www.nature.com/bdj/rss/current", "source": "British Dental Journal", "category": "dentistry"},
+
+    # Locksmithing & Physical Security
+    {"url": "https://www.securitymagazine.com/rss/topic/2236", "source": "Security Magazine", "category": "physical_security"},
+    {"url": "https://www.ifsecglobal.com/feed/", "source": "IFSEC Global", "category": "physical_security"},
+    {"url": "https://www.securityinfowatch.com/rss", "source": "Security Info Watch", "category": "physical_security"},
+    {"url": "https://www.asisonline.org/security-management-magazine/rss/", "source": "ASIS Security Management", "category": "physical_security"},
+    {"url": "https://www.sdmmag.com/rss/", "source": "SDM Magazine", "category": "physical_security"},
+
+    # Origami & Paper Craft
+    {"url": "https://www.paperkawaii.com/feed/", "source": "Paper Kawaii", "category": "origami_papercraft"},
+    {"url": "https://origamiway.com/feed/", "source": "Origami Way", "category": "origami_papercraft"},
+    {"url": "https://www.instructables.com/tag/type-id/category-craft/channel-paper/feed.rss", "source": "Instructables Paper", "category": "origami_papercraft"},
+    {"url": "https://www.thesprucecrafts.com/feed", "source": "The Spruce Crafts", "category": "origami_papercraft"},
+    {"url": "https://www.craftpassion.com/feed/", "source": "Craft Passion", "category": "origami_papercraft"},
 ]
 
 
