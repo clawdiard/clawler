@@ -29,12 +29,36 @@ class _LazyHeaders(dict):
     def __iter__(self):
         self._ensure()
         return super().__iter__()
+    def __len__(self):
+        self._ensure()
+        return super().__len__()
+    def __repr__(self):
+        self._ensure()
+        return super().__repr__()
     def items(self):
         self._ensure()
         return super().items()
+    def keys(self):
+        self._ensure()
+        return super().keys()
+    def values(self):
+        self._ensure()
+        return super().values()
+    def get(self, key, default=None):
+        self._ensure()
+        return super().get(key, default)
     def __contains__(self, key):
         self._ensure()
         return super().__contains__(key)
+    def copy(self):
+        self._ensure()
+        return dict(self)
+    def __or__(self, other):
+        self._ensure()
+        return dict.__or__(dict(self), other)
+    def __ror__(self, other):
+        self._ensure()
+        return dict.__or__(other, dict(self))
 
 HEADERS = _LazyHeaders()
 

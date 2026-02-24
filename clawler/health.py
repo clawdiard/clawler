@@ -65,17 +65,24 @@ class HealthTracker:
 
     def get_health_modifier(self, source: str) -> float:
         """Return a modifier (0.5-1.0) based on source health."""
-        for key, d in self.data.items():
-            if key.lower() in source.lower() or source.lower() in key.lower():
-                total = d.get("total_crawls", 0)
-                if total == 0:
-                    return 1.0
-                success_rate = 1.0 - (d.get("failures", 0) / total)
-                if success_rate < 0.5:
-                    return 0.5
-                elif success_rate < 0.8:
-                    return 0.8
-                return 1.0
+        # Exact match first, then case-insensitive exact match
+        d = self.data.get(source)
+        if d is None:
+            source_lower = source.lower()
+            for key, val in self.data.items():
+                if key.lower() == source_lower:
+                    d = val
+                    break
+        if d is None:
+            return 1.0
+        total = d.get("total_crawls", 0)
+        if total == 0:
+            return 1.0
+        success_rate = 1.0 - (d.get("failures", 0) / total)
+        if success_rate < 0.5:
+            return 0.5
+        elif success_rate < 0.8:
+            return 0.8
         return 1.0
 
     @property
