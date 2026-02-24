@@ -1,9 +1,19 @@
-"""InfoQ source — enterprise software engineering articles via RSS (no key needed)."""
+"""InfoQ source — enterprise software engineering articles via RSS (no key needed).
+
+Enhanced features (v10.83.0):
+- Quality scoring (0–1) based on topic prominence + keyword specificity + position
+- 7 topic feeds covering AI, architecture, cloud, DevOps, Java, .NET, and general
+- Two-tier keyword category detection
+- Rich summaries with author/topic metadata
+- Provenance tags: infoq:topic, infoq:category, infoq:author, infoq:tag
+- Filters: min_quality, category_filter, global_limit
+- Cross-feed URL deduplication
+"""
 import logging
 import re
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-from typing import List, Optional
+from typing import Dict, List, Optional, Set
 
 from clawler.models import Article
 from clawler.sources.base import BaseSource
@@ -20,6 +30,17 @@ INFOQ_FEEDS = [
     {"url": "https://feed.infoq.com/java", "topic": "java"},
     {"url": "https://feed.infoq.com/dotnet", "topic": "dotnet"},
 ]
+
+# Topic prominence scores
+TOPIC_PROMINENCE: Dict[str, float] = {
+    "ai": 0.55,
+    "architecture": 0.50,
+    "cloud": 0.50,
+    "devops": 0.48,
+    "java": 0.45,
+    "dotnet": 0.45,
+    "all": 0.42,
+}
 
 _ITEM_RE = re.compile(r"<item>(.*?)</item>", re.DOTALL)
 _TAG_RE = {
@@ -51,10 +72,28 @@ TOPIC_MAP = {
 
 # Keyword-based category detection for finer categorization
 _CATEGORY_KEYWORDS = {
-    "ai": ["ai", "machine learning", "deep learning", "llm", "gpt", "neural", "ml ", "artificial intelligence", "generative ai", "transformer"],
-    "security": ["security", "vulnerability", "cve", "breach", "authentication", "encryption", "zero-day", "ransomware"],
-    "business": ["leadership", "management", "agile", "scrum", "team", "organization", "hiring", "culture", "strategy"],
+    "ai": [
+        "ai", "machine learning", "deep learning", "llm", "gpt", "neural",
+        "ml ", "artificial intelligence", "generative ai", "transformer",
+        "large language model", "chatgpt", "copilot",
+    ],
+    "security": [
+        "security", "vulnerability", "cve", "breach", "authentication",
+        "encryption", "zero-day", "ransomware", "cybersecurity", "owasp",
+    ],
+    "business": [
+        "leadership", "management", "agile", "scrum", "team", "organization",
+        "hiring", "culture", "strategy", "enterprise",
+    ],
     "science": ["research", "quantum", "physics"],
+    "devops": [
+        "kubernetes", "docker", "ci/cd", "pipeline", "terraform", "ansible",
+        "gitops", "observability", "monitoring", "sre",
+    ],
+    "cloud": [
+        "aws", "azure", "gcp", "serverless", "lambda", "microservices",
+        "cloud native", "containers",
+    ],
 }
 
 
@@ -75,43 +114,84 @@ def _extract_all(pattern, text) -> List[str]:
 
 
 def _detect_category(title: str, summary: str, topic: str) -> str:
-    """Detect category from title/summary keywords, falling back to topic map."""
+    """Two-tier: keyword hits first, then topic map fallback."""
     text = f"{title} {summary}".lower()
+    best_cat = None
+    best_hits = 0
     for cat, keywords in _CATEGORY_KEYWORDS.items():
-        if any(kw in text for kw in keywords):
-            return cat
+        hits = sum(1 for kw in keywords if kw in text)
+        if hits > best_hits:
+            best_hits = hits
+            best_cat = cat
+    if best_cat and best_hits >= 1:
+        return best_cat
     return TOPIC_MAP.get(topic, "tech")
 
 
+def _compute_quality(topic: str, category: str, topic_default: str,
+                     position: int, author: str) -> float:
+    """Quality score (0–1) based on topic prominence + position + specificity."""
+    base = TOPIC_PROMINENCE.get(topic, 0.42)
+    position_factor = 1.0 / (1.0 + 0.05 * position)
+    score = base * position_factor
+    # Boost for specific keyword-detected category
+    if category != topic_default:
+        score = min(1.0, score + 0.08)
+    # Bylined articles get a boost
+    if author:
+        score = min(1.0, score + 0.05)
+    return round(min(1.0, score), 3)
+
+
 class InfoQSource(BaseSource):
-    """Fetch enterprise software engineering articles from InfoQ RSS feeds."""
+    """Fetch enterprise software engineering articles from InfoQ RSS feeds.
+
+    Parameters
+    ----------
+    feeds : list of dict or None
+        Custom feed list (overrides defaults).
+    limit : int
+        Max articles per feed. Default 20.
+    topics : list of str or None
+        Topic filter — only fetch these topics.
+    min_quality : float
+        Minimum quality score (0–1). Default 0.0.
+    category_filter : list of str or None
+        Only include articles in these categories.
+    global_limit : int or None
+        Max total articles (quality-sorted). None = no limit.
+    """
 
     name = "infoq"
 
-    def __init__(self, feeds: Optional[List[dict]] = None, limit: int = 20,
-                 topics: Optional[List[str]] = None):
-        """
-        Args:
-            feeds: Custom feed list (overrides defaults).
-            limit: Max articles per feed.
-            topics: Topic filter — only fetch these topics (e.g. ["ai", "devops"]).
-        """
+    def __init__(
+        self,
+        feeds: Optional[List[dict]] = None,
+        limit: int = 20,
+        topics: Optional[List[str]] = None,
+        min_quality: float = 0.0,
+        category_filter: Optional[List[str]] = None,
+        global_limit: Optional[int] = None,
+    ):
         self.feeds = feeds or INFOQ_FEEDS
         self.limit = limit
+        self.min_quality = min_quality
+        self.category_filter = [c.lower() for c in category_filter] if category_filter else None
+        self.global_limit = global_limit
         if topics:
             topic_set = set(t.lower() for t in topics)
             self.feeds = [f for f in self.feeds if f["topic"] in topic_set]
 
-    def _parse_feed(self, feed_url: str, topic: str) -> List[Article]:
+    def _parse_feed(self, feed_url: str, topic: str, seen_urls: Set[str]) -> List[Article]:
         xml = self.fetch_url(feed_url)
         if not xml:
             return []
 
         articles: List[Article] = []
-        seen_urls: set = set()
         items = _ITEM_RE.findall(xml)
+        topic_default = TOPIC_MAP.get(topic, "tech")
 
-        for item_xml in items[:self.limit]:
+        for position, item_xml in enumerate(items[:self.limit]):
             try:
                 title = _extract(_TAG_RE["title"], item_xml)
                 url = _extract(_TAG_RE["link"], item_xml)
@@ -134,17 +214,29 @@ class InfoQSource(BaseSource):
                     except (ValueError, TypeError):
                         pass
 
-                # Extract categories/tags from RSS
                 rss_categories = _extract_all(_TAG_RE["category"], item_xml)
-
-                # Extract author
                 author = _extract(_TAG_RE["author"], item_xml)
 
                 category = _detect_category(title, summary, topic)
 
-                tags = [f"infoq:topic:{topic}"]
+                # Quality scoring
+                quality = _compute_quality(topic, category, topic_default, position, author)
+
+                # Build rich summary
+                parts = []
                 if author:
-                    tags.append(f"infoq:author:{author}")
+                    parts.append(f"✍️ {author}")
+                parts.append(f"📰 {topic.title()}")
+                if summary:
+                    parts.append(summary)
+                rich_summary = " · ".join(parts[:2])
+                if summary:
+                    rich_summary += f" — {summary}"
+
+                # Provenance tags
+                tags = [f"infoq:topic:{topic}", f"infoq:category:{category}"]
+                if author:
+                    tags.append(f"infoq:author:{author.lower()}")
                 for rc in rss_categories[:5]:
                     tags.append(f"infoq:tag:{rc.lower()}")
 
@@ -155,10 +247,12 @@ class InfoQSource(BaseSource):
                         title=title,
                         url=url,
                         source=source_label,
-                        summary=summary,
+                        summary=rich_summary,
                         timestamp=ts,
                         category=category,
                         tags=tags,
+                        author=author if author else None,
+                        quality_score=quality,
                     )
                 )
             except Exception as e:
@@ -169,17 +263,29 @@ class InfoQSource(BaseSource):
 
     def crawl(self) -> List[Article]:
         all_articles: List[Article] = []
-        seen_urls: set = set()
+        seen_urls: Set[str] = set()
 
         for feed in self.feeds:
             try:
-                articles = self._parse_feed(feed["url"], feed["topic"])
-                for a in articles:
-                    if a.url not in seen_urls:
-                        seen_urls.add(a.url)
-                        all_articles.append(a)
+                articles = self._parse_feed(feed["url"], feed["topic"], seen_urls)
+                all_articles.extend(articles)
+                logger.info(f"[InfoQ] {feed['topic']}: {len(articles)} articles")
             except Exception as e:
                 logger.warning(f"[InfoQ] Failed to fetch {feed['topic']}: {e}")
 
-        logger.info(f"[InfoQ] Fetched {len(all_articles)} articles from {len(self.feeds)} topic feeds")
+        # Apply quality filter
+        if self.min_quality > 0:
+            all_articles = [a for a in all_articles if (a.quality_score or 0) >= self.min_quality]
+
+        if self.category_filter:
+            all_articles = [a for a in all_articles if a.category in self.category_filter]
+
+        # Sort by quality descending
+        all_articles.sort(key=lambda a: a.quality_score or 0, reverse=True)
+
+        # Global limit
+        if self.global_limit:
+            all_articles = all_articles[:self.global_limit]
+
+        logger.info(f"[InfoQ] Total: {len(all_articles)} articles from {len(self.feeds)} topic feeds")
         return all_articles
