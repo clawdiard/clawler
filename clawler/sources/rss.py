@@ -878,6 +878,34 @@ DEFAULT_FEEDS = [
     {"url": "https://blog.remotive.com/feed/", "source": "Remotive Blog", "category": "remote_work"},
     {"url": "https://www.yourremotecoach.com/feed/", "source": "Your Remote Coach", "category": "remote_work"},
     {"url": "https://runningremote.com/feed/", "source": "Running Remote", "category": "remote_work"},
+
+    # Podcasting & Audio
+    {"url": "https://podnews.net/rss", "source": "Podnews", "category": "podcasting"},
+    {"url": "https://blog.pacific-content.com/feed", "source": "Pacific Content", "category": "podcasting"},
+    {"url": "https://www.thepodcasthost.com/feed/", "source": "The Podcast Host", "category": "podcasting"},
+    {"url": "https://transom.org/feed/", "source": "Transom", "category": "podcasting"},
+    {"url": "https://hotpodnews.com/feed/", "source": "Hot Pod News", "category": "podcasting"},
+
+    # Tiny Houses & Minimalism
+    {"url": "https://www.theminimalists.com/feed/", "source": "The Minimalists", "category": "minimalism"},
+    {"url": "https://www.becomingminimalist.com/feed/", "source": "Becoming Minimalist", "category": "minimalism"},
+    {"url": "https://www.rowdykittens.com/feed/", "source": "Rowdy Kittens", "category": "minimalism"},
+    {"url": "https://tinyhouseblog.com/feed/", "source": "Tiny House Blog", "category": "minimalism"},
+    {"url": "https://www.thetinylife.com/feed/", "source": "The Tiny Life", "category": "minimalism"},
+
+    # Calligraphy & Lettering
+    {"url": "https://www.iampeth.com/blog?format=rss", "source": "IAMPETH", "category": "calligraphy"},
+    {"url": "https://thepostmansknock.com/feed/", "source": "The Postman's Knock", "category": "calligraphy"},
+    {"url": "https://www.jetpens.com/blog/feed", "source": "JetPens Blog", "category": "calligraphy"},
+    {"url": "https://seanwes.com/feed/", "source": "seanwes", "category": "calligraphy"},
+    {"url": "https://www.johnstonlettercutting.co.uk/feed/", "source": "Johnston Letter Cutting", "category": "calligraphy"},
+
+    # Competitive Programming & CTF
+    {"url": "https://codeforces.com/blog/rss", "source": "Codeforces Blog", "category": "competitive_programming"},
+    {"url": "https://blog.codechef.com/feed/", "source": "CodeChef Blog", "category": "competitive_programming"},
+    {"url": "https://ctftime.org/event/list/upcoming/rss/", "source": "CTFtime Events", "category": "competitive_programming"},
+    {"url": "https://www.roppers.org/feed", "source": "Roppers Academy", "category": "competitive_programming"},
+    {"url": "https://blog.trailofbits.com/feed/", "source": "Trail of Bits", "category": "competitive_programming"},
 ]
 
 
