@@ -112,6 +112,13 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("cnet",          "clawler.sources.cnet.CNETSource",                           "CNET"),
     SourceEntry("vox",           "clawler.sources.vox.VoxSource",                             "Vox"),
     SourceEntry("salon",         "clawler.sources.salon.SalonSource",                         "Salon"),
+    SourceEntry("statnews",      "clawler.sources.statnews.StatNewsSource",                   "STAT News"),
+    SourceEntry("barstoolsports","clawler.sources.barstoolsports.BarstoolSportsSource",       "Barstool Sports"),
+    SourceEntry("bleacherreport","clawler.sources.bleacherreport.BleacherReportSource",       "Bleacher Report"),
+    SourceEntry("nejm",          "clawler.sources.nejm.NEJMSource",                           "NEJM"),
+    SourceEntry("thelancet",     "clawler.sources.thelancet.TheLancetSource",                 "The Lancet"),
+    SourceEntry("jama",          "clawler.sources.jamanetwork.JAMASource",                    "JAMA"),
+    SourceEntry("medpagetoday",  "clawler.sources.medpagetoday.MedPageTodaySource",           "MedPage Today"),
 ]
 
 # Quick lookups

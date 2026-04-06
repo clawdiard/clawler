@@ -715,6 +715,8 @@ DEFAULT_FEEDS = [
     {"url": "https://www.foodnavigator.com/rss/news", "source": "FoodNavigator", "category": "food_science"},
     {"url": "https://www.foodsafetynews.com/feed/", "source": "Food Safety News", "category": "food_science"},
     {"url": "https://newfoodmagazine.com/feed/", "source": "New Food Magazine", "category": "food_science"},
+    {"url": "https://www.sciencedirect.com/journal/food-chemistry/rss", "source": "Food Chemistry", "category": "food_science"},
+    {"url": "https://www.ifis.org/blog/rss.xml", "source": "IFIS Food Science", "category": "food_science"},
     # Motorsport & Racing (NEW)
     {"url": "https://www.autosport.com/rss/feed/all", "source": "Autosport", "category": "motorsport"},
     {"url": "https://racer.com/feed/", "source": "RACER", "category": "motorsport"},
@@ -794,6 +796,8 @@ DEFAULT_FEEDS = [
     {"url": "https://www.boardgamegeek.com/rss/boardgamenews", "source": "BoardGameGeek News", "category": "board_games"},
     {"url": "https://arstechnica.com/tag/board-games/feed/", "source": "Ars Technica Board Games", "category": "board_games"},
     {"url": "https://www.polygon.com/rss/tabletop-games/index.xml", "source": "Polygon Tabletop", "category": "board_games"},
+    {"url": "https://www.dicebreaker.com/feed", "source": "Dicebreaker", "category": "board_games"},
+    {"url": "https://www.shutupandsitdown.com/feed/", "source": "Shut Up & Sit Down", "category": "board_games"},
     # ── Sleep Science (new category) ──
     {"url": "https://www.sleepfoundation.org/feed", "source": "Sleep Foundation", "category": "sleep_science"},
     {"url": "https://www.sleepresearchsociety.org/feed/", "source": "Sleep Research Society", "category": "sleep_science"},
@@ -866,6 +870,8 @@ DEFAULT_FEEDS = [
     {"url": "https://blog.pacific-content.com/feed", "source": "Pacific Content", "category": "podcasting"},
     {"url": "https://www.thepodcasthost.com/feed/", "source": "The Podcast Host", "category": "podcasting"},
     {"url": "https://transom.org/feed/", "source": "Transom", "category": "podcasting"},
+    {"url": "https://podnews.net/rss", "source": "Podnews", "category": "podcasting"},
+    {"url": "https://feeds.buzzsprout.com/1/rss", "source": "Buzzsprout Blog", "category": "podcasting"},
 
     # Tiny Houses & Minimalism
     {"url": "https://www.theminimalists.com/feed/", "source": "The Minimalists", "category": "minimalism"},
@@ -889,6 +895,9 @@ DEFAULT_FEEDS = [
     # Animation & VFX
     {"url": "https://beforesandafters.com/feed/", "source": "befores & afters", "category": "animation_vfx"},
     {"url": "https://www.fxguide.com/feed/", "source": "fxguide", "category": "animation_vfx"},
+    {"url": "https://www.awn.com/rss.xml", "source": "Animation World Network VFX", "category": "animation_vfx"},
+    {"url": "https://www.artofvfx.com/feed/", "source": "Art of VFX", "category": "animation_vfx"},
+    {"url": "https://vfxvoice.com/feed/", "source": "VFX Voice", "category": "animation_vfx"},
 
     # Dentistry & Oral Health
     {"url": "https://www.dentistrytoday.com/feed/", "source": "Dentistry Today", "category": "dentistry"},
@@ -1050,6 +1059,20 @@ DEFAULT_FEEDS = [
     {"url": "https://www.interweave.com/knitting/feed/", "source": "Interweave Knits", "category": "knitting_crochet"},
     {"url": "https://www.gathered.how/knitting/feed/", "source": "Gathered (Knitting)", "category": "knitting_crochet"},
     {"url": "https://www.yarnspirations.com/blog/feed/", "source": "Yarnspirations", "category": "knitting_crochet"},
+
+    # Sustainable Fashion
+    {"url": "https://www.thegoodtrade.com/feed/", "source": "The Good Trade", "category": "sustainable_fashion"},
+    {"url": "https://goodonyou.eco/feed/", "source": "Good On You", "category": "sustainable_fashion"},
+    {"url": "https://www.fashionrevolution.org/feed/", "source": "Fashion Revolution", "category": "sustainable_fashion"},
+    {"url": "https://ecocult.com/feed/", "source": "EcoCult", "category": "sustainable_fashion"},
+    {"url": "https://remake.world/feed/", "source": "Remake", "category": "sustainable_fashion"},
+
+    # Vintage Computing & Retro Gaming
+    {"url": "https://www.retrorgb.com/feed", "source": "RetroRGB", "category": "retro_computing"},
+    {"url": "https://hackaday.com/tag/retrocomputing/feed/", "source": "Hackaday Retro", "category": "retro_computing"},
+    {"url": "https://www.timeextension.com/feeds/latest", "source": "Time Extension", "category": "retro_computing"},
+    {"url": "https://blog.archive.org/feed/", "source": "Internet Archive Blog", "category": "retro_computing"},
+    {"url": "https://www.retrogamer.net/feed/", "source": "Retro Gamer", "category": "retro_computing"},
 ]
 
 
