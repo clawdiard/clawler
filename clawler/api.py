@@ -74,6 +74,8 @@ def crawl(
     min_relevance: float = 0.0,
     min_quality: float = 0.0,
     sample: int = 0,
+    strategy: str | None = None,
+    strategy_min_score: float = 0.3,
     # Legacy no_<source> kwargs accepted for backward compatibility
     **kwargs,
 ) -> List[Article]:
@@ -100,6 +102,8 @@ def crawl(
         min_relevance: Minimum relevance score (0.0-1.0) when profile is used.
         min_quality: Minimum source quality score (0.0-1.0).
         sample: Randomly sample N articles from results (0 = disabled).
+        strategy: Sourcing strategy text for LLM-based relevance filtering.
+        strategy_min_score: Minimum strategy relevance score (0.0-1.0, default 0.3).
         **kwargs: Legacy no_<source>=True flags (e.g. no_hn=True, no_reddit=True).
 
     Returns:
@@ -167,6 +171,12 @@ def crawl(
     if profile_data:
         from clawler.profile import score_articles
         articles = score_articles(articles, profile_data, min_relevance=min_relevance)
+
+    # LLM-powered strategy filtering
+    if strategy:
+        from clawler.strategy import StrategyFilter
+        sf = StrategyFilter(strategy, min_score=strategy_min_score)
+        articles = sf.filter(articles)
 
     result = articles[:limit]
 

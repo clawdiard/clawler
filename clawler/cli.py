@@ -245,6 +245,10 @@ def main(argv=None):
     parser.add_argument("--export-sources", type=str, default=None, metavar="FILE",
                         dest="export_sources",
                         help="Export source registry as JSON (name, key, type) and exit")
+    parser.add_argument("--strategy", type=str, default=None, metavar="FILE",
+                        help="Path to a text file containing a sourcing strategy for LLM-based relevance filtering")
+    parser.add_argument("--strategy-min-score", type=float, default=0.3, dest="strategy_min_score",
+                        help="Minimum strategy relevance score 0.0-1.0 (default: 0.3)")
 
     args = parser.parse_args(argv)
 
@@ -824,6 +828,24 @@ def main(argv=None):
     if profile_data:
         from clawler.profile import score_articles
         articles = score_articles(articles, profile_data, min_relevance=args.min_relevance)
+
+    # LLM-powered strategy filtering (--strategy)
+    if args.strategy:
+        try:
+            with open(args.strategy, "r", encoding="utf-8") as _sf:
+                _strategy_text = _sf.read()
+            from clawler.strategy import StrategyFilter
+            _sfilt = StrategyFilter(_strategy_text, min_score=args.strategy_min_score)
+            if not args.quiet:
+                print(f"🧠 Filtering {len(articles)} articles through sourcing strategy...", file=sys.stderr)
+            articles = _sfilt.filter(articles)
+            if not args.quiet:
+                print(f"   ✓ {len(articles)} articles match strategy (min score: {args.strategy_min_score})", file=sys.stderr)
+        except FileNotFoundError:
+            print(f"Error: strategy file not found: {args.strategy}", file=sys.stderr)
+            sys.exit(1)
+        except Exception as e:
+            print(f"Warning: strategy filter failed: {e}", file=sys.stderr)
 
     # Truncate summaries to configured length
     max_summary = args.summary_length
