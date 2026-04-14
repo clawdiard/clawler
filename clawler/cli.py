@@ -250,6 +250,47 @@ def main(argv=None):
     parser.add_argument("--strategy-min-score", type=float, default=0.3, dest="strategy_min_score",
                         help="Minimum strategy relevance score 0.0-1.0 (default: 0.3)")
 
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Podcast arguments
+    # ═══════════════════════════════════════════════════════════════════════════
+    parser.add_argument("--podcasts", action="store_true",
+                        help="Include podcast episodes in results (enables podcast sources)")
+    parser.add_argument("--only-podcasts", action="store_true", dest="only_podcasts",
+                        help="Only show podcast episodes (disables all non-podcast sources)")
+    parser.add_argument("--podcast-feeds", type=str, default=None, metavar="FILE",
+                        dest="podcast_feeds",
+                        help="Path to custom podcast feeds YAML config file")
+    parser.add_argument("--podcast", type=str, default=None,
+                        help="Filter episodes by podcast name (substring match, case-insensitive)")
+    parser.add_argument("--min-duration", type=str, default=None, dest="min_duration",
+                        help="Minimum episode duration (e.g., 30m, 1h)")
+    parser.add_argument("--max-duration", type=str, default=None, dest="max_duration",
+                        help="Maximum episode duration (e.g., 2h, 3h)")
+    parser.add_argument("--list-podcasts", action="store_true", dest="list_podcasts",
+                        help="List all configured podcast feeds and exit")
+
+    # Podcast ingest mode (transcription + summarization)
+    parser.add_argument("--ingest", action="store_true",
+                        help="Enable ingest mode: transcribe and summarize podcast episodes")
+    parser.add_argument("--ingest-limit", type=int, default=5, dest="ingest_limit",
+                        help="Maximum episodes to ingest per run (default: 5)")
+    parser.add_argument("--whisper-model", type=str, default="base", dest="whisper_model",
+                        choices=["tiny", "base", "small", "medium", "large"],
+                        help="Whisper model size for transcription (default: base)")
+    parser.add_argument("--whisper-api", action="store_true", dest="whisper_api",
+                        help="Use OpenAI Whisper API instead of local model")
+    parser.add_argument("--summary-style", type=str, default="executive", dest="summary_style",
+                        choices=["executive", "detailed", "bullets", "chapters"],
+                        help="Summary output style (default: executive)")
+    parser.add_argument("--save-transcripts", action="store_true", dest="save_transcripts",
+                        help="Save full transcripts to disk during ingest")
+    parser.add_argument("--ingest-cache-dir", type=str, default=None, dest="ingest_cache_dir",
+                        help="Custom directory for ingest cache (transcripts, summaries)")
+    parser.add_argument("--clear-ingest-cache", action="store_true", dest="clear_ingest_cache",
+                        help="Clear podcast ingest cache and exit")
+    parser.add_argument("--list-ingested", action="store_true", dest="list_ingested",
+                        help="List all ingested podcast episodes in cache and exit")
+
     args = parser.parse_args(argv)
 
     # --silent is an alias for --quiet
@@ -314,6 +355,69 @@ def main(argv=None):
         removed = clear_history()
         print("🧹 Cleared dedup history" if removed else "ℹ️  No history to clear")
         return
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Podcast early-exit handlers
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # Clear ingest cache
+    if args.clear_ingest_cache:
+        from clawler.podcast.ingest import PodcastIngestPipeline
+        pipeline = PodcastIngestPipeline(cache_dir=args.ingest_cache_dir)
+        n = pipeline.clear_cache()
+        print(f"🧹 Cleared {n} ingested podcast(s) from cache")
+        return
+
+    # List ingested podcasts
+    if args.list_ingested:
+        from clawler.podcast.ingest import PodcastIngestPipeline
+        pipeline = PodcastIngestPipeline(cache_dir=args.ingest_cache_dir)
+        cached = pipeline.list_cached()
+        if not cached:
+            print("📚 No ingested podcasts in cache.")
+        else:
+            print(f"📚 {len(cached)} ingested podcast(s):\n")
+            for title in cached:
+                print(f"  • {title}")
+        return
+
+    # List configured podcasts
+    if args.list_podcasts:
+        from clawler.podcast_config import load_podcast_feeds
+        feeds = load_podcast_feeds(args.podcast_feeds)
+        if not feeds:
+            print("📡 No podcast feeds configured.")
+        else:
+            print(f"📡 {len(feeds)} configured podcast(s):\n")
+            print(f"   {'Podcast':<40} {'Category':<12} {'Quality':>7} {'Platforms'}")
+            print(f"   {'─'*40} {'─'*12} {'─'*7} {'─'*20}")
+            for feed in feeds:
+                platforms = []
+                if feed.has_spotify:
+                    platforms.append("spotify")
+                if feed.has_apple:
+                    platforms.append("apple")
+                if feed.has_youtube:
+                    platforms.append("youtube")
+                if feed.has_rss:
+                    platforms.append("rss")
+                enabled = "✓" if feed.enabled else "✗"
+                print(f" {enabled} {feed.name:<40} {feed.category:<12} {feed.quality_weight:>7.2f} {', '.join(platforms)}")
+        return
+
+    # --only-podcasts: disable all non-podcast sources
+    if args.only_podcasts:
+        _PODCAST_KEYS = {"spotify_podcasts", "apple_podcasts", "youtube_podcasts", "podcast_rss"}
+        for entry in _REGISTRY_SOURCES:
+            if entry.key not in _PODCAST_KEYS:
+                setattr(args, f"no_{entry.key}", True)
+
+    # --podcasts: ensure podcast sources are enabled (they're off by default due to volume)
+    # By default, podcast sources are disabled unless --podcasts or --only-podcasts is used
+    if not args.podcasts and not args.only_podcasts:
+        # Disable podcast sources unless explicitly requested
+        for key in ["spotify_podcasts", "apple_podcasts", "youtube_podcasts", "podcast_rss"]:
+            setattr(args, f"no_{key}", True)
 
     # Config init
     if args.config_init:
@@ -641,15 +745,33 @@ def main(argv=None):
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
 
+    # Load podcast feeds if podcasts are enabled
+    podcast_feeds = None
+    if args.podcasts or args.only_podcasts:
+        from clawler.podcast_config import load_podcast_feeds
+        podcast_feeds = load_podcast_feeds(args.podcast_feeds)
+        if not args.quiet and podcast_feeds:
+            print(f"🎙️  Loaded {len(podcast_feeds)} podcast feeds", file=sys.stderr)
+
     # Build source list from central registry — no manual duplication needed
     from clawler.registry import SOURCES as _REG_SOURCES
+
+    # Podcast source keys for special handling
+    _PODCAST_KEYS = {"spotify_podcasts", "apple_podcasts", "youtube_podcasts", "podcast_rss"}
 
     sources = []
     for entry in _REG_SOURCES:
         if getattr(args, f"no_{entry.key}", False):
             continue
         cls = entry.load_class()
-        src = cls(feeds=custom_feeds) if (entry.key == "rss" and custom_feeds) else cls()
+        # Pass custom feeds to RSS source
+        if entry.key == "rss" and custom_feeds:
+            src = cls(feeds=custom_feeds)
+        # Pass podcast feeds to podcast sources
+        elif entry.key in _PODCAST_KEYS and podcast_feeds:
+            src = cls(feeds=podcast_feeds)
+        else:
+            src = cls()
         src.timeout = args.timeout
         src.max_retries = args.retries
         sources.append(src)
@@ -765,6 +887,47 @@ def main(argv=None):
     if args.exclude_author:
         eaq = args.exclude_author.lower()
         articles = [a for a in articles if eaq not in a.author.lower()]
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Podcast-specific filters
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # Filter by podcast name (--podcast)
+    if args.podcast:
+        pq = args.podcast.lower()
+        # Filter articles that are from podcasts matching the query
+        articles = [a for a in articles if "podcast" in a.source.lower() and pq in a.source.lower()]
+
+    # Duration filtering (--min-duration, --max-duration) - for podcast episodes
+    if args.min_duration or args.max_duration:
+        from clawler.sources.podcasts.base import parse_duration as _parse_duration
+
+        def _get_duration_tag(a):
+            """Extract duration seconds from tags."""
+            for tag in a.tags:
+                if tag.startswith("duration:"):
+                    dur_str = tag[9:]  # Remove "duration:" prefix
+                    # Convert formatted duration back to seconds
+                    parts = dur_str.replace("h", ":").replace("m", "").split(":")
+                    if len(parts) == 2:
+                        try:
+                            return int(parts[0]) * 3600 + int(parts[1]) * 60
+                        except ValueError:
+                            pass
+                    elif len(parts) == 1:
+                        try:
+                            return int(parts[0]) * 60
+                        except ValueError:
+                            pass
+            return 0
+
+        if args.min_duration:
+            min_secs = _parse_duration(args.min_duration)
+            articles = [a for a in articles if _get_duration_tag(a) >= min_secs or "podcast" not in a.source.lower()]
+
+        if args.max_duration:
+            max_secs = _parse_duration(args.max_duration)
+            articles = [a for a in articles if _get_duration_tag(a) <= max_secs or _get_duration_tag(a) == 0 or "podcast" not in a.source.lower()]
 
     # Filter by time (--since)
     if args.since:
@@ -887,6 +1050,120 @@ def main(argv=None):
             srcs[a.source] = srcs.get(a.source, 0) + 1
         top = sorted(srcs.items(), key=lambda x: x[1], reverse=True)[:10]
         print(f"   Top sources: {', '.join(f'{s} ({n})' for s, n in top)}")
+        return
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Podcast Ingest Mode — transcribe and summarize episodes
+    # ═══════════════════════════════════════════════════════════════════════════
+    if args.ingest:
+        # Filter to only podcast articles
+        podcast_articles = [a for a in articles if "podcast" in a.source.lower()]
+        if not podcast_articles:
+            print("⚠️  No podcast episodes found for ingest. Use --podcasts to enable podcast sources.", file=sys.stderr)
+            sys.exit(1)
+
+        # Convert articles to episodes for ingest
+        from clawler.models import Episode
+
+        episodes = []
+        for a in podcast_articles[:args.ingest_limit]:
+            # Extract podcast name from source (e.g., "Podcast (Huberman Lab)" -> "Huberman Lab")
+            podcast_name = a.source
+            if podcast_name.startswith("Podcast (") and podcast_name.endswith(")"):
+                podcast_name = podcast_name[9:-1]
+
+            # Extract duration from tags if available
+            duration = 0
+            for tag in a.tags:
+                if tag.startswith("duration:"):
+                    dur_str = tag[9:]
+                    parts = dur_str.replace("h", ":").replace("m", "").split(":")
+                    try:
+                        if len(parts) == 2:
+                            duration = int(parts[0]) * 3600 + int(parts[1]) * 60
+                        elif len(parts) == 1:
+                            duration = int(parts[0]) * 60
+                    except ValueError:
+                        pass
+
+            # Determine platform and audio_url from tags
+            platform = "rss"
+            audio_url = ""
+            for tag in a.tags:
+                if tag.startswith("platform:"):
+                    platform = tag[9:]
+                elif tag.startswith("audio_url:"):
+                    audio_url = tag[10:]
+
+            ep = Episode(
+                title=a.title,
+                url=a.url,
+                podcast_name=podcast_name,
+                source_platform=platform,
+                audio_url=audio_url or a.url,  # Use preserved audio_url or fall back to url
+                summary=a.summary,
+                timestamp=a.timestamp,
+                duration_seconds=duration,
+                category=a.category,
+                quality_score=a.quality_score,
+                tags=a.tags,
+                host=getattr(a, 'author', getattr(a, 'host', '')),
+            )
+            episodes.append(ep)
+
+        if not episodes:
+            print("⚠️  No episodes to ingest.", file=sys.stderr)
+            return
+
+        # Initialize pipeline
+        from clawler.podcast.transcribe import PodcastTranscriber
+        from clawler.podcast.summarize import PodcastSummarizer
+        from clawler.podcast.ingest import PodcastIngestPipeline
+
+        if not args.quiet:
+            print(f"\n🎙️  Podcast Ingest Mode", file=sys.stderr)
+            print(f"   Episodes to process: {len(episodes)}", file=sys.stderr)
+            print(f"   Whisper model: {args.whisper_model}", file=sys.stderr)
+            print(f"   Summary style: {args.summary_style}", file=sys.stderr)
+
+        transcriber = PodcastTranscriber(
+            model=args.whisper_model,
+            use_api=args.whisper_api,
+            cache_dir=args.ingest_cache_dir,
+        )
+        summarizer = PodcastSummarizer()
+        pipeline = PodcastIngestPipeline(
+            transcriber=transcriber,
+            summarizer=summarizer,
+            cache_dir=args.ingest_cache_dir,
+            save_transcripts=args.save_transcripts,
+            summary_style=args.summary_style,
+        )
+
+        def _progress(current, total, ep):
+            if not args.quiet:
+                print(f"   [{current}/{total}] {ep.title[:50]}...", file=sys.stderr)
+
+        results = pipeline.batch_ingest(
+            episodes,
+            max_parallel=1,  # Transcription is CPU-intensive
+            skip_existing=True,
+            summary_style=args.summary_style,
+            progress_callback=_progress,
+        )
+
+        # Output results
+        print(f"\n🎙️  Podcast Ingest Results ({len(results)} episodes)\n")
+        for result in results:
+            print(f"{'═' * 70}")
+            print(result.summary.to_markdown())
+            print()
+
+        if not args.quiet:
+            successful = sum(1 for r in results if r.transcript.text)
+            cached = sum(1 for r in results if r.cached)
+            print(f"\n✅ Ingested {successful} episodes ({cached} from cache)", file=sys.stderr)
+
         return
 
     # Count-only mode (for scripting)

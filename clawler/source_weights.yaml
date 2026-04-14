@@ -333,3 +333,35 @@ sources:
   CNET (Reviews): 0.72
   CNET (How-To): 0.65
   CNET (Deals): 0.55
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Podcasts — Health & Wellness
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  Podcast (Huberman Lab): 0.85
+  Podcast (Ground Truths with Eric Topol): 0.82
+  Podcast (Found My Fitness): 0.80
+  Podcast (Science Vs): 0.78
+  Podcast (The Dr. Hyman Show): 0.78
+  Podcast (Dr. Gabrielle Lyon Show): 0.76
+  Podcast (Joe Rogan Experience): 0.75
+  Podcast (Medlife Crisis): 0.75
+  Podcast (New Heights with Jason and Travis Kelce): 0.72
+  Podcast (The Human Upgrade - Dave Asprey): 0.72
+  Podcast (The Boundless Life): 0.70
+  Podcast (The Ready State): 0.70
+  Podcast (Sleep Unplugged with Dr. Chris Winter): 0.70
+  Podcast (The Bill Simmons Podcast): 0.70
+  Podcast (Mind Pump): 0.68
+  Podcast (Longevity with Natalie Niddam): 0.68
+  Podcast (Siim Land Podcast): 0.66
+  Podcast (Brian Johnson Podcast): 0.65
+  Podcast (Culture Apothecary with Alex Clark): 0.65
+  Podcast (Fit Father Project Podcast): 0.64
+  Podcast (The Goop Podcast): 0.60
+
+  # Podcast platform defaults
+  Spotify Podcasts: 0.70
+  Apple Podcasts: 0.72
+  YouTube Podcasts: 0.68
+  Podcast RSS: 0.65

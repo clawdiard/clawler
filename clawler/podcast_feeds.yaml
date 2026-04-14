@@ -1,0 +1,160 @@
+# Podcast Feeds Configuration for Clawler
+# Each podcast can have multiple platform sources (Spotify, Apple, YouTube, RSS)
+# The system will use whichever sources are configured and available
+
+podcasts:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Health & Wellness Podcasts
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - name: "Joe Rogan Experience"
+    category: "health"
+    quality_weight: 0.75
+    spotify_id: "4rOoJ6Egrf8K2IrywzwOMk"
+    youtube_channel_id: "UCzQUP1qoWDoEbmsQxvdjxgQ"
+    website_url: "https://open.spotify.com/show/4rOoJ6Egrf8K2IrywzwOMk"
+
+  - name: "The Dr. Hyman Show"
+    category: "health"
+    quality_weight: 0.78
+    apple_id: "1382804627"
+    youtube_playlist_id: "PLA5Z1Q1JnNwa-PnH0B6x9DfM8pxeO4blX"
+    website_url: "https://drhyman.com/podcast"
+
+  - name: "Dr. Gabrielle Lyon Show"
+    category: "health"
+    quality_weight: 0.76
+    apple_id: "1536644389"
+    website_url: "https://drgabriellelyon.com/podcast/"
+
+  - name: "Huberman Lab"
+    category: "health"
+    quality_weight: 0.85
+    spotify_id: "79CkJF3UJTHFV8Dse3Oy0P"
+    youtube_channel_id: "UC2D2CMWXMOVWx7giW1n3LIg"
+    apple_id: "1545953110"
+    rss_url: "https://feeds.megaphone.fm/hubermanlab"
+    website_url: "https://hubermanlab.com"
+
+  - name: "Culture Apothecary with Alex Clark"
+    category: "health"
+    quality_weight: 0.65
+    spotify_id: "7M0C7cl5Fobejy7gbT5GB2"
+    youtube_playlist_id: "PLxx4kcMvHrwIFMnpmdY0_KgH93XIWsQ6j"
+
+  - name: "The Human Upgrade - Dave Asprey"
+    category: "health"
+    quality_weight: 0.72
+    spotify_id: "2mkB9OoukPVKCTKSuAIgCq"
+    apple_id: "451114698"
+    website_url: "https://daveasprey.com/podcast"
+
+  - name: "The Boundless Life"
+    category: "health"
+    quality_weight: 0.70
+    apple_id: "283908977"
+    rss_url: "https://bengreenfieldfitness.libsyn.com/rss"
+    website_url: "https://bengreenfieldlife.com"
+
+  - name: "Longevity with Natalie Niddam"
+    category: "health"
+    quality_weight: 0.68
+    spotify_id: "6p3R333ynb3OT3oqXmcWUd"
+    rss_url: ""
+    website_url: "https://natalieniddam.com/podcast"
+
+  - name: "Siim Land Podcast"
+    category: "health"
+    quality_weight: 0.66
+    spotify_id: "55f9VKYsWBbIU1aJGURpP0"
+    apple_id: "1352182299"
+    website_url: "https://siimland.com"
+
+  - name: "Brian Johnson Podcast"
+    category: "health"
+    quality_weight: 0.65
+    spotify_id: "2XarVtLfFQN59uUfV9ZowT"
+    website_url: "https://blueprint.bryanjohnson.com"
+
+  - name: "Fit Father Project Podcast"
+    category: "health"
+    quality_weight: 0.64
+    apple_id: "1566009525"
+    website_url: "https://www.fitfatherproject.com/podcast"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Science & Education Podcasts
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - name: "Science Vs"
+    category: "health"
+    quality_weight: 0.78
+    spotify_id: "5lY4b5PGOvMuOYOjOVEcb9"
+    youtube_playlist_id: "PLql9ZqeHkZRvLeTJjG9K07j1lQ1UrNU5K"
+    apple_id: "1051557000"
+    rss_url: "https://feeds.megaphone.fm/sciencevs"
+
+  - name: "Sleep Unplugged with Dr. Chris Winter"
+    category: "health"
+    quality_weight: 0.70
+    spotify_id: "7jKG2lDRZWBpm0dTiHrcRd"
+    apple_id: "1668932902"
+    website_url: "https://www.sleepunplugged.com"
+
+  - name: "Medlife Crisis"
+    category: "health"
+    quality_weight: 0.75
+    youtube_channel_id: "UCgRBRE1DUP2w7HTH9j_L4OQ"
+    website_url: "https://www.youtube.com/@MedlifeCrisis"
+
+  - name: "Ground Truths with Eric Topol"
+    category: "health"
+    quality_weight: 0.82
+    spotify_id: "2Ff4x8RYLcxoOFPjBO6RnR"
+    apple_id: "1699626306"
+    website_url: "https://erictopol.substack.com"
+
+  - name: "The Goop Podcast"
+    category: "health"
+    quality_weight: 0.60
+    spotify_id: "1PyphXayU14C9VmJfdIt9M"
+    apple_id: "1352546554"
+    website_url: "https://goop.com/the-goop-podcast"
+
+  - name: "Found My Fitness"
+    category: "health"
+    quality_weight: 0.80
+    youtube_channel_id: "UCWF8SqJVNlx-ctXbLswcTcA"  # /user/FoundMyFitness
+    apple_id: "818198322"
+    rss_url: "https://podcast.foundmyfitness.com/rss.xml"
+    website_url: "https://www.foundmyfitness.com/episodes"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Sports & Entertainment Podcasts
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - name: "New Heights with Jason and Travis Kelce"
+    category: "health"
+    quality_weight: 0.72
+    spotify_id: "1y3SUbFMUSESC1N43tBleK"
+    apple_id: "1643850831"
+
+  - name: "Mind Pump"
+    category: "health"
+    quality_weight: 0.68
+    spotify_id: "5bFmJRVFH8bRhkZ3bEHsZn"
+    apple_id: "954100756"
+    website_url: "https://mindpumppodcast.com"
+
+  - name: "The Ready State"
+    category: "health"
+    quality_weight: 0.70
+    apple_id: "1448664901"
+    website_url: "https://thereadystate.com"
+
+  - name: "The Bill Simmons Podcast"
+    category: "health"
+    quality_weight: 0.70
+    spotify_id: "6qOs7WlD4glQV5fBwyRSks"
+    apple_id: "1043699613"
+    website_url: "https://www.theringer.com/the-bill-simmons-podcast"

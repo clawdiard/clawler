@@ -119,6 +119,11 @@ SOURCES: List[SourceEntry] = [
     SourceEntry("thelancet",     "clawler.sources.thelancet.TheLancetSource",                 "The Lancet"),
     SourceEntry("jama",          "clawler.sources.jamanetwork.JAMASource",                    "JAMA"),
     SourceEntry("medpagetoday",  "clawler.sources.medpagetoday.MedPageTodaySource",           "MedPage Today"),
+    # Podcast sources
+    SourceEntry("spotify_podcasts",  "clawler.sources.podcasts.spotify.SpotifyPodcastSource",     "Spotify Podcasts"),
+    SourceEntry("apple_podcasts",    "clawler.sources.podcasts.apple.ApplePodcastsSource",        "Apple Podcasts"),
+    SourceEntry("youtube_podcasts",  "clawler.sources.podcasts.youtube.YouTubePodcastSource",     "YouTube Podcasts"),
+    SourceEntry("podcast_rss",       "clawler.sources.podcasts.rss.PodcastRSSSource",             "Podcast RSS"),
 ]
 
 # Quick lookups
@@ -135,19 +140,38 @@ def get_entry(key: str) -> Optional[SourceEntry]:
     return _BY_KEY.get(key)
 
 
-def build_sources(*, disabled: Optional[set] = None, timeout: int = 15) -> List[BaseSource]:
+def build_sources(
+    *,
+    disabled: Optional[set] = None,
+    timeout: int = 15,
+    podcast_feeds: Optional[List] = None,
+) -> List[BaseSource]:
     """Instantiate all enabled sources.
 
     Args:
         disabled: Set of source keys to skip (e.g. {"reddit", "hn"}).
         timeout: HTTP timeout to set on each source.
+        podcast_feeds: Optional list of PodcastFeed objects for podcast sources.
     """
     disabled = disabled or set()
     result = []
+
+    # Podcast source keys for special handling
+    podcast_source_keys = {"spotify_podcasts", "apple_podcasts", "youtube_podcasts", "podcast_rss"}
+
     for entry in SOURCES:
-        if entry.key not in disabled:
-            cls = entry.load_class()
+        if entry.key in disabled:
+            continue
+
+        cls = entry.load_class()
+
+        # Special handling for podcast sources - pass feeds config
+        if entry.key in podcast_source_keys and podcast_feeds:
+            src = cls(feeds=podcast_feeds)
+        else:
             src = cls()
-            src.timeout = timeout
-            result.append(src)
+
+        src.timeout = timeout
+        result.append(src)
+
     return result
