@@ -1156,7 +1156,8 @@ def main(argv=None):
         print(f"\n🎙️  Podcast Ingest Results ({len(results)} episodes)\n")
         for result in results:
             print(f"{'═' * 70}")
-            print(result.summary.to_markdown())
+            # Use Slack-friendly markdown which includes URL prominently
+            print(result.to_slack_markdown())
             print()
 
         if not args.quiet:

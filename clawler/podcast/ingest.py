@@ -86,6 +86,35 @@ class IngestedEpisode:
 
         return "\n".join(lines)
 
+    def to_slack_markdown(self) -> str:
+        """Format as Slack-friendly markdown (no transcript, URL prominent)."""
+        lines = [
+            f"🎙️ *{self.episode.podcast_name}* — {self.episode.title}",
+            "",
+        ]
+
+        # Summary
+        if self.summary.summary:
+            lines.append(self.summary.summary)
+            lines.append("")
+
+        # Key takeaways
+        if self.summary.key_takeaways:
+            lines.append("*Key Takeaways:*")
+            for takeaway in self.summary.key_takeaways:
+                lines.append(f"• {takeaway}")
+            lines.append("")
+
+        # Notable quote (just one)
+        if self.summary.notable_quotes:
+            lines.append(f"> \"{self.summary.notable_quotes[0]}\"")
+            lines.append("")
+
+        # URL - prominent at the bottom
+        lines.append(f"🔗 {self.episode.url}")
+
+        return "\n".join(lines)
+
 
 class PodcastIngestPipeline:
     """Full pipeline for podcast ingestion: download → transcribe → summarize."""
