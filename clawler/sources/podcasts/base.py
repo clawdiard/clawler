@@ -112,10 +112,10 @@ class PodcastBaseSource(BaseSource):
 
     def _filter_episode(self, episode: Episode) -> bool:
         """Check if episode passes configured filters."""
-        # Duration filter
-        if self.min_duration > 0 and episode.duration_seconds < self.min_duration:
+        # Duration filter (skip if duration is unknown/0 - we can't filter what we don't know)
+        if self.min_duration > 0 and episode.duration_seconds > 0 and episode.duration_seconds < self.min_duration:
             return False
-        if self.max_duration > 0 and episode.duration_seconds > self.max_duration:
+        if self.max_duration > 0 and episode.duration_seconds > 0 and episode.duration_seconds > self.max_duration:
             return False
 
         # Category filter

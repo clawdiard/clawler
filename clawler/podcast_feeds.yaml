@@ -12,6 +12,7 @@ podcasts:
     quality_weight: 0.75
     spotify_id: "4rOoJ6Egrf8K2IrywzwOMk"
     youtube_channel_id: "UCzQUP1qoWDoEbmsQxvdjxgQ"
+    rss_url: "https://feeds.megaphone.fm/GLT1412515089"
     website_url: "https://open.spotify.com/show/4rOoJ6Egrf8K2IrywzwOMk"
 
   - name: "The Dr. Hyman Show"
