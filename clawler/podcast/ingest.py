@@ -115,6 +115,54 @@ class IngestedEpisode:
 
         return "\n".join(lines)
 
+    def get_transcript_text(self) -> str:
+        """Get the full transcript text for posting in threads."""
+        if self.transcript.segments:
+            lines = []
+            for seg in self.transcript.segments:
+                lines.append(f"[{seg.start_formatted}] {seg.text}")
+            return "\n\n".join(lines)
+        return self.transcript.text or ""
+
+    def get_transcript_chunks(self, max_chars: int = 3500) -> List[str]:
+        """Split transcript into chunks suitable for Slack messages (max ~4000 chars).
+
+        Returns list of chunks, each under max_chars.
+        """
+        full_text = self.get_transcript_text()
+        if not full_text:
+            return []
+
+        # Split by paragraphs first
+        paragraphs = full_text.split("\n\n")
+        chunks = []
+        current_chunk = ""
+
+        for para in paragraphs:
+            if len(current_chunk) + len(para) + 2 <= max_chars:
+                current_chunk += para + "\n\n"
+            else:
+                if current_chunk:
+                    chunks.append(current_chunk.strip())
+                # If single paragraph is too long, split by sentences
+                if len(para) > max_chars:
+                    sentences = para.replace(". ", ".\n").split("\n")
+                    current_chunk = ""
+                    for sent in sentences:
+                        if len(current_chunk) + len(sent) + 1 <= max_chars:
+                            current_chunk += sent + " "
+                        else:
+                            if current_chunk:
+                                chunks.append(current_chunk.strip())
+                            current_chunk = sent + " "
+                else:
+                    current_chunk = para + "\n\n"
+
+        if current_chunk.strip():
+            chunks.append(current_chunk.strip())
+
+        return chunks
+
 
 class PodcastIngestPipeline:
     """Full pipeline for podcast ingestion: download → transcribe → summarize."""
